@@ -38,7 +38,7 @@ App = {
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
 
-     // App.listenForEvents();
+      App.listenForEvents();
      return App.displayDetails();
       //return App.render();
     });
@@ -106,7 +106,7 @@ App = {
     }).catch(function(err) {
       console.error(err);
     });
-  }
+  },
 
   fillStock: function() {
     
@@ -120,8 +120,6 @@ App = {
 
         return instance.fillStock(orderAmount, {from: App.account}); 
     }).then(function(result) {
-      document.getElementById("postOrder").style.display = 'none';
-      document.getElementById("orderPlaced").style.display = 'block';
     }).catch(function(err) {
       console.error(err);
     });
