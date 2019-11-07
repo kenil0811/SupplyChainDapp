@@ -38,26 +38,26 @@ App = {
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
 
-     // App.listenForEvents();
+    App.listenForEvents();
      return App.displayDetails();
       //return App.render();
     });
   },
 
   // Listen for events emitted from the contract
- /* listenForEvents: function() {
+  listenForEvents: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
-      instance.orderPlaced({}, {
+      instance.orderSent({}, {
       }).watch(function(error, event) {
         console.log("event triggered", event)
         // Reload when a new vote is recorded
         App.getDetails();
       });
     });
-  }, */
+  }, 
 
   displayDetails: function() {
       var content = $("#content");
@@ -88,12 +88,9 @@ App = {
     })
   },
 
-  submitOrder: function() {
-    web3.eth.getCoinbase(function(err, account) {
-      if (err === null) {App.account = account;}
-    });
-
-    var orderAmount = document.getElementById("amount").value;
+  submitOrderUp: function() {
+    
+    var orderAmount = document.getElementById("amountUp").value;
     console.log(orderAmount);
     App.contracts.SupplyChain.deployed().then(function(instance) {
         
@@ -101,7 +98,26 @@ App = {
           var role = player[0].c[0];
         });
 
-        return instance.order(orderAmount, {from: App.account}); 
+        return instance.orderUp(orderAmount, {from: App.account}); 
+    }).then(function(result) {
+      document.getElementById("postOrder").style.display = 'none';
+      document.getElementById("orderPlaced").style.display = 'block';
+    }).catch(function(err) {
+      console.error(err);
+    });
+  },
+
+  submitOrderDown: function() {
+    
+    var orderAmount = document.getElementById("amountDown").value;
+    console.log(orderAmount);
+    App.contracts.SupplyChain.deployed().then(function(instance) {
+        
+        instance.players(App.account).then(function(player) {
+          var role = player[0].c[0];
+        });
+
+        return instance.orderDown(orderAmount, {from: App.account}); 
     }).then(function(result) {
       document.getElementById("postOrder").style.display = 'none';
       document.getElementById("orderPlaced").style.display = 'block';
@@ -109,6 +125,9 @@ App = {
       console.error(err);
     });
   }
+
+
+
 };
   
 $(function() {

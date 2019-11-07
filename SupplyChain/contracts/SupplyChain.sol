@@ -20,6 +20,10 @@ contract SupplyChain {
         uint indexed _orderAmount
     );
 
+    event orderSent (
+        uint indexed _amt
+    );
+
     constructor () public {
         setRoles();
     }
@@ -32,11 +36,25 @@ contract SupplyChain {
         players[0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9] = Details(4, 40, 35, 0, 0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9, 0xFe536dc6ef2167B9184946FF21D084E16e5EAd67);
     }
 
-    function order(uint _amt) public {
+    function orderUp(uint _amt) public {
        address upAddreess = players[msg.sender].upstream;
        players[upAddreess].orderReceived = _amt;
  //       emit orderPlaced(_orderAmount);
     }
+
+    function orderDown(uint _amt) public {
+
+        require(_amt <= players[msg.sender].inventory && _amt<= players[msg.sender].orderReceived);
+
+        address downAddress = players[msg.sender].downstream;
+        players[downAddress].inventory += _amt;
+        players[msg.sender].inventory -= _amt;
+        players[msg.sender].orderReceived -= _amt;
+
+        emit orderSent(_amt);
+    }
+
+
 
     /*
     function vote (uint _DetailsId) public {
