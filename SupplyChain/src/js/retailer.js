@@ -67,6 +67,23 @@ App = {
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
       }
+
+      App.contracts.SupplyChain.deployed().then(function(instance) {
+        instance.inventory(0).then(function(array) {
+          $("#ret_inv").html(array.c[0]);
+        });
+        instance.inventory(1).then(function(array) {
+          $("#who_inv").html(array.c[0]);
+        });
+        instance.inventory(2).then(function(array) {
+          $("#dis_inv").html(array.c[0]);
+        });
+        instance.inventory(3).then(function(array) {
+          $("#fac_inv").html(array.c[0]);
+        });
+
+
+      })
     });
 
        //content.show();
@@ -122,8 +139,11 @@ App = {
       
     }).catch(function(err) {
       console.error(err);
+      alert("Error!!!");
     });
-  }
+  },
+
+
 
 
 

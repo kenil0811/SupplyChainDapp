@@ -15,6 +15,8 @@ contract SupplyChain {
     // Store accounts that have voted
     mapping(address => Details) public players;
 
+    uint[4] public inventory;
+
     // voted event
     event orderPlaced (
         uint indexed _orderAmount
@@ -34,6 +36,8 @@ contract SupplyChain {
         players[0xBF43C96c307B2c822fbc6Ae3fC6cf203D1c8062D] = Details(2, 20, 15, 0, 0xFe536dc6ef2167B9184946FF21D084E16e5EAd67, 0x13A72135525FE16DcECb0C0BF59F1f730aF00e27);
         players[0xFe536dc6ef2167B9184946FF21D084E16e5EAd67] = Details(3, 30, 25, 0, 0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9, 0xBF43C96c307B2c822fbc6Ae3fC6cf203D1c8062D);
         players[0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9] = Details(4, 40, 35, 0, 0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9, 0xFe536dc6ef2167B9184946FF21D084E16e5EAd67);
+
+        inventory = [100, 20, 30, 40];
     }
 
     function orderUp(uint _amt) public {
@@ -44,12 +48,15 @@ contract SupplyChain {
 
     function fillStock(uint _amt) public {
         players[msg.sender].inventory += _amt;
+        inventory[players[msg.sender].role - 1] += _amt;
         emit orderSent(_amt);
     }
 
     function clearStock(uint _amt) public {
         require(_amt <= players[msg.sender].inventory && _amt<= players[msg.sender].orderReceived);
         players[msg.sender].inventory -= _amt;
+        inventory[players[msg.sender].role-1] -= _amt;
+
         players[msg.sender].orderReceived -= _amt;
         emit orderSent(_amt);
     }
@@ -60,7 +67,11 @@ contract SupplyChain {
 
         address downAddress = players[msg.sender].downstream;
         players[downAddress].inventory += _amt;
+        inventory[players[downAddress].role-1] += _amt;
+
         players[msg.sender].inventory -= _amt;
+        inventory[players[msg.sender].role-1] -= _amt;
+
         players[msg.sender].orderReceived -= _amt;
 
         emit orderSent(_amt);
