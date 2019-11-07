@@ -59,88 +59,6 @@ App = {
     });
   }, */
 
-  /*render: function() {
-    var supplyChainInstance;
-    var loader = $("#loader");
-    var content = $("#content");
-
-    loader.show();
-    content.hide();
-
-    // Load account data
-    web3.eth.getCoinbase(function(err, account) {
-      if (err === null) {
-        App.account = account;
-        $("#accountAddress").html("Your Account: " + account);
-      }
-    });
-
-    // Load contract data
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-      supplyChainInstance = instance;
-      console.log(supplyChainInstance);
-      return supplyChainInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
-
-      var candidatesSelect = $('#candidatesSelect');
-      candidatesSelect.empty();
-
-      for (var i = 1; i <= candidatesCount; i++) {
-        supplyChainInstance.candidates(i).then(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var voteCount = candidate[2];
-
-          // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
-
-          // Render candidate ballot option
-          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
-          candidatesSelect.append(candidateOption);
-        });
-      }
-      return supplyChainInstance.voters(App.account);
-    }).then(function(hasVoted) {
-      // Do not allow a user to vote
-      if(hasVoted) {
-        $('form').hide();
-      }
-      loader.hide();
-      content.show();
-    }).catch(function(error) {
-      console.warn(error);
-    });
-  }, */
-
-
-  /*checkValidity: function(num) {
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-      instance.players(web3.eth.accounts).then(function(player) {
-        
-        var id = player[0].c[0];
-        console.log(num);
-        console.log(web3.eth.accounts);
-        console.log(id);
-        if(num !== id) {
-            window.location.href = "error.html";
-            console.log("incorrect");
-            return;
-          }
-        if(num===1)
-            window.location.href = "retailer.html";
-        else if(num===2)
-            window.location.href = "wholesaler.html";
-        else if(num===3)
-            window.location.href = "distributer.html";
-        else if(num===4)
-            window.location.href = "factory.html";
-      })
-    })
-  },*/
-
   displayDetails: function() {
       var content = $("#content");
 
@@ -152,7 +70,6 @@ App = {
     });
 
        //content.show();
-
     },
 
   getDetails: function() {
@@ -184,7 +101,7 @@ App = {
           var role = player[0].c[0];
         });
 
-        return instance.order1(orderAmount, {from: App.account}); 
+        return instance.order(orderAmount, {from: App.account}); 
     }).then(function(result) {
       document.getElementById("postOrder").style.display = 'none';
       document.getElementById("orderPlaced").style.display = 'block';

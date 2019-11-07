@@ -9,6 +9,7 @@ contract SupplyChain {
         uint orderReceived;
         uint orderSent;
         address upstream;
+        address downstream;
     }
 
     // Store accounts that have voted
@@ -25,13 +26,13 @@ contract SupplyChain {
 
 
     function setRoles() private {
-        players[0xe54F19D76FA26AA456cd59Df78DE136fEB4e4B13] = Details(1, 10, 5, 0, 0x981e807DbDEDB2C32B1f60C0Bda24c088F768D74);
-        players[0x981e807DbDEDB2C32B1f60C0Bda24c088F768D74] = Details(2, 20, 15, 0, 0xF322A90f6345f27349A22d0022B986775eB7A105);
-        players[0xF322A90f6345f27349A22d0022B986775eB7A105] = Details(3, 30, 25, 0, 0xCE4d47CCD7F50EE76dD69F22Ff9E9eB0ac33D25d);
-        players[0xCE4d47CCD7F50EE76dD69F22Ff9E9eB0ac33D25d] = Details(4, 40, 35, 0, 0xCE4d47CCD7F50EE76dD69F22Ff9E9eB0ac33D25d);
+        players[0x13A72135525FE16DcECb0C0BF59F1f730aF00e27] = Details(1, 10, 5, 0, 0xBF43C96c307B2c822fbc6Ae3fC6cf203D1c8062D, 0x13A72135525FE16DcECb0C0BF59F1f730aF00e27);
+        players[0xBF43C96c307B2c822fbc6Ae3fC6cf203D1c8062D] = Details(2, 20, 15, 0, 0xFe536dc6ef2167B9184946FF21D084E16e5EAd67, 0x13A72135525FE16DcECb0C0BF59F1f730aF00e27);
+        players[0xFe536dc6ef2167B9184946FF21D084E16e5EAd67] = Details(3, 30, 25, 0, 0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9, 0xBF43C96c307B2c822fbc6Ae3fC6cf203D1c8062D);
+        players[0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9] = Details(4, 40, 35, 0, 0x99C230F42Da0F5391cf4EA4dc4e2e6310eFDadB9, 0xFe536dc6ef2167B9184946FF21D084E16e5EAd67);
     }
 
-    function order1(uint _amt) public {
+    function order(uint _amt) public {
        address upAddreess = players[msg.sender].upstream;
        players[upAddreess].orderReceived = _amt;
  //       emit orderPlaced(_orderAmount);
