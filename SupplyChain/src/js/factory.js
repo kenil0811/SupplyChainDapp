@@ -38,7 +38,7 @@ App = {
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
 
-    App.listenForEvents();
+     // App.listenForEvents();
      return App.displayDetails();
       //return App.render();
     });
@@ -88,24 +88,6 @@ App = {
     })
   },
 
-  submitOrderUp: function() {
-    
-    var orderAmount = document.getElementById("amountUp").value;
-    console.log(orderAmount);
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-        
-        instance.players(App.account).then(function(player) {
-          var role = player[0].c[0];
-        });
-
-        return instance.orderUp(orderAmount, {from: App.account}); 
-    }).then(function(result) {
-      document.getElementById("postOrder").style.display = 'none';
-      document.getElementById("orderPlaced").style.display = 'block';
-    }).catch(function(err) {
-      console.error(err);
-    });
-  },
 
   submitOrderDown: function() {
     
@@ -126,10 +108,26 @@ App = {
     });
   }
 
+  fillStock: function() {
+    
+    var orderAmount = document.getElementById("amountUp").value;
+    console.log(orderAmount);
+    App.contracts.SupplyChain.deployed().then(function(instance) {
+        
+        instance.players(App.account).then(function(player) {
+          var role = player[0].c[0];
+        });
 
-
+        return instance.fillStock(orderAmount, {from: App.account}); 
+    }).then(function(result) {
+      document.getElementById("postOrder").style.display = 'none';
+      document.getElementById("orderPlaced").style.display = 'block';
+    }).catch(function(err) {
+      console.error(err);
+    });
+  },
 };
-  
+
 $(function() {
   $(window).load(function() {
     App.init();
