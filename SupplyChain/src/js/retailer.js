@@ -55,6 +55,7 @@ App = {
         console.log("event triggered", event)
         // Reload when a new vote is recorded
         App.getDetails();
+        App.displayDetails();
       });
     });
   }, 
