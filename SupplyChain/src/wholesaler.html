@@ -28,6 +28,22 @@
       <h2 id="id3"></h2><br>
     </div>
   </div>
+
+  <div id="postOrder">
+    <h3>Submit Order to Producer: </h3>
+    <input type="number" id="amountUp" placeholder="Enter Amount">
+    <button type="button" onclick="App.submitOrderUp()"> Submit</button>
+  </div>
+
+  <div id="sendOrder">
+    <h3>Send Order to Wholesaler: </h3>
+    <input type="number" id="amountDown" placeholder="Enter Amount">
+    <button type="button" onclick="App.submitOrderDown()"> Submit</button>
+  </div>
+
+<div id="orderPlaced" style="display: none;">
+  <h2> Your order has been placed</h2>
+</div>
 </div>
 </div>
 
