@@ -108,7 +108,7 @@ App = {
     });
   }
 
-  submitOrderUp: function() {
+  fillStock: function() {
     
     var orderAmount = document.getElementById("amountUp").value;
     console.log(orderAmount);
