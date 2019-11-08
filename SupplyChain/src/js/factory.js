@@ -118,7 +118,7 @@ App = {
           var role = player[0].c[0];
         });
 
-        return instance.orderUp(orderAmount, {from: App.account}); 
+        return instance.fillStock(orderAmount, {from: App.account}); 
     }).then(function(result) {
       document.getElementById("postOrder").style.display = 'none';
       document.getElementById("orderPlaced").style.display = 'block';
