@@ -13,7 +13,7 @@
   <div class="card border-dark mt-4 mb-3">
   <div class="card-header" style="font-size: 50px;">Factory</div>
   <div class="card-body text-dark">
-    <h5 class="card-title" id="accountAddress" style="font-size: 30px">Your Address</h5>
+    <h5 class="card-title" id="accountAddress" style="font-size: 30px"></h5>
     <p class="card-text" style="font-size: 20px;"></p>
   </div>
   <button type="button"  onclick="App.getDetails();" class="btn btn-secondary">Get Your Details:</button>
@@ -29,12 +29,21 @@
     </div>
   </div>
 
+
+  <div id="postOrder">
+    <h3>Inventory Update</h3>
+    <input type="number" id="amountUp" placeholder="Enter Amount">
+    <button type="button" onclick="App.fillStock()"> Submit</button>
+  </div>
+
   <div id="sendOrder">
     <h3>Send Order to Wholesaler: </h3>
     <input type="number" id="amountDown" placeholder="Enter Amount">
     <button type="button" onclick="App.submitOrderDown()"> Submit</button>
   </div>
 
+< div id="orderPlaced" style="display: none;">
+  <h2> Your order has been placed</h2>
 </div>
 </div>
 
