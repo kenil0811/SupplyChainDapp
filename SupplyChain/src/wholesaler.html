@@ -11,7 +11,7 @@
 
 <div class="container">
   <div class="card border-dark mt-4 mb-3">
-  <div class="card-header" style="font-size: 50px;">Wholesaler</div>
+  <div class="card-header" style="font-size: 50px;">Retailer</div>
   <div class="card-body text-dark">
     <h5 class="card-title" id="accountAddress" style="font-size: 30px"></h5>
     <p class="card-text" style="font-size: 20px;"></p>
@@ -29,22 +29,29 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-6" align="center">
   <div id="postOrder">
     <h3>Submit Order to Distributer: </h3>
     <input type="number" id="amountUp" placeholder="Enter Amount">
     <button type="button" onclick="App.submitOrderUp()"> Submit</button>
   </div>
 
-  <div id="sendOrder">
-    <h3>Send Order to Retailer: </h3>
+
+  <div id="orderPlaced" style="display: none;">
+    <h2> Your order has been placed</h2>
+  </div>
+</div>
+  <div class="col-6" align="center">
+    <div id="sendOrder">
+    <h3>Submit Order to Retailer: </h3>
     <input type="number" id="amountDown" placeholder="Enter Amount">
     <button type="button" onclick="App.submitOrderDown()"> Submit</button>
   </div>
-
-<div id="orderPlaced" style="display: none;">
-  <h2> Your order has been placed</h2>
+  </div>
 </div>
-
+<br>
+<br>
 <table class="table table-hover">
     <thead>
       <tr>
