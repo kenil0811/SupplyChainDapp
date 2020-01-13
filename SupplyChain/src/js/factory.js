@@ -119,7 +119,6 @@ App = {
 
         return instance.orderDown(orderAmount, {from: App.account}); 
     }).then(function(result) {
-      document.getElementById("postOrder").style.display = 'none';
       document.getElementById("orderPlaced").style.display = 'block';
     }).catch(function(err) {
       console.error(err);

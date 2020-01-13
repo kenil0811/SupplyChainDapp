@@ -4,16 +4,25 @@ pragma solidity ^0.5.0;
 contract SupplyChain {
 
     struct Details {
+        uint inventoryReceived;
+        uint inventoryPrevious;
+        uint demand;
+        uint shippingQuantity;
+        uint orderPlaced;
+        uint inventoryLeft;         
+        }
+
+    struct Player {
         uint role;
-        uint inventory;
-        uint orderReceived;
-        uint orderSent;
         address upstream;
         address downstream;
+        mapping (uint => Details) week;
     }
 
+
     // Store accounts that have voted
-    mapping(address => Details) public players;
+    mapping(address => Player) public players;
+
 
     uint[4] public inventory;
 
@@ -32,15 +41,20 @@ contract SupplyChain {
 
 
     function setRoles() private {
-        players[0x4Fa7a4ffDe1a72b3921aC2EfCCadF22EDb146F5D] = Details(1, 100, 20, 0, 0xa778E73d7081fF7f48269f535dcE0974d3572168, 0x4Fa7a4ffDe1a72b3921aC2EfCCadF22EDb146F5D);
-        players[0xa778E73d7081fF7f48269f535dcE0974d3572168] = Details(2, 20, 15, 0, 0xFd74191fb585b9e0c10Ffc2c0b45F574773eA2Cf, 0x4Fa7a4ffDe1a72b3921aC2EfCCadF22EDb146F5D);
-        players[0xFd74191fb585b9e0c10Ffc2c0b45F574773eA2Cf] = Details(3, 30, 25, 0, 0x976281a8daE01Db0029007681E61Bc3b5C22a6F4, 0xa778E73d7081fF7f48269f535dcE0974d3572168);
-        players[0x976281a8daE01Db0029007681E61Bc3b5C22a6F4] = Details(4, 40, 35, 0, 0x976281a8daE01Db0029007681E61Bc3b5C22a6F4, 0xFd74191fb585b9e0c10Ffc2c0b45F574773eA2Cf);
+        players[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34] = Player(1, 0x5a528ef100931de8dd12C08d09877ac038AF04eb, 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
+        players[0x5a528ef100931de8dd12C08d09877ac038AF04eb] = Player(2, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C, 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
+        players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
+        players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
+
+        players[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].week[0] = Details(0, 40, 0, 0, 0, 0);
+        players[0x5a528ef100931de8dd12C08d09877ac038AF04eb].week[0] = Details(0, 40, 0, 0, 0, 0);
+        players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].week[0] = Details(0, 40, 0, 0, 0, 0);
+        players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].week[0] = Details(0, 40, 0, 0, 0, 0);
 
         inventory = [100, 20, 30, 40];
     }
 
-    function orderUp(uint _amt) public {
+/*    function orderUp(uint _amt) public {
        address upAddreess = players[msg.sender].upstream;
        players[upAddreess].orderReceived += _amt;
  //       emit orderPlaced(_orderAmount);
@@ -76,24 +90,5 @@ contract SupplyChain {
 
         emit orderSent(_amt);
     }
-
-
-
-    /*
-    function vote (uint _DetailsId) public {
-        // require that they haven't voted before
-        //require(!voters[msg.sender]);
-
-        // require a valid Details
-        //require(_DetailsId > 0 && _DetailsId <= DetailssCount);
-
-        // record that voter has voted
-        //voters[msg.sender] = true;
-
-        // update Details vote Count
-      //  Detailss[_DetailsId].voteCount ++;
-
-        // trigger voted event
-        //emit votedEvent(_DetailsId);
-    } */
+*/
 }
