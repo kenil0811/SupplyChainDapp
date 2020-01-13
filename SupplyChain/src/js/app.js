@@ -130,7 +130,7 @@ App = {
             return;
           }
         if(num===1)
-            window.location.href = "retailer.html";
+            window.location.href = "new.html";
         else if(num===2)
             window.location.href = "wholesaler.html";
         else if(num===3)
