@@ -18,7 +18,7 @@ contract SupplyChain {
         address downstream;
     }
 
-    uint private weekNo;
+    uint public weekNo;
     uint private leadTime;
     uint[4] private orderState;
     uint[4] public inventory;

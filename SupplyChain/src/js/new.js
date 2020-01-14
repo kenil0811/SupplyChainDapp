@@ -38,14 +38,14 @@ App = {
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
 
-    App.listenForEvents();
+    //App.listenForEvents();
      return App.displayDetails();
       //return App.render();
     });
   },
 
   // Listen for events emitted from the contract
-  listenForEvents: function() {
+/*  listenForEvents: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
@@ -57,7 +57,7 @@ App = {
         App.displayDetails();
       });
     });
-  }, 
+  }, */
 
   displayDetails: function() {
       var content = $("#content");
@@ -74,14 +74,14 @@ App = {
         instance.weekNo().then(function(weeks){
           //console.log(weeks.c[0]);
           //console.log(numWeeks);
-        var a=0;
+        var a=1;
         for(i=0; i<weeks.c[0]; i++) {
             //console.log(i);
             //console.log(weeks.c[0]);
             instance.weekDetails(web3.eth.accounts,i).then(function(player){
                 //console.log(i);
               var table = document.getElementById("DetailsTable");
-              var row = table.insertRow(1);
+              var row = table.insertRow(a);
               var c = row.insertCell(0);
               c.innerHTML = a;
               a++;
