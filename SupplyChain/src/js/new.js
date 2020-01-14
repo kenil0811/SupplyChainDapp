@@ -25,7 +25,7 @@ App = {
       web3 = new Web3(web3.currentProvider);
     } else {
       // Specify default instance if no web3 instance provided
-      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
       web3 = new Web3(App.web3Provider);
     }
     return App.initContract();
@@ -69,7 +69,35 @@ App = {
       }
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
-        instance.inventory(0).then(function(array) {
+        
+        
+        instance.weekNo().then(function(weeks){
+          //console.log(weeks.c[0]);
+          //console.log(numWeeks);
+        var a=0;
+        for(i=0; i<weeks.c[0]; i++) {
+            //console.log(i);
+            //console.log(weeks.c[0]);
+            instance.play(web3.eth.accounts,i).then(function(player){
+                //console.log(i);
+              var table = document.getElementById("DetailsTable");
+              var row = table.insertRow(1);
+              var c = row.insertCell(0);
+              c.innerHTML = a;
+              a++;
+              for(var j = 0;j<player.length;j++){
+                var cell = row.insertCell(j+1);
+                //console.log(j);
+                cell.innerHTML = player[j].c[0];  
+              }
+
+            });
+          }
+            
+        });
+
+        
+       /* instance.inventory(0).then(function(array) {
           $("#ret_inv").html(array.c[0]);
         });
         instance.inventory(1).then(function(array) {
@@ -81,7 +109,7 @@ App = {
         instance.inventory(3).then(function(array) {
           $("#fac_inv").html(array.c[0]);
         });
-
+        */
 
       })
     });

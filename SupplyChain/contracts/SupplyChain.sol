@@ -16,14 +16,15 @@ contract SupplyChain {
         uint role;
         address upstream;
         address downstream;
-        mapping (uint => Details) week;
     }
 
-
+    Details[] public week;
     // Store accounts that have voted
     mapping(address => Player) public players;
 
+    mapping(address => Details[]) public play;
 
+    uint public weekNo;
     uint[4] public inventory;
 
     // voted event
@@ -46,12 +47,21 @@ contract SupplyChain {
         players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
         players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
 
-        players[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].week[0] = Details(0, 40, 0, 0, 0, 0);
-        players[0x5a528ef100931de8dd12C08d09877ac038AF04eb].week[0] = Details(0, 40, 0, 0, 0, 0);
-        players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].week[0] = Details(0, 40, 0, 0, 0, 0);
-        players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].week[0] = Details(0, 40, 0, 0, 0, 0);
+        play[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 40, 0, 0, 0, 0));
+        play[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(0, 40, 0, 0, 0, 0));
+        play[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(0, 40, 0, 0, 0, 0));
+        play[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(0, 40, 0, 0, 0, 0));
 
+        weekNo = 1;
+        addWeeks(0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
+        addWeeks(0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
+        addWeeks(0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
         inventory = [100, 20, 30, 40];
+    }
+
+    function addWeeks(address actor) public {
+        play[actor].push(Details(5,20,10,34,20,10));
+        weekNo++;
     }
 
 /*    function orderUp(uint _amt) public {
