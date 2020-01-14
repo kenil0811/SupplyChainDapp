@@ -22,7 +22,16 @@
       <h4>Previous Inventory</h4>
       <h4>Recieved Quantity</h4>
       <h4>Total Inventory</h4>
-      <h4>Order Placed in week</h4>
+      
+      <div id="placeOrder">
+        <input type="number" id="order" placeholder="Place order for current week">
+        <button type="button" onclick="App.order()"> Submit</button>
+      </div>
+      <div id ="orderPlaced" style="display: none">
+        <h4> Your order has been placed</h4>
+      </div>
+      <hr>
+      
       <button type="button" onclick="window.location.href = 'new.html';" class="btn btn-secondary">Order Details</button>
     </div>
     <div class="col-6">

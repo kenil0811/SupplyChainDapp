@@ -54,8 +54,8 @@ App = {
       }).watch(function(error, event) {
         console.log("event triggered", event)
         // Reload when a new vote is recorded
-        App.getDetails();
-        App.displayDetails();
+        //App.getDetails();
+       // App.displayDetails();
       });
     });
   }, 
@@ -106,19 +106,15 @@ App = {
     })
   },
 
-  submitOrderUp: function() {
+  order: function() {
     
-    var orderAmount = document.getElementById("amountUp").value;
+    var orderAmount = document.getElementById("order").value;
     console.log(orderAmount);
     App.contracts.SupplyChain.deployed().then(function(instance) {
         
-        instance.players(App.account).then(function(player) {
-          var role = player[0].c[0];
-        });
-
-        return instance.orderUp(orderAmount, {from: App.account}); 
+        return instance.order(orderAmount, {from: App.account}); 
     }).then(function(result) {
-      document.getElementById("postOrder").style.display = 'none';
+      document.getElementById("placeOrder").style.display = 'none';
       document.getElementById("orderPlaced").style.display = 'block';
     }).catch(function(err) {
       console.error(err);
