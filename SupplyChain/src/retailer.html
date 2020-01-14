@@ -16,7 +16,39 @@
     <h5 class="card-title" id="accountAddress" style="font-size: 30px"></h5>
     <p class="card-text" style="font-size: 20px;"></p>
   </div>
-  <button type="button"  onclick="App.getDetails();" class="btn btn-secondary">Get Your Details:</button>
+  <div class="row">
+    <div class="col-6">
+      <h4>Customer Demand</h4>
+      <h4>Previous Inventory</h4>
+      <h4>Recieved Quantity</h4>
+      <h4>Total Inventory</h4>
+      <h4>Order Placed in week</h4>
+      <button type="button" onclick="window.location.href = 'new.html';" class="btn btn-secondary">Order Details</button>
+    </div>
+    <div class="col-6">
+      <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Retailer</th>
+        <th>Wholesaler</th>
+        <th>Distributer</th>
+        <th>Factory</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Inventory<b></td>
+        <td id="ret_inv"></td>
+        <td id="who_inv"></td>
+        <td id="dis_inv"></td>
+        <td id="fac_inv"></td>
+      </tr>
+    </tbody>
+  </table>      
+    </div>
+  </div>  
+ <!-- <button type="button"  onclick="App.getDetails();" class="btn btn-secondary">Get Your Details:</button>
   <div class="row mt-4">
     <div class="col-4" style="text-align: center;">
       <h2 id="id1"></h2><br>
@@ -73,7 +105,7 @@
       </tr>
     </tbody>
   </table>
-
+-->
 </div>
 </div>
 
