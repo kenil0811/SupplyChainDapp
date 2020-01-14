@@ -78,7 +78,7 @@ App = {
         for(i=0; i<weeks.c[0]; i++) {
             //console.log(i);
             //console.log(weeks.c[0]);
-            instance.play(web3.eth.accounts,i).then(function(player){
+            instance.weekDetails(web3.eth.accounts,i).then(function(player){
                 //console.log(i);
               var table = document.getElementById("DetailsTable");
               var row = table.insertRow(1);
