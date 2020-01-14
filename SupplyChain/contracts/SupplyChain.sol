@@ -18,24 +18,23 @@ contract SupplyChain {
         address downstream;
     }
 
-    // Store accounts that have voted
-    mapping(address => Player) public players;
-
-    mapping(address => Details[]) public weekDetails;
-
-    uint public weekNo;
+    uint private weekNo;
+    uint private leadTime;
+    uint[4] private orderState;
     uint[4] public inventory;
 
-    // voted event
-    event orderPlaced (
-        uint indexed _orderAmount
+    mapping(address => Player) public players;
+    mapping(address => Details[]) public weekDetails;
+
+    
+
+    event weekEnd (
     );
 
-    event orderSent (
-        uint indexed _amt
-    );
+
 
     constructor () public {
+        leadTime = 1;
         setRoles();
     }
 
@@ -56,6 +55,7 @@ contract SupplyChain {
         addWeeks(0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
         addWeeks(0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
         inventory = [100, 20, 30, 40];
+        orderState = [0,0,0,0];
     }
 
     function addWeeks(address actor) public {
@@ -63,26 +63,76 @@ contract SupplyChain {
         weekNo++;
     }
 
-/*    function orderUp(uint _amt) public {
-       address upAddreess = players[msg.sender].upstream;
-       players[upAddreess].orderReceived += _amt;
- //       emit orderPlaced(_orderAmount);
+
+    function checkWeekEnd() private {
+
+        if(players[msg.sender].role == 1)  
+            weekDetails[msg.sender][weekNo+1].demand = (uint(keccak256(abi.encode(block.difficulty, block.timestamp)))%100);
+
+        if(orderState[0]==1 && orderState[1]==1 && orderState[2]==1 && orderState[3]==1 ) {
+            orderState = [0, 0, 0, 0];
+            weekNo++;
+            emit weekEnd();
+        }
     }
 
-    function fillStock(uint _amt) public {
-        players[msg.sender].inventory += _amt;
-        inventory[players[msg.sender].role - 1] += _amt;
-        emit orderSent(_amt);
+    function order(uint _amt) public {
+        address upAddreess = players[msg.sender].upstream;
+        address downAddreess = players[msg.sender].downstream;
+
+        if(players[msg.sender].role == 4)
+            weekDetails[msg.sender][weekNo].inventoryReceived = weekDetails[upAddreess][weekNo-leadTime].orderPlaced;
+        else
+            weekDetails[msg.sender][weekNo].inventoryReceived = weekDetails[upAddreess][weekNo-leadTime].shippingQuantity;
+        
+        weekDetails[msg.sender][weekNo].inventoryPrevious = weekDetails[msg.sender][weekNo-1].inventoryLeft;
+
+        uint totalInventory = weekDetails[msg.sender][weekNo].inventoryReceived + weekDetails[msg.sender][weekNo].inventoryPrevious;
+
+        if (players[msg.sender].role != 4) {
+            if(weekNo-leadTime > 0)
+                weekDetails[upAddreess][weekNo].demand = weekDetails[msg.sender][weekNo-leadTime].orderPlaced;
+            else
+                weekDetails[upAddreess][weekNo].demand = 0;
+        }
+
+        if(weekDetails[msg.sender][weekNo].demand < totalInventory) {
+            weekDetails[msg.sender][weekNo].shippingQuantity = weekDetails[msg.sender][weekNo].demand;
+            weekDetails[msg.sender][weekNo].inventoryLeft = totalInventory - weekDetails[msg.sender][weekNo].demand;
+        }
+        else {
+            weekDetails[msg.sender][weekNo].shippingQuantity = totalInventory;
+            weekDetails[msg.sender][weekNo].inventoryLeft = 0;
+        }
+
+
+        weekDetails[msg.sender][weekNo].orderPlaced = _amt;
+
+        orderState[players[msg.sender].role - 1] = 1;
+
+        checkWeekEnd();
     }
 
-    function clearStock(uint _amt) public {
-        require(_amt <= players[msg.sender].inventory && _amt<= players[msg.sender].orderReceived);
+ /*   function fillStock(uint _amt) public {
+
+        require(players[msg.sender].role==4);
+        weekDetails[msg.sender][weekNo].inventoryPrevious = weekDetails[msg.sender][weekNo-1].inventoryLeft;
+        weekDetails[msg.sender][weekNo].inventoryReceived = weekDetails[msg.sender][weekNo-leadTime].orderPlaced;
+        weekDetails[msg.sender][weekNo].orderPlaced = _amt;
+//        players[msg.sender].inventory += _amt;
+//        inventory[players[msg.sender].role - 1] += _amt;
+//        emit orderSent(_amt);
+    }
+
+/*function clearStock(uint _amt) public {
+       // require(_amt <= players[msg.sender].inventory && _amt<= players[msg.sender].orderReceived);
         players[msg.sender].inventory -= _amt;
         inventory[players[msg.sender].role-1] -= _amt;
 
         players[msg.sender].orderReceived -= _amt;
-        emit orderSent(_amt);
+        //emit orderSent(_amt);
     }
+
 
     function orderDown(uint _amt) public {
 
