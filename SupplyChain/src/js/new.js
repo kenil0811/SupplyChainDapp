@@ -74,14 +74,14 @@ App = {
         instance.weekNo().then(function(weeks){
           //console.log(weeks.c[0]);
           //console.log(numWeeks);
-        var a=1;
+        var a=0;
         for(i=0; i<weeks.c[0]; i++) {
             //console.log(i);
             //console.log(weeks.c[0]);
             instance.weekDetails(web3.eth.accounts,i).then(function(player){
                 //console.log(i);
               var table = document.getElementById("DetailsTable");
-              var row = table.insertRow(a);
+              var row = table.insertRow(1);
               var c = row.insertCell(0);
               c.innerHTML = a;
               a++;
