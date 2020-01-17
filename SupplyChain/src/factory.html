@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Producer</title>
+    <title>Factory</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   </head>
   <body >
-
+<!--
 <div class="container">
   <div class="card border-dark mt-4 mb-3">
   <div class="card-header" style="font-size: 50px;">Factory</div>
@@ -71,8 +71,67 @@
   </table>
   </div>
 </div>
-  
+ --> 
 
+<div class="container">
+  <div class="card border-dark mt-4 mb-3">
+  <div class="card-header" style="font-size: 50px;"><i>Factory</i></div>
+  <div class="card-body text-dark">
+    <h5 class="card-title" id="accountAddress" style="font-size: 30px"></h5>
+    <p class="card-text" style="font-size: 20px;"></p>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="row">
+        <div class="col-6">
+          <h4>Distributor Demand:</h4> 
+          <h4>Previous Inventory:</h4>
+          <h4>Recieved Quantity:</h4>
+          <h4>Total Inventory:</h4>        
+        </div>
+      
+      <div class="col-6">
+        <h4 id="demand">a</h4>
+        <h4 id="prev_inv">b</h4>
+        <h4 id="rec_inv">c</h4>
+        <h4 id="total_inv">d</h4>
+      </div>
+    </div>
+      
+      <div id="placeOrder">
+        <input type="number" id="order" placeholder="Place order for current week">
+        <button type="button" onclick="App.order()"> Submit</button>
+      </div>
+      <div id ="orderPlaced" style="display: none">
+        <h4> Order will be ready by next week.</h4>
+      </div>
+      <hr>
+      
+      <button type="button" onclick="window.location.href = 'new.html';" class="btn btn-secondary">Order Details</button>
+    </div>
+    <div class="col-6">
+      <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Retailer</th>
+        <th>Wholesaler</th>
+        <th>Distributer</th>
+        <th>Factory</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Inventory<b></td>
+        <td id="ret_inv"></td>
+        <td id="who_inv"></td>
+        <td id="dis_inv"></td>
+        <td id="fac_inv"></td>
+      </tr>
+    </tbody>
+  </table>      
+    </div>
+  </div>  
    
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
