@@ -57,6 +57,7 @@ App = {
 
 
     App.listenForEvents();
+    App.getDetails();
     return App.displayDetails();
     });
   },
@@ -107,9 +108,9 @@ App = {
   getDetails: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       instance.weekNo().then(function(weekNo) {
-      instance.weekDetails(web3.eth.accounts, weekNo-1).then(function(details) {
+      instance.weekDetails(web3.eth.accounts, weekNo.c[0]-1).then(function(details) {
       console.log(details);
-
+      console.log(weekNo.c[0]);
         document.getElementById("demand").innerHTML = details[2].c[0];
         document.getElementById("prev_inv").innerHTML = details[1].c[0];
         document.getElementById("rec_inv").innerHTML = details[0].c[0];

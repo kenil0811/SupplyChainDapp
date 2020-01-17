@@ -44,17 +44,17 @@ contract SupplyChain {
         players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
         players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
 
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 40, 20, 0, 0, 40));
-        weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(0, 40, 0, 0, 0, 40));
-        weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(0, 40, 0, 0, 0, 40));
-        weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(0, 40, 0, 0, 0, 40));
+        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 50, 20, 0, 0, 30));
+        weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(0, 50, 0, 0, 0, 50));
+        weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(0, 50, 0, 0, 0, 50));
+        weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(0, 50, 0, 0, 0, 50));
 
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 40, 0, 0, 0, 40));
+        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 0, 0, 0, 0, 0));
         weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34][1].demand = (uint(keccak256(abi.encode(block.difficulty, block.timestamp)))%100);        
 
         weekNo = 1;
         leadTime = 1;
-        inventory = [40, 40, 40, 40];
+        inventory = [30, 50, 50, 50];
         orderState = [0,0,0,0];
     }
 
@@ -65,6 +65,8 @@ contract SupplyChain {
             weekDetails[msg.sender].push(Details(0,0,0,0,0,0));
             weekDetails[msg.sender][weekNo+1].demand = (uint(keccak256(abi.encode(block.difficulty, block.timestamp)))%100);
         }
+
+        inventory[players[msg.sender].role-1] = weekDetails[msg.sender][weekNo].inventoryLeft;
 
         if(orderState[0]==1 && orderState[1]==1 && orderState[2]==1 && orderState[3]==1 ) {
             orderState = [0, 0, 0, 0];
