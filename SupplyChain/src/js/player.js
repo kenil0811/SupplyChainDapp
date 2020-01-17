@@ -38,22 +38,36 @@ App = {
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
 
-      App.listenForEvents();
-     return App.displayDetails();
-      //return App.render();
+      App.contracts.SupplyChain.deployed().then(function(instance) {
+
+        instance.players(web3.eth.accounts).then(function(player) {
+          var role = player[0].c[0]-1;
+          instance.orderState(role).then(function(state) {
+            if(state.c[0] == 1) {
+              document.getElementById("placeOrder").style.display = "none"; 
+              document.getElementById("orderPlaced").style.display = "block";
+            }
+            else {
+              document.getElementById("placeOrder").style.display = "block"; 
+              document.getElementById("orderPlaced").style.display = "none";
+            }
+          });
+        });
+      });
+
+
+    App.listenForEvents();
+    return App.displayDetails();
     });
   },
 
   // Listen for events emitted from the contract
   listenForEvents: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
-      // Restart Chrome if you are unable to receive this event
-      // This is a known issue with Metamask
-      // https://github.com/MetaMask/metamask-extension/issues/2393
-      instance.orderSent({}, {
-      }).watch(function(error, event) {
-        console.log("event triggered", event)
-        // Reload when a new vote is recorded
+        instance.weekEnd({}, {}).watch(function(error, event) {
+
+              document.getElementById("placeOrder").disabled = false; 
+              document.getElementById("orderPlaced").disabled = true; 
         App.getDetails();
         App.displayDetails();
       });
@@ -92,57 +106,39 @@ App = {
 
   getDetails: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
-      instance.players(web3.eth.accounts).then(function(player) {
-        
-        document.getElementById("id1").innerHTML = "<h2> Your Inventory: <b id=\"Inventory\"> </h2> <hr>";
-        document.getElementById("Inventory").innerHTML = player[1].c[0];
+      instance.weekNo().then(function(weekNo) {
+      instance.weekDetails(web3.eth.accounts, weekNo-1).then(function(details) {
+      console.log(details);
 
-        document.getElementById("id2").innerHTML = "<h2> Orders Received: <b id=\"Demand\"> </h2> <hr>";
-        document.getElementById("Demand").innerHTML = player[2].c[0];
+        document.getElementById("demand").innerHTML = details[2].c[0];
+        document.getElementById("prev_inv").innerHTML = details[1].c[0];
+        document.getElementById("rec_inv").innerHTML = details[0].c[0];
+        document.getElementById("total_inv").innerHTML = details[5].c[0];                
 
-        document.getElementById("id3").innerHTML = "<h2> Order Placed: <b id=\"Req\"> </h2> <hr>";
-        document.getElementById("Req").innerHTML = player[3].c[0];
-      })
-    })
+      });
+    });
+    });
   },
 
-
-  submitOrderDown: function() {
+  order: function() {
     
-    var orderAmount = document.getElementById("amountDown").value;
+    var orderAmount = document.getElementById("order").value;
     console.log(orderAmount);
     App.contracts.SupplyChain.deployed().then(function(instance) {
         
-        instance.players(App.account).then(function(player) {
-          var role = player[0].c[0];
-        });
+        return instance.order(orderAmount, {from: App.account}); 
+    }).then(function(result) {      
+              document.getElementById("placeOrder").style.display = "none"; 
+              document.getElementById("orderPlaced").style.display = "block";
 
-        return instance.orderDown(orderAmount, {from: App.account}); 
-    }).then(function(result) {
-      document.getElementById("orderPlaced").style.display = 'block';
     }).catch(function(err) {
       console.error(err);
     });
   },
 
-  fillStock: function() {
-    
-    var orderAmount = document.getElementById("amountUp").value;
-    console.log(orderAmount);
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-        
-        instance.players(App.account).then(function(player) {
-          var role = player[0].c[0];
-        });
 
-        return instance.fillStock(orderAmount, {from: App.account}); 
-    }).then(function(result) {
-    }).catch(function(err) {
-      console.error(err);
-    });
-  },
 };
-
+  
 $(function() {
   $(window).load(function() {
     App.init();
