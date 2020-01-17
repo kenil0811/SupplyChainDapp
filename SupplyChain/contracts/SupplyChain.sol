@@ -44,13 +44,19 @@ contract SupplyChain {
         players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
         players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
 
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 50, 20, 0, 0, 30));
+        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 50, 0, 0, 0, 50));
         weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(0, 50, 0, 0, 0, 50));
         weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(0, 50, 0, 0, 0, 50));
         weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(0, 50, 0, 0, 0, 50));
 
         weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 0, 0, 0, 0, 0));
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34][1].demand = (uint(keccak256(abi.encode(block.difficulty, block.timestamp)))%100);        
+        weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(0, 0, 0, 0, 0, 0));
+        weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(0, 0, 0, 0, 0, 0));
+        weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(0, 0, 0, 0, 0, 0));
+
+        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34][1].demand = (uint(keccak256(abi.encode(block.difficulty, block.timestamp)))%60);        
+
+
 
         weekNo = 1;
         leadTime = 1;
@@ -77,11 +83,8 @@ contract SupplyChain {
 
     function order(uint _amt) public {
         address upAddreess = players[msg.sender].upstream;
-        address downAddreess = players[msg.sender].downstream;
 
-        if(weekDetails[msg.sender].length < weekNo+1)
-            weekDetails[msg.sender].push(Details(0,0,0,0,0,0));
-        if(weekDetails[upAddreess].length < weekNo+1)
+        if(players[msg.sender].role != 4)
             weekDetails[upAddreess].push(Details(0,0,0,0,0,0));
 
 
@@ -94,11 +97,13 @@ contract SupplyChain {
 
         uint totalInventory = weekDetails[msg.sender][weekNo].inventoryReceived + weekDetails[msg.sender][weekNo].inventoryPrevious;
 
+        weekDetails[msg.sender][weekNo].orderPlaced = _amt;
+
         if (players[msg.sender].role != 4) {
-            if(weekNo-leadTime > 0)
-                weekDetails[upAddreess][weekNo].demand = weekDetails[msg.sender][weekNo-leadTime].orderPlaced;
+            if(weekNo-leadTime >= 0)
+                weekDetails[upAddreess][weekNo+1].demand = weekDetails[msg.sender][weekNo].orderPlaced;
             else
-                weekDetails[upAddreess][weekNo].demand = 0;
+                weekDetails[upAddreess][weekNo+1].demand = 0;
         }
 
         if(weekDetails[msg.sender][weekNo].demand < totalInventory) {
@@ -111,7 +116,7 @@ contract SupplyChain {
         }
 
 
-        weekDetails[msg.sender][weekNo].orderPlaced = _amt;
+        
 
         orderState[players[msg.sender].role - 1] = 1;
 
