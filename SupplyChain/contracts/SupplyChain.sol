@@ -20,7 +20,7 @@ contract SupplyChain {
 
     uint public weekNo;
     uint private leadTime;
-    uint[4] private orderState;
+    uint[4] public orderState;
     uint[4] public inventory;
 
     mapping(address => Player) public players;
@@ -44,7 +44,7 @@ contract SupplyChain {
         players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
         players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
 
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 40, 0, 0, 0, 40));
+        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 40, 20, 0, 0, 40));
         weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(0, 40, 0, 0, 0, 40));
         weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(0, 40, 0, 0, 0, 40));
         weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(0, 40, 0, 0, 0, 40));
@@ -77,15 +77,18 @@ contract SupplyChain {
         address upAddreess = players[msg.sender].upstream;
         address downAddreess = players[msg.sender].downstream;
 
-        if(players[msg.sender].role != 1)
+        if(weekDetails[msg.sender].length < weekNo+1)
             weekDetails[msg.sender].push(Details(0,0,0,0,0,0));
+        if(weekDetails[upAddreess].length < weekNo+1)
+            weekDetails[upAddreess].push(Details(0,0,0,0,0,0));
+
 
         if(players[msg.sender].role == 4)
             weekDetails[msg.sender][weekNo].inventoryReceived = weekDetails[upAddreess][weekNo-leadTime].orderPlaced;
         else
             weekDetails[msg.sender][weekNo].inventoryReceived = weekDetails[upAddreess][weekNo-leadTime].shippingQuantity;
         
-    /*    weekDetails[msg.sender][weekNo].inventoryPrevious = weekDetails[msg.sender][weekNo-1].inventoryLeft;
+        weekDetails[msg.sender][weekNo].inventoryPrevious = weekDetails[msg.sender][weekNo-1].inventoryLeft;
 
         uint totalInventory = weekDetails[msg.sender][weekNo].inventoryReceived + weekDetails[msg.sender][weekNo].inventoryPrevious;
 
@@ -110,7 +113,7 @@ contract SupplyChain {
 
         orderState[players[msg.sender].role - 1] = 1;
 
-        checkWeekEnd(); */
+        checkWeekEnd(); 
     }
 
  /*   function fillStock(uint _amt) public {
