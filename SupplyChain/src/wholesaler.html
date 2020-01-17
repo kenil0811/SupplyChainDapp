@@ -11,48 +11,42 @@
 
 <div class="container">
   <div class="card border-dark mt-4 mb-3">
-  <div class="card-header" style="font-size: 50px;">Wholesaler</div>
+  <div class="card-header" style="font-size: 50px;"><i>Wholesaler</i></div>
   <div class="card-body text-dark">
     <h5 class="card-title" id="accountAddress" style="font-size: 30px"></h5>
     <p class="card-text" style="font-size: 20px;"></p>
   </div>
-  <button type="button"  onclick="App.getDetails();" class="btn btn-secondary">Get Your Details:</button>
-  <div class="row mt-4">
-    <div class="col-4" style="text-align: center;">
-      <h2 id="id1"></h2><br>
-    </div>
-    <div class="col-4" style="text-align: center;">
-      <h2 id="id2"></h2><br>
-    </div>
-    <div class="col-4" style="text-align: center;">
-      <h2 id="id3"></h2><br>
-    </div>
-  </div>
-
   <div class="row">
-    <div class="col-6" align="center">
-  <div id="postOrder">
-    <h3>Submit Order to Distributer: </h3>
-    <input type="number" id="amountUp" placeholder="Enter Amount">
-    <button type="button" onclick="App.submitOrderUp()"> Submit</button>
-  </div>
-
-
-  <div id="orderPlaced" style="display: none;">
-    <h2> Your order has been placed</h2>
-  </div>
-</div>
-  <div class="col-6" align="center">
-    <div id="sendOrder">
-    <h3>Submit Order to Retailer: </h3>
-    <input type="number" id="amountDown" placeholder="Enter Amount">
-    <button type="button" onclick="App.submitOrderDown()"> Submit</button>
-  </div>
-  </div>
-</div>
-<br>
-<br>
-<table class="table table-hover">
+    <div class="col-6">
+      <div class="row">
+        <div class="col-6">
+          <h4>Customer Demand:</h4> 
+          <h4>Previous Inventory:</h4>
+          <h4>Recieved Quantity:</h4>
+          <h4>Total Inventory:</h4>        
+        </div>
+      
+      <div class="col-6">
+        <h4 id="demand">a</h4>
+        <h4 id="prev_inv">b</h4>
+        <h4 id="rec_inv">c</h4>
+        <h4 id="total_inv">d</h4>
+      </div>
+    </div>
+      
+      <div id="placeOrder">
+        <input type="number" id="order" placeholder="Place order for current week">
+        <button type="button" onclick="App.order()"> Submit</button>
+      </div>
+      <div id ="orderPlaced" style="display: none">
+        <h4> Your order has been placed</h4>
+      </div>
+      <hr>
+      
+      <button type="button" onclick="window.location.href = 'new.html';" class="btn btn-secondary">Order Details</button>
+    </div>
+    <div class="col-6">
+      <table class="table table-hover">
     <thead>
       <tr>
         <th>Role</th>
@@ -71,10 +65,14 @@
         <td id="fac_inv"></td>
       </tr>
     </tbody>
-  </table>
+  </table>      
+    </div>
+  </div>  
 
 </div>
 </div>
+
+
 
    
 
@@ -86,7 +84,7 @@
 <!--<script src="js/bootstrap.min.js"></script>-->
 <script src="js/web3.min.js"></script>
 <script src="js/truffle-contract.js"></script>
-<script src="js/wholesaler.js"></script>
+<script src="js/player.js"></script>
 </body>
 </html>
 
