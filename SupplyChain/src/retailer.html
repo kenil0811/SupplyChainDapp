@@ -18,10 +18,21 @@
   </div>
   <div class="row">
     <div class="col-6">
-      <h4>Customer Demand</h4>
-      <h4>Previous Inventory</h4>
-      <h4>Recieved Quantity</h4>
-      <h4>Total Inventory</h4>
+      <div class="row">
+        <div class="col-6">
+          <h4>Customer Demand:</h4> 
+          <h4>Previous Inventory:</h4>
+          <h4>Recieved Quantity:</h4>
+          <h4>Total Inventory:</h4>        
+        </div>
+      
+      <div class="col-6">
+        <h4 id="demand">a</h4>
+        <h4 id="prev_inv">b</h4>
+        <h4 id="rec_inv">c</h4>
+        <h4 id="total_inv">d</h4>
+      </div>
+    </div>
       
       <div id="placeOrder">
         <input type="number" id="order" placeholder="Place order for current week">
@@ -57,64 +68,7 @@
   </table>      
     </div>
   </div>  
- <!-- <button type="button"  onclick="App.getDetails();" class="btn btn-secondary">Get Your Details:</button>
-  <div class="row mt-4">
-    <div class="col-4" style="text-align: center;">
-      <h2 id="id1"></h2><br>
-    </div>
-    <div class="col-4" style="text-align: center;">
-      <h2 id="id2"></h2><br>
-    </div>
-    <div class="col-4" style="text-align: center;">
-      <h2 id="id3"></h2><br>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-6" align="center">
-  <div id="postOrder">
-    <h3>Submit Order to Wholesaler: </h3>
-    <input type="number" id="amountUp" placeholder="Enter Amount">
-    <button type="button" onclick="App.submitOrderUp()"> Submit</button>
-  </div>
-
-
-  <div id="orderPlaced" style="display: none;">
-    <h2> Your order has been placed</h2>
-  </div>
-</div>
-  <div class="col-6" align="center">
-    <div id="sendOrder">
-    <h3>Submit Order to Customer: </h3>
-    <input type="number" id="amountDown" placeholder="Enter Amount">
-    <button type="button" onclick="App.submitOrderDown()"> Submit</button>
-  </div>
-  </div>
-</div>
-
-<br>
-<br>
-<table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Role</th>
-        <th>Retailer</th>
-        <th>Wholesaler</th>
-        <th>Distributer</th>
-        <th>Factory</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>Inventory<b></td>
-        <td id="ret_inv"></td>
-        <td id="who_inv"></td>
-        <td id="dis_inv"></td>
-        <td id="fac_inv"></td>
-      </tr>
-    </tbody>
-  </table>
--->
 </div>
 </div>
 
