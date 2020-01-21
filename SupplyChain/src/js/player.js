@@ -111,12 +111,10 @@ App = {
       instance.weekDetails(web3.eth.accounts, weekNo.c[0]-1).then(function(details) {
       console.log(details);
       console.log(weekNo.c[0]);
-
-        instance.weekDetails(web3.eth.accounts, weekNo.c[0]).then(function(details_next) {
-          document.getElementById("demand").innerHTML = details_next[2].c[0];
-        })
+        document.getElementById("demand").innerHTML = details[2].c[0];
         document.getElementById("prev_inv").innerHTML = details[1].c[0];
         document.getElementById("rec_inv").innerHTML = details[0].c[0];
+        document.getElementById("ship_quan").innerHTML = details[3].c[0];
         document.getElementById("total_inv").innerHTML = details[5].c[0];                
 
       });
