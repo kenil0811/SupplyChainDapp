@@ -163,14 +163,6 @@ App = {
 
       });
 
-      if(weekNo.c[0]>=2){
-        instance.weekDetails(web3.eth.accounts,weekNo.c[0]-2).then(function(details){
-            document.getElementById("expectedQuantity").innerHTML = details[5].c[0]; 
-        });   
-      }
-      else{
-            document.getElementById("expectedQuantity").innerHTML = 0;
-      }
 
     });
     });
