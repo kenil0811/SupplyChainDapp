@@ -100,7 +100,7 @@ App = {
           //console.log(weeks.c[0]);
           //console.log(numWeeks);
 
-          document.getElementById("currentWeek").innerHTML = "Current Week: "+weeks.c[0] ;
+          document.getElementById("currentWeek").innerHTML = role_add ;
 
         var table = document.getElementById("DetailsTable");
         for(var i=0; i<weeks.c[0]; i++)
