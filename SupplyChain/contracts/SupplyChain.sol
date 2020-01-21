@@ -4,6 +4,7 @@ pragma solidity ^0.5.0;
 contract SupplyChain {
 
     struct Details {
+        uint weekNo;
         uint inventoryReceived;
         uint inventoryPrevious;
         uint demand;
@@ -45,10 +46,10 @@ contract SupplyChain {
         players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
         players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
 
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(0, 50, 20, 20, 0, 30));
-        weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(0, 50, 0, 0, 0, 50));
-        weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(0, 50, 0, 0, 0, 50));
-        weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(0, 50, 0, 0, 0, 50));
+        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(1, 0, 50, 20, 20, 0, 30));
+        weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(1, 0, 50, 0, 0, 0, 50));
+        weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(1, 0, 50, 0, 0, 0, 50));
+        weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(1, 0, 50, 0, 0, 0, 50));
 
 
         adds[1] = 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34;
@@ -114,7 +115,7 @@ contract SupplyChain {
 
     function order(uint _amt) public {
 
-        weekDetails[msg.sender].push(Details(0,0,0,0,0,0));
+        weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0));
         weekDetails[msg.sender][weekNo-1].orderPlaced = _amt;
 
 /*        address upAddreess = players[msg.sender].upstream;

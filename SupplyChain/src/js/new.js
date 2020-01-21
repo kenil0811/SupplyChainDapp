@@ -74,19 +74,18 @@ App = {
         instance.weekNo().then(function(weeks){
           //console.log(weeks.c[0]);
           //console.log(numWeeks);
-        var a=1;
+
+        var table = document.getElementById("DetailsTable");
+        for(var i=0; i<weeks.c[0]; i++)
+          var row = table.insertRow();
+
         for(i=0; i<weeks.c[0]; i++) {
-            //console.log(i);
-            //console.log(weeks.c[0]);
             instance.weekDetails(web3.eth.accounts,i).then(function(player){
-                //console.log(i);
-              var table = document.getElementById("DetailsTable");
-              var row = table.insertRow(a);
-              var c = row.insertCell(0);
-              c.innerHTML = a;
-              a++;
+              var pos = player[0].c[0];
+              console.log(pos);
+              var row = table.rows[pos];
               for(var j = 0;j<player.length;j++){
-                var cell = row.insertCell(j+1);
+                var cell = row.insertCell(j);
                 //console.log(j);
                 cell.innerHTML = player[j].c[0];  
               }
@@ -95,21 +94,6 @@ App = {
           }
             
         });
-
-        
-       /* instance.inventory(0).then(function(array) {
-          $("#ret_inv").html(array.c[0]);
-        });
-        instance.inventory(1).then(function(array) {
-          $("#who_inv").html(array.c[0]);
-        });
-        instance.inventory(2).then(function(array) {
-          $("#dis_inv").html(array.c[0]);
-        });
-        instance.inventory(3).then(function(array) {
-          $("#fac_inv").html(array.c[0]);
-        });
-        */
 
       })
     });
