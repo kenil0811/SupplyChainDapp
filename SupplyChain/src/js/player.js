@@ -97,9 +97,13 @@ App = {
           document.getElementById("currentWeek").innerHTML = weekNo;
         })
 
-        instance.leadTime().then(function(leadTime) {
-          document.getElementById("leadTime").innerHTML = leadTime;
-        })
+        instance.orderLeadTime().then(function(orderLeadTime) {
+          document.getElementById("orderLeadTime").innerHTML = orderLeadTime;
+        });
+
+        instance.deliveryLeadTime().then(function(deliveryLeadTime) {
+          document.getElementById("deliveryLeadTime").innerHTML = deliveryLeadTime;
+        });
 
         instance.inventory(0).then(function(array) {
           $("#ret_inv").html(array.c[0]);
@@ -128,9 +132,32 @@ App = {
       console.log(details);
       console.log(weekNo.c[0]);
         document.getElementById("demand").innerHTML = details[3].c[0];
-        document.getElementById("prev_inv").innerHTML = details[2].c[0];
+        document.getElementById("backorder").innerHTML = details[8].c[0];
+        document.getElementById("totalDemand").innerHTML = details[3].c[0] + details[8].c[0];
         document.getElementById("rec_inv").innerHTML = details[1].c[0];
-        document.getElementById("ship_quan").innerHTML = details[4].c[0];
+        document.getElementById("rec_back").innerHTML = "NA";
+        document.getElementById("ship_quan_demand").innerHTML = details[4].c[0];
+        document.getElementById("ship_quan_back").innerHTML = details[5].c[0];
+        document.getElementById("exp_back").innerHTML = "NA";
+
+
+        var orderLeadTime, deliveryLeadTime;
+        instance.orderLeadTime().then(function(leadTime) {
+          orderLeadTime = leadTime.c[0];
+        });
+
+        instance.deliveryLeadTime().then(function(leadTime) {
+          deliveryLeadTime = leadTime.c[0];
+        });
+
+        var totalLeadTime = orderLeadTime + deliveryLeadTime;
+
+        if(weekNo.c[0]-totalLeadTime >= 0) {
+          instance.weekDetails(web3.eth.accounts, weekNo.c[0]-totalLeadTime).then(function(details) {
+            document.getElementById("exp_quan").innerHTML = details[6].c[0];
+
+          })
+        }
         //document.getElementById("total_inv").innerHTML = details[6].c[0];
                         
 
