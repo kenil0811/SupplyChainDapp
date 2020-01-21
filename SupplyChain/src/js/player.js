@@ -85,6 +85,14 @@ App = {
       }
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
+        instance.weekNo().then(function(weekNo) {
+          document.getElementById("currentWeek").innerHTML = "Current Week = " + weekNo;
+        })
+
+        instance.leadTime().then(function(leadTime) {
+          document.getElementById("leadTime").innerHTML = "Lead Time = " + leadTime;
+        })
+
         instance.inventory(0).then(function(array) {
           $("#ret_inv").html(array.c[0]);
         });

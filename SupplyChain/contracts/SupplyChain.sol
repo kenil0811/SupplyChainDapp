@@ -19,7 +19,7 @@ contract SupplyChain {
     }
 
     uint public weekNo;
-    uint private leadTime;
+    uint public leadTime;
     uint[4] public orderState;
     uint[4] public inventory;
 
