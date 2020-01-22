@@ -16566,12 +16566,12 @@
         }
       },
       "links": {},
-      "address": "0x054B115415FB4fa13A3a9C386bDdaDB9D9EC250e",
-      "transactionHash": "0x432efbecb600087bfcb5136b830e1f92a573caf3f128d8d82520363055b42c2c"
+      "address": "0x2228F92F315155D660820bf370e58C56bA54d12B",
+      "transactionHash": "0x46d965fdf5bfe9d38fdb2f6cb0dcbd5381a4ae1713113f715913e8bd0f8b5960"
     }
   },
   "schemaVersion": "3.0.17",
-  "updatedAt": "2020-01-22T13:36:01.422Z",
+  "updatedAt": "2020-01-22T14:19:25.249Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

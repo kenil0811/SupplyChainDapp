@@ -104,6 +104,8 @@ App = {
                 //console.log(j);
                 cell.innerHTML = player[j].c[0];  
               }
+              var cell1= row.insertCell(j);
+              cell1.innerHTML= Math.abs(player[3].c[0]-player[4].c[0]); 
 
             });
           }
