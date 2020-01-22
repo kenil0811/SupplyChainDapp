@@ -62,6 +62,17 @@ App = {
   displayDetails: function() {
       var content = $("#content");
 
+      var qs= window.location.search;
+      //var v1=qs.get("role");
+
+      console.log(qs);
+
+      const urlParams = new URLSearchParams(qs);
+
+      const v1= urlParams.get('role');
+
+      console.log(v1);
+
       web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         App.account = account;
@@ -69,6 +80,10 @@ App = {
       }
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
+
+        instance.adds(v1).then(function(role_add){
+
+         
         
         
         instance.weekNo().then(function(weeks){
@@ -80,7 +95,7 @@ App = {
           var row = table.insertRow();
 
         for(i=0; i<weeks.c[0]; i++) {
-            instance.weekDetails(web3.eth.accounts,i).then(function(player){
+            instance.weekDetails(role_add,i).then(function(player){
               var pos = player[0].c[0];
               console.log(pos);
               var row = table.rows[pos];
@@ -94,13 +109,14 @@ App = {
           }
             
         });
-
+       });
       })
     });
 
        //content.show();
     }
   };
+
   
 $(function() {
   $(window).load(function() {
