@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -9,21 +9,160 @@
   </head>
   <body >
 
-<div class="container">
-  <div class="card border-dark mt-4 mb-3">
-  <div class="card-header" style="font-size: 50px;"><i>Factory</i></div>
+
+  <div class="jumbotron jumbotron-fluid bg-dark text-white" >
+    <div class="container">
+      <h1 class="display-4 ">Factory</h1>
+      <h3 id="accountAddress"></h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+    <div class="col-sm-6">
+      <div class="card text-white bg-dark">
+        <div class="card-body">
+          <h5 class="card-title" >Current Week</h5>
+          <h2 class="card-text" id="currentWeek" ></h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card text-white bg-dark" >
+        <div class="card-body">
+          <h5 class="card-title">Lead Time</h5>
+          <h2 class="card-text" id="leadTime"></h2>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <hr>
+  <div class="container">
+  <div class="row">
+    <div class="col-6">
+      
+          <br>
+          <ul class="list-group" style="font-size: 24px">
+            <li class="list-group-item d-flex justify-content-between align-items-center" >
+              Distributer Demand:
+              <span class="badge badge-primary badge-pill" id="demand"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Previous Inventory:
+              <span class="badge badge-primary badge-pill" id="prev_inv"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Recieved Quantity:
+              <span class="badge badge-primary badge-pill" id="rec_inv">1</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Shipping Quantity:
+              <span class="badge badge-primary badge-pill" id="ship_quan">1</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Total Inventory:
+              <span class="badge badge-primary badge-pill" id="total_inv">1</span>
+            </li>
+          </ul>      
+          <br>        
+        <div id="placeOrder">  
+          <div class="row" >
+            <div class="col-9" >
+              <input type="text" class="form-control" id="order" placeholder="Current Week Order"  aria-describedby="basic-addon2">
+            </div>  
+            <div class="col-3">
+              <button class="btn btn-outline-secondary" style="width: 110px;" onclick="App.order()" type="button">Order</button>
+            </div>
+          </div>
+        </div>  
+          <div class="alert alert-success" id ="orderPlaced" role="alert" style="display: none">
+            Your order has been placed
+          </div>
+        
+      
+    </div>
+    <div class="col-6">
+      <div class="page-header">
+        <h1 style="text-align: center;">Inventory Details</h1>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-6">
+          <div class="card text-white bg-dark mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Factory</h5>
+              <h1 class="card-title" id="fac_inv" style="text-align: right;"></h1>
+            </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card text-white bg-dark mb-3" >
+            <div class="card-body">
+              <h5 class="card-title">Distributor</h5>
+              <h1 class="card-title" id="dis_inv" style="text-align: right;"></h1>
+            </div>
+            </div>  
+        </div>
+        
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="card text-white bg-dark mb-3" >
+            <div class="card-body">
+              <h5 class="card-title">Wholesaler</h5>
+              <h1 class="card-title" id="who_inv" style="text-align: right;"></h1>
+            </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card text-white bg-dark mb-3" >
+            <div class="card-body">
+              <h5 class="card-title">Retailer</h5>
+              <h1 class="card-title" id="ret_inv" style="text-align: right;"></h1>
+            </div>
+            </div>  
+        </div>
+        
+      </div>
+
+    </div>
+  </div>
+  <br>
+  <br>
+
+  
+
+</div>
+<div style="text-align: center;">
+  <div class="center" style="" aria-label="Basic example">
+    
+      <button type="button" class="btn btn-secondary" onclick="window.location.href = 'new.html?role=4';">Factory Details</button>  
+    
+      <button type="button" class="btn btn-secondary" onclick="window.location.href = 'new.html?role=3';">Distributor Details</button>  
+    
+      <button type="button" class="btn btn-secondary" onclick="window.location.href = 'new.html?role=2';">Wholesaler Details</button>  
+    
+      <button type="button" class="btn btn-secondary" onclick="window.location.href = 'new.html?role=1';">Retailer Details</button>  
+    
+  </div>
+</div>
+<br>
+<br>
+ <!-- <div class="card border-dark mt-4 mb-3">
+  <div class="card-header" style="font-size: 50px;"><i>Retailer</i></div>
   <div class="card-body text-dark">
-    <h5 class="card-title" id="accountAddress" style="font-size: 30px"></h5>
+    <h5 id="accountAddress" style="font-size: 30px"></h5>
     <h5 id="currentWeek" style="font-size: 25px"></h5>
     <h5 id="leadTime" style="font-size: 25px"></h5>
-
-    <p class="card-text" style="font-size: 20px;"></p>
+    <p class="card-text" style="font-size: 20px;"></p>  
+    <hr>
   </div>
   <div class="row">
     <div class="col-6">
       <div class="row">
         <div class="col-6">
-          <h4>Distributor Demand:</h4> 
+          <h4>Customer Demand:</h4> 
           <h4>Previous Inventory:</h4>
           <h4>Recieved Quantity:</h4>
           <h4>Shipping Quantity:</h4>
@@ -31,11 +170,11 @@
         </div>
       
       <div class="col-6">
-        <h4 id="demand">a</h4>
-        <h4 id="prev_inv">b</h4>
-        <h4 id="rec_inv">c</h4>
+        <h4 id="demand"></h4>
+        <h4 id="prev_inv"></h4>
+        <h4 id="rec_inv"></h4>
         <h4 id="ship_quan"></h4>
-        <h4 id="total_inv">d</h4>
+        <h4 id="total_inv"></h4>
       </div>
     </div>
       
@@ -76,6 +215,12 @@
   </table>      
     </div>
   </div>  
+
+</div>-->
+
+
+
+
    
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

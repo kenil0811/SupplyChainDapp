@@ -63,15 +63,25 @@ App = {
       var content = $("#content");
 
       var qs= window.location.search;
-      //var v1=qs.get("role");
-
+      //var v1=qs.get("role")
       console.log(qs);
-
       const urlParams = new URLSearchParams(qs);
-
       const v1= urlParams.get('role');
-
       console.log(v1);
+
+
+      if(v1==1){
+            document.getElementById("roleDetails").innerHTML = "Retailer Details"
+          }
+          else if(v1==2){
+            document.getElementById("roleDetails").innerHTML = "Wholesaler Details" 
+          }
+          else if(v1==3){
+            document.getElementById("roleDetails").innerHTML = "Distributer Details" 
+          }
+          else if(v1==4){
+            document.getElementById("roleDetails").innerHTML = "Factory Details" 
+          }
 
       web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
@@ -79,16 +89,18 @@ App = {
         $("#accountAddress").html("Your Account: " + account);
       }
 
+
+
       App.contracts.SupplyChain.deployed().then(function(instance) {
 
-        instance.adds(v1).then(function(role_add){
-
-         
+        instance.adds(v1).then(function(role_add){ 
         
         
         instance.weekNo().then(function(weeks){
           //console.log(weeks.c[0]);
           //console.log(numWeeks);
+
+          document.getElementById("currentWeek").innerHTML = "Current Week: "+weeks.c[0] ;
 
         var table = document.getElementById("DetailsTable");
         for(var i=0; i<weeks.c[0]; i++)
@@ -115,8 +127,9 @@ App = {
       })
     });
 
-       //content.show();
     }
+
+
   };
 
   

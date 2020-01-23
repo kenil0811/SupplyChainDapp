@@ -57,8 +57,8 @@ App = {
 
 
     App.listenForEvents();
-    App.getDetails();
-    return App.displayDetails();
+     return App.displayDetails();
+      //return App.render();
     });
   },
 
@@ -67,8 +67,8 @@ App = {
     App.contracts.SupplyChain.deployed().then(function(instance) {
         instance.weekEnd({}, {}).watch(function(error, event) {
 
-              document.getElementById("placeOrder").style.display = "block"; 
-              document.getElementById("orderPlaced").style.display = "none"; 
+              document.getElementById("placeOrder").disabled = false; 
+              document.getElementById("orderPlaced").disabled = true; 
         App.getDetails();
         App.displayDetails();
       });
@@ -85,14 +85,6 @@ App = {
       }
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
-        instance.weekNo().then(function(weekNo) {
-          document.getElementById("currentWeek").innerHTML = weekNo;
-        })
-
-        instance.leadTime().then(function(leadTime) {
-          document.getElementById("leadTime").innerHTML = leadTime;
-        })
-
         instance.inventory(0).then(function(array) {
           $("#ret_inv").html(array.c[0]);
         });
@@ -116,14 +108,13 @@ App = {
   getDetails: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       instance.weekNo().then(function(weekNo) {
-      instance.weekDetails(web3.eth.accounts, weekNo.c[0]-1).then(function(details) {
+      instance.weekDetails(web3.eth.accounts, weekNo-1).then(function(details) {
       console.log(details);
-      console.log(weekNo.c[0]);
-        document.getElementById("demand").innerHTML = details[3].c[0];
-        document.getElementById("prev_inv").innerHTML = details[2].c[0];
-        document.getElementById("rec_inv").innerHTML = details[1].c[0];
-        document.getElementById("ship_quan").innerHTML = details[4].c[0];
-        document.getElementById("total_inv").innerHTML = details[6].c[0];                
+
+        document.getElementById("demand").innerHTML = details[2].c[0];
+        document.getElementById("prev_inv").innerHTML = details[1].c[0];
+        document.getElementById("rec_inv").innerHTML = details[0].c[0];
+        document.getElementById("total_inv").innerHTML = details[5].c[0];                
 
       });
     });
