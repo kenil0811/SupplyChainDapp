@@ -67,6 +67,14 @@ App = {
     App.contracts.SupplyChain.deployed().then(function(instance) {
         instance.weekEnd({}, {}).watch(function(error, event) {
 
+              var modal = document.getElementById("nextWeekModal");
+              modal.style.display = "block"
+
+              var close = document.getElementById("closeBtn");
+
+              close.onclick = function(){
+                modal.style.display = "none";
+              }
               document.getElementById("placeOrder").style.display = "block"; 
               document.getElementById("orderPlaced").style.display = "none"; 
         App.getDetails();
@@ -81,7 +89,7 @@ App = {
       web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         App.account = account;
-        $("#accountAddress").html("Your Account: " + account);
+        $("#accountAddress").html(account);
       }
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
@@ -123,9 +131,20 @@ App = {
         document.getElementById("prev_inv").innerHTML = details[2].c[0];
         document.getElementById("rec_inv").innerHTML = details[1].c[0];
         document.getElementById("ship_quan").innerHTML = details[4].c[0];
-        document.getElementById("total_inv").innerHTML = details[6].c[0];                
+        //document.getElementById("total_inv").innerHTML = details[6].c[0];
+                        
 
       });
+
+      if(weekNo.c[0]>=2){
+        instance.weekDetails(web3.eth.accounts,weekNo.c[0]-2).then(function(details){
+            document.getElementById("expectedQuantity").innerHTML = details[5].c[0]; 
+        });   
+      }
+      else{
+            document.getElementById("expectedQuantity").innerHTML = 0;
+      }
+
     });
     });
   },
