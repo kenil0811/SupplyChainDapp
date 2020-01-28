@@ -37,27 +37,10 @@ App = {
       App.contracts.SupplyChain = TruffleContract(supplyChain);
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
-
-    //App.listenForEvents();
      return App.displayDetails();
-      //return App.render();
     });
   },
 
-  // Listen for events emitted from the contract
-/*  listenForEvents: function() {
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-      // Restart Chrome if you are unable to receive this event
-      // This is a known issue with Metamask
-      // https://github.com/MetaMask/metamask-extension/issues/2393
-      instance.orderSent({}, {
-      }).watch(function(error, event) {
-        console.log("event triggered", event)
-        // Reload when a new vote is recorded
-        App.displayDetails();
-      });
-    });
-  }, */
 
   displayDetails: function() {
       var content = $("#content");
@@ -107,14 +90,29 @@ App = {
           var row = table.insertRow();
 
         for(i=0; i<weeks.c[0]; i++) {
+              var pos, row;
             instance.weekDetails(role_add,i).then(function(player){
-              var pos = player[0].c[0];
+              pos = player[0].c[0];
               console.log(pos);
-              var row = table.rows[pos];
-              for(var j = 0;j<player.length;j++){
+              row = table.rows[pos];
+              for(var j = 0;j<5;j++){
                 var cell = row.insertCell(j);
                 //console.log(j);
                 cell.innerHTML = player[j].c[0];  
+              }
+              var cell = row.insertCell(5);
+              cell.innerHTML = 0;
+              if(i!=0) {
+                instance.weekDetails(role_add,i-1).then(function(player){
+                  var cell = row.cells[5];
+                  cell.innerHTML = player[8].c[0]; 
+                });
+              }
+
+              for(var j = 6;j<player.length;j++){
+                var cell = row.insertCell(j);
+                //console.log(j);
+                cell.innerHTML = player[j-1].c[0];  
               }
               var cell1= row.insertCell(j);
               cell1.innerHTML= Math.abs(player[3].c[0]-player[4].c[0]); 
