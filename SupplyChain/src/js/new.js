@@ -69,7 +69,6 @@ App = {
       web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         App.account = account;
-        $("#accountAddress").html("Your Account: " + account);
       }
 
 
@@ -83,40 +82,47 @@ App = {
           //console.log(weeks.c[0]);
           //console.log(numWeeks);
 
-          document.getElementById("currentWeek").innerHTML = role_add ;
+          document.getElementById("accountAddress").innerHTML = role_add;
+          document.getElementById("currentWeek").innerHTML = weeks.c[0];
+          
 
         var table = document.getElementById("DetailsTable");
         for(var i=0; i<weeks.c[0]; i++)
           var row = table.insertRow();
 
+        var a=0;
         for(i=0; i<weeks.c[0]; i++) {
               var pos, row;
-            instance.weekDetails(role_add,i).then(function(player){
+            instance.weekDetails(role_add,i).then(function(player){   
+
+            console.log(player);
+            console.log("---");           
               pos = player[0].c[0];
               console.log(pos);
               row = table.rows[pos];
-              for(var j = 0;j<5;j++){
+
+              for(var j=0; j<4; j++){
                 var cell = row.insertCell(j);
-                //console.log(j);
-                cell.innerHTML = player[j].c[0];  
+                cell.innerHTML = player[j].c[0] * player[j].s;  
               }
-              var cell = row.insertCell(5);
+
+              var cell = row.insertCell(4);
               cell.innerHTML = 0;
-              if(i!=0) {
-                instance.weekDetails(role_add,i-1).then(function(player){
-                  var cell = row.cells[5];
-                  cell.innerHTML = player[8].c[0]; 
+              if(a!=0) {
+                console.log(a);
+                instance.weekDetails(role_add,a-1).then(function(player_old){
+                  var cell = row.cells[4];
+                  console.log(player_old[8].c[0]);
+                  cell.innerHTML = player_old[8].c[0] * player_old[j].s; 
                 });
               }
 
-              for(var j = 6;j<player.length;j++){
+              for(var j=5; j<=player.length; j++){
                 var cell = row.insertCell(j);
-                //console.log(j);
-                cell.innerHTML = player[j-1].c[0];  
+                console.log(player.length);
+                cell.innerHTML = player[j-1].c[0] * player[j-1].s;  
               }
-              var cell1= row.insertCell(j);
-              cell1.innerHTML= Math.abs(player[3].c[0]-player[4].c[0]); 
-
+              a++;
             });
           }
             

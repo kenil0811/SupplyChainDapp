@@ -5,14 +5,14 @@ contract SupplyChain {
 
     struct Details {
         uint weekNo;
-        uint inventoryReceived;
-        uint inventoryPrevious;
-        uint demand;
-        uint shippingQuantityDemand;
-        uint shippingQuantityBackOrder;
-        uint orderPlaced;
-        uint inventoryLeft;         
-        uint backOrder;
+        int inventoryReceived;
+        int inventoryPrevious;
+        int demand;
+        int shippingQuantityDemand;
+        int shippingQuantityBackOrder;
+        int orderPlaced;
+        int inventoryLeft;         
+        int backOrder;
         }
 
     struct Player {
@@ -25,7 +25,7 @@ contract SupplyChain {
     uint public deliveryLeadTime;
     uint public orderLeadTime;
     uint[4] public orderState;
-    uint[4] public inventory;
+    int[4] public inventory;
 
     mapping(address => Player) public players;
     mapping(address => Details[]) public weekDetails;
@@ -49,7 +49,7 @@ contract SupplyChain {
         players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
         players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
 
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(1, 0, 50, 20, 20, 0, 0, 30, 0));
+        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(1, 0, 50, 30, 30, 0, 0, 20, 0));
         weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(1, 0, 50, 0, 0, 0, 0, 50, 0));
         weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(1, 0, 50, 0, 0, 0, 0, 50, 0));
         weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(1, 0, 50, 0, 0, 0, 0, 50, 0));
@@ -64,7 +64,7 @@ contract SupplyChain {
         weekNo = 1;
         deliveryLeadTime = 1;
         orderLeadTime = 0;
-        inventory = [50, 50, 50, 50];
+        inventory = [20, 50, 50, 50];
         orderState = [0,0,0,0];
     }
 
@@ -72,7 +72,7 @@ contract SupplyChain {
     function checkWeekEnd() private {
 
         if(players[msg.sender].role == 1) {
-            weekDetails[msg.sender][weekNo].demand = (uint(keccak256(abi.encode(block.difficulty, block.timestamp)))%100);
+            weekDetails[msg.sender][weekNo].demand = 40 + (int(keccak256(abi.encode(block.difficulty, block.timestamp)))%15);
         }
 
         
@@ -100,13 +100,14 @@ contract SupplyChain {
                 weekDetails[upAdd][weekNo].demand = weekDetails[add][weekNo-1-orderLeadTime].orderPlaced;
 
         }
-        else
+        else {
             if(weekNo-deliveryLeadTime >= 0)
                 weekDetails[add][weekNo].inventoryReceived = weekDetails[add][weekNo-deliveryLeadTime].orderPlaced;
+        }
 
         weekDetails[add][weekNo].inventoryPrevious = weekDetails[add][weekNo-1].inventoryLeft;
 
-        uint totalInventory = weekDetails[add][weekNo].inventoryReceived + weekDetails[add][weekNo].inventoryPrevious;
+        int totalInventory = weekDetails[add][weekNo].inventoryReceived + weekDetails[add][weekNo].inventoryPrevious;
 
         if(totalInventory < weekDetails[add][weekNo].demand)
             weekDetails[add][weekNo].backOrder = weekDetails[add][weekNo].demand - totalInventory;
@@ -116,11 +117,14 @@ contract SupplyChain {
         else
             weekDetails[add][weekNo].shippingQuantityBackOrder = weekDetails[add][weekNo].inventoryReceived;
 
-        if(weekDetails[add][weekNo].demand < totalInventory)
-                weekDetails[add][weekNo].shippingQuantityDemand = weekDetails[add][weekNo].demand;       
-        else
+        if(weekDetails[add][weekNo].demand < totalInventory) {
+            weekDetails[add][weekNo].shippingQuantityDemand = weekDetails[add][weekNo].demand;       
+        }
+        else { 
             if(totalInventory >= 0)
                 weekDetails[add][weekNo].shippingQuantityDemand = totalInventory;
+        }
+
 
         weekDetails[add][weekNo].inventoryLeft = totalInventory - weekDetails[add][weekNo].demand;
 
@@ -129,7 +133,7 @@ contract SupplyChain {
     }
 
 
-    function order(uint _amt) public {
+    function order(int _amt) public {
 
         weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0,0,0));
         weekDetails[msg.sender][weekNo-1].orderPlaced = _amt;
