@@ -36,27 +36,22 @@ contract SupplyChain {
 
 
 
-    constructor () public {
-        setRoles();
-    }
+    constructor(address add1, address add2, address add3, address add4) public{
+        players[add1] = Player(1, add2, add1);
+        players[add2] = Player(2, add3, add1);
+        players[add3] = Player(3,add4, add2);
+        players[add4] = Player(4, add4, add3);
+
+        weekDetails[add1].push(Details(1, 0, 50, 30, 30, 0, 20));
+        weekDetails[add2].push(Details(1, 0, 50, 0, 0, 0, 50));
+        weekDetails[add3].push(Details(1, 0, 50, 0, 0, 0, 50));
+        weekDetails[add4].push(Details(1, 0, 50, 0, 0, 0, 50));
 
 
-    function setRoles() private {
-        players[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34] = Player(1, 0x5a528ef100931de8dd12C08d09877ac038AF04eb, 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
-        players[0x5a528ef100931de8dd12C08d09877ac038AF04eb] = Player(2, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C, 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
-        players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
-        players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
-
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(1, 0, 50, 30, 30, 0, 20));
-        weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(1, 0, 50, 0, 0, 0, 50));
-        weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(1, 0, 50, 0, 0, 0, 50));
-        weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(1, 0, 50, 0, 0, 0, 50));
-
-
-        adds[1] = 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34;
-        adds[2] = 0x5a528ef100931de8dd12C08d09877ac038AF04eb;
-        adds[3] = 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C;
-        adds[4] = 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8;
+        adds[1] = add1;
+        adds[2] = add2;
+        adds[3] = add3;
+        adds[4] = add4;
 
 
         weekNo = 1;

@@ -19,15 +19,15 @@ App = {
     }
 }
 
-    if (typeof web3 !== 'undefined') {
-      // If a web3 instance is already provided by Meta Mask.
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
-    } else {
+    // if (typeof web3 !== 'undefined') {
+    //   // If a web3 instance is already provided by Meta Mask.
+    //   App.web3Provider = web3.currentProvider;
+    //   web3 = new Web3(web3.currentProvider);
+    // } else {
       // Specify default instance if no web3 instance provided
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
       web3 = new Web3(App.web3Provider);
-    }
+    // }
     return App.initContract();
   },
 
@@ -44,26 +44,11 @@ App = {
     });
   },
 
-  // Listen for events emitted from the contract
-/*  listenForEvents: function() {
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-      // Restart Chrome if you are unable to receive this event
-      // This is a known issue with Metamask
-      // https://github.com/MetaMask/metamask-extension/issues/2393
-      instance.orderSent({}, {
-      }).watch(function(error, event) {
-        console.log("event triggered", event)
-        // Reload when a new vote is recorded
-        App.displayDetails();
-      });
-    });
-  }, */
 
   displayDetails: function() {
+    
       var content = $("#content");
-
       var qs= window.location.search;
-      //var v1=qs.get("role")
       console.log(qs);
       const urlParams = new URLSearchParams(qs);
       const v1= urlParams.get('role');
@@ -97,27 +82,32 @@ App = {
         
         
         instance.weekNo().then(function(weeks){
-          //console.log(weeks.c[0]);
+          //console.log(weeks.words[0]);
           //console.log(numWeeks);
 
           document.getElementById("currentWeek").innerHTML = role_add ;
 
         var table = document.getElementById("DetailsTable");
-        for(var i=0; i<weeks.c[0]; i++)
+        console.log(weeks.words[0]);
+        for(var i=0; i<weeks.words[0]; i++)
           var row = table.insertRow();
 
-        for(i=0; i<weeks.c[0]; i++) {
+        for(i=0; i<weeks.words[0]; i++) {
             instance.weekDetails(role_add,i).then(function(player){
-              var pos = player[0].c[0];
+              var pos = player[0].words[0];
+              console.log(pos);
               console.log(pos);
               var row = table.rows[pos];
-              for(var j = 0;j<player.length;j++){
+              console.log(player);
+              for(var j = 0;j<7;j++){
                 var cell = row.insertCell(j);
                 //console.log(j);
-                cell.innerHTML = player[j].c[0];  
+                console.log(player[j]);
+                console.log(player[j].words[0]);
+                cell.innerHTML = player[j].words[0];  
               }
               var cell1= row.insertCell(j);
-              cell1.innerHTML= Math.abs(player[3].c[0]-player[4].c[0]); 
+              cell1.innerHTML= Math.abs(player[3].words[0]-player[4].words[0]); 
 
             });
           }
