@@ -72,8 +72,9 @@ App = {
     App.contracts.SupplyChain.deployed().then(function(instance) {
 
       instance.adds(App.role).then(function(exp_add) {
+        console.log(exp_add);
         if(exp_add !== address) {
-          window.location.href = "error.html?val=1";
+          //window.location.href = "error.html?val=1";
             console.log("incorrect");
             return;
         }
