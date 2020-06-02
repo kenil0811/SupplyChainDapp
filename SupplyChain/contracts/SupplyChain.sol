@@ -10,7 +10,8 @@ contract SupplyChain {
         uint demand;
         uint shippingQuantity;
         uint orderPlaced;
-        uint inventoryLeft;         
+        uint inventoryLeft;
+        uint blockNumber;         
         }
 
     struct Player {
@@ -42,10 +43,10 @@ contract SupplyChain {
         players[add3] = Player(3,add4, add2);
         players[add4] = Player(4, add4, add3);
 
-        weekDetails[add1].push(Details(1, 0, 50, 30, 30, 0, 20));
-        weekDetails[add2].push(Details(1, 0, 50, 0, 0, 0, 50));
-        weekDetails[add3].push(Details(1, 0, 50, 0, 0, 0, 50));
-        weekDetails[add4].push(Details(1, 0, 50, 0, 0, 0, 50));
+        weekDetails[add1].push(Details(1, 0, 50, 30, 30, 0, 20, 0));
+        weekDetails[add2].push(Details(1, 0, 50, 0, 0, 0, 50, 0));
+        weekDetails[add3].push(Details(1, 0, 50, 0, 0, 0, 50, 0));
+        weekDetails[add4].push(Details(1, 0, 50, 0, 0, 0, 50, 0));
 
 
         adds[1] = add1;
@@ -115,8 +116,9 @@ contract SupplyChain {
 
     function order(uint _amt) public {
 
-        weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0));
+        weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0,0));
         weekDetails[msg.sender][weekNo-1].orderPlaced = _amt;
+        weekDetails[msg.sender][weekNo-1].blockNumber = block.number;
 
         orderState[players[msg.sender].role - 1] = 1;
 

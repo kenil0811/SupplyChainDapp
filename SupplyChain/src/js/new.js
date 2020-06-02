@@ -108,6 +108,9 @@ App = {
               }
               var cell1= row.insertCell(j);
               cell1.innerHTML= Math.abs(player[3].words[0]-player[4].words[0]); 
+              j++;
+              var cell1= row.insertCell(j);
+              cell1.innerHTML= Math.abs(player[7].words[0]);              
 
             });
           }
