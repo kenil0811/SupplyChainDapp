@@ -1,13 +1,12 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-app.use(express.static('src'));		// to add the static routes
-app.use(express.static('build/contracts'))	//to add the static routes
+var express = require('express');
+var app = express();
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname,'/src', 'index.html')); 	//add the start page
-});
+app.get('/functionName', function (req, res) {
+   console.log("hello");
+})
 
-app.listen(process.env.PORT || 4000, function(){
-    console.log('Your node js server is running');
-});
+var server = app.listen(8081, function () {
+   var host = server.address().address
+   var port = server.address().port
+   console.log("Example app listening at http://%s:%s", host, port)
+})
