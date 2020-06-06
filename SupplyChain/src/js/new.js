@@ -110,18 +110,73 @@ App = {
               cell1.innerHTML= Math.abs(player[3].words[0]-player[4].words[0]); 
               j++;
               var cell1= row.insertCell(j);
-              cell1.innerHTML= Math.abs(player[7].words[0]);              
-
+              cell1.innerHTML= Math.abs(player[7].words[0]);
+              //cell1.setAttribute('href','hello');
+              cell1.style.color = 'blue';
+              var blockNumber = cell1.innerHTML;
+              cell1.setAttribute('type','button')
+              cell1.setAttribute('onclick','App.showTransaction('+blockNumber+','+v1+')')
             });
           }
-            
+           
+
+
         });
        });
       })
     });
 
-    }
+    },
 
+
+    showTransaction: function(blockNumber,role) {
+      //alert('Hello');
+      var modal = document.getElementById("transactionModal");
+       if(blockNumber!=0){
+          modal.style.display = "block"; 
+       }
+       
+
+      var closeBtn1 = document.getElementById("closeBtn");
+      //var closeBtn2 = document.getElementById("closeBtn2");
+
+       closeBtn1.onclick = function() {
+          modal.style.display = "none";
+        } 
+
+        var player;
+        if(role==1){
+             player = "Retailer";          
+        }
+        else if(role==2){
+             player = "Wholesaler";    
+        }
+        else if(role==3){
+            player = "Distributer"; 
+        }
+        else if(role==4){
+            player = "Factory"; 
+        }
+
+        //fetch data from the block
+        web3.eth.getBlock(blockNumber).then(function(block){
+
+            web3.eth.getTransaction(block.transactions[0]).then(function(tx) {
+            console.log(tx);
+
+            var num = tx.blockNumber;
+            var hash = tx.hash;
+            var time = block.timestamp;
+            var from = tx.from;
+
+            document.getElementById("bnumber").innerHTML = num;
+            document.getElementById("hash").innerHTML = hash;
+            document.getElementById("timestamp").innerHTML = time;
+            document.getElementById("creater").innerHTML = from+"   ("+player+")";            
+            });
+
+        })
+    }
 
   };
 

@@ -58,7 +58,7 @@ App = {
         web3.eth.getTransaction(block.transactions[0]).then(function(tx) {
           console.log(tx);
 
-var num = tx.blockNumber;
+        var num = tx.blockNumber;
         var hash = tx.hash;
         var time = block.timestamp;
         var from = tx.from;
