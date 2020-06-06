@@ -27,6 +27,10 @@ xhttp.onreadystatechange = function() {
 
 
 function deployContract() {
-	xhttp.open("GET", "http://localhost:5000/deployGame", true);
-	xhttp.send();
+    var url = "http://localhost:5000/deployGame";
+    var weeks = document.getElementById("weeks").value;
+    if(weeks != ""){
+	   xhttp.open("GET", url+"/"+weeks, true);
+	   xhttp.send();
+    }
 }

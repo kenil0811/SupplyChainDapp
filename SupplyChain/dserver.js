@@ -26,14 +26,18 @@ let myContract = new web3.eth.Contract(abi);
 
 defaultAccount = "0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34";
 
+app.use(express.static('src'));
 
-app.get('/deployGame', deployGame);
+app.get('/deployGame/:weeks', deployGame);
 
 app.listen(process.env.PORT || 5000, function(){
     console.log('Your node js server is running');
 });
 
 function deployGame(req, res) {
+	console.log("\n\n\n");
+	var weeks = Number(req.params.weeks);
+	console.log("Number of weeks: " + weeks);
 	var players = {retailer: {}, wholesaler: {}, distributer: {}, factory: {}};
 
 //retailer account
@@ -41,7 +45,6 @@ web3.eth.personal.newAccount("pass1").then(function(newAcc) {
 	players.retailer["address"] = newAcc;
 	players.retailer["password"] = "pass1";
 	console.log(newAcc);
-	console.log(players);
 	web3.eth.sendTransaction({from:defaultAccount, to:newAcc, value:web3.utils.toWei('0.5', 'ether')});
 	fs.appendFile('details', "Address: " + newAcc + "; Pass: pass1" + "\n" , function(err){});
 
