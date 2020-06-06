@@ -30,7 +30,7 @@ app.use(express.static('src'));
 
 app.get('/deployGame/:weeks', deployGame);
 
-app.listen(process.env.PORT || 5000, function(){
+app.listen(process.env.PORT || 3000, function(){
     console.log('Your node js server is running');
 });
 
@@ -78,6 +78,8 @@ len = accounts.length;
 
 fs.appendFile('details', (len-1)/4 + '\n-----\n', function(err){});
 console.log("Game id:" + (len-1)/4);
+
+players["GameID"] = (len-1)/4;
 
 myContract.deploy({
     data: bytecode,
