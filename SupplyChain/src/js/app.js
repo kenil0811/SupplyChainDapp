@@ -2,6 +2,7 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
+  role: null,
 
   init: function() {
     return App.initWeb3();
@@ -19,15 +20,9 @@ App = {
     }
 }
 
-    if (typeof web3 !== 'undefined') {
-      // If a web3 instance is already provided by Meta Mask.
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
-    } else {
-      // Specify default instance if no web3 instance provided
-      App.web3Provider = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/b6ccfb8d40874683a12d4b617a2f9f25');
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
       web3 = new Web3(App.web3Provider);
-    }
+
     return App.initContract();
   },
 
@@ -38,7 +33,27 @@ App = {
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
 
-     // App.listenForEvents();
+    //App.listenForEvents();
+    var content = $("#content");
+    var qs= window.location.search;
+    const urlParams = new URLSearchParams(qs);
+    App.role= urlParams.get('role');
+    console.log(App.role);
+
+    const v1=App.role;
+    
+    if(v1==1){
+      document.getElementById("player").innerHTML = "Retailer login"
+    }
+    else if(v1==2){
+      document.getElementById("player").innerHTML = "Wholesaler login" 
+    }
+    else if(v1==3){
+      document.getElementById("player").innerHTML = "Distributer login" 
+    }
+    else if(v1==4){
+      document.getElementById("player").innerHTML = "Factory login" 
+    }
 
       //return App.render();
     });
@@ -59,85 +74,37 @@ App = {
     });
   }, */
 
-  /*render: function() {
-    var supplyChainInstance;
-    var loader = $("#loader");
-    var content = $("#content");
+  
+  checkValidity: function() {
 
-    loader.show();
-    content.hide();
+    var address = document.getElementById("address").value;
+    var password = document.getElementById("password").value;
 
-    // Load account data
-    web3.eth.getCoinbase(function(err, account) {
-      if (err === null) {
-        App.account = account;
-        $("#accountAddress").html("Your Account: " + account);
-      }
-    });
-
-    // Load contract data
     App.contracts.SupplyChain.deployed().then(function(instance) {
-      supplyChainInstance = instance;
-      console.log(supplyChainInstance);
-      return supplyChainInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
 
-      var candidatesSelect = $('#candidatesSelect');
-      candidatesSelect.empty();
-
-      for (var i = 1; i <= candidatesCount; i++) {
-        supplyChainInstance.candidates(i).then(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var voteCount = candidate[2];
-
-          // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
-
-          // Render candidate ballot option
-          var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
-          candidatesSelect.append(candidateOption);
-        });
-      }
-      return supplyChainInstance.voters(App.account);
-    }).then(function(hasVoted) {
-      // Do not allow a user to vote
-      if(hasVoted) {
-        $('form').hide();
-      }
-      loader.hide();
-      content.show();
-    }).catch(function(error) {
-      console.warn(error);
-    });
-  }, */
-
-
-  checkValidity: function(num) {
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-      instance.players(web3.eth.accounts).then(function(player) {
-        
-        var id = player[0].c[0];
-        console.log(num);
-        console.log(web3.eth.accounts);
-        console.log(id);
-        if(num !== id) {
-            window.location.href = "error.html";
+      instance.adds(App.role).then(function(exp_add) {
+        console.log(exp_add);
+        if(exp_add !== address) {
+          console.log(exp_add);
+          console.log(address);
+          //window.location.href = "error.html?val=1";
             console.log("incorrect");
             return;
-          }
-        if(num===1)
-            window.location.href = "retailer.html";
-        else if(num===2)
-            window.location.href = "wholesaler.html";
-        else if(num===3)
-            window.location.href = "distributer.html";
-        else if(num===4)
-            window.location.href = "factory.html";
+        }
+
+      web3.eth.personal.unlockAccount(address, password, function(error, res){
+      if(error){
+        window.location.href = "error.html?val=2";
+        console.log("incorrect");
+        return;
+      }
+      else if(res==true) {
+        window.location.href = "player.html?role=" + App.role;
+
+      }
       })
+      })
+
     })
   },
 

@@ -5,13 +5,16 @@ contract SupplyChain {
 
     struct Details {
         uint weekNo;
-        int inventoryReceived;
+        int inventoryReceivedBackOrder;
+        int inventoryReceivedDemand;
         int inventoryPrevious;
         int demand;
-        int shippingQuantityDemand;
         int shippingQuantityBackOrder;
+        int shippingQuantityDemand;
+        int inventoryLeft;
+        int expectedQuantity;
+        int expectedQuantityBackOrder;        
         int orderPlaced;
-        int inventoryLeft;         
         int backOrder;
         }
 
@@ -26,6 +29,7 @@ contract SupplyChain {
     uint public orderLeadTime;
     uint[4] public orderState;
     int[4] public inventory;
+    int[25] private retailerDemand;
 
     mapping(address => Player) public players;
     mapping(address => Details[]) public weekDetails;
@@ -38,41 +42,35 @@ contract SupplyChain {
 
 
 
-    constructor () public {
-        setRoles();
-    }
+    constructor (address add1, address add2, address add3, address add4) public {
+        players[add1] = Player(1, add2, add1);
+        players[add2] = Player(2, add3, add1);
+        players[add3] = Player(3,add4, add2);
+        players[add4] = Player(4, add4, add3);
 
+        weekDetails[add1].push(Details(1, 0, 0, 190, 87, 0, 87, 103, 0, 0, 0, 0));
+        weekDetails[add2].push(Details(1, 0, 0, 190, 0, 0, 0, 190, 0, 0, 0, 0));
+        weekDetails[add3].push(Details(1, 0, 0, 190, 0, 0, 0, 190, 0, 0, 0, 0));
+        weekDetails[add4].push(Details(1, 0, 0, 190, 0, 0, 0, 190, 0, 0, 0, 0));
 
-    function setRoles() private {
-        players[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34] = Player(1, 0x5a528ef100931de8dd12C08d09877ac038AF04eb, 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
-        players[0x5a528ef100931de8dd12C08d09877ac038AF04eb] = Player(2, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C, 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34);
-        players[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C] = Player(3,0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0x5a528ef100931de8dd12C08d09877ac038AF04eb);
-        players[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8] = Player(4, 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8, 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C);
-
-        weekDetails[0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34].push(Details(1, 0, 50, 30, 30, 0, 0, 20, 0));
-        weekDetails[0x5a528ef100931de8dd12C08d09877ac038AF04eb].push(Details(1, 0, 50, 0, 0, 0, 0, 50, 0));
-        weekDetails[0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C].push(Details(1, 0, 50, 0, 0, 0, 0, 50, 0));
-        weekDetails[0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8].push(Details(1, 0, 50, 0, 0, 0, 0, 50, 0));
-
-
-        adds[1] = 0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34;
-        adds[2] = 0x5a528ef100931de8dd12C08d09877ac038AF04eb;
-        adds[3] = 0xeb01d15D4C7B3c75bB801E8fFDE842E3a5e4D94C;
-        adds[4] = 0x777B061fB4C1eB1b5F745eBe45e0f462F1e298F8;
-
+        adds[1] = add1;
+        adds[2] = add2;
+        adds[3] = add3;
+        adds[4] = add4;
 
         weekNo = 1;
         deliveryLeadTime = 1;
         orderLeadTime = 0;
-        inventory = [20, 50, 50, 50];
+        inventory = [103, 190, 190, 190];
         orderState = [0,0,0,0];
+        retailerDemand = [87,77,76,80,88,67,95,81,85,77,75,88,87,80,103,96,97,88,66,67,79,84,90,79,81]; 
     }
 
 
     function checkWeekEnd() private {
 
         if(players[msg.sender].role == 1) {
-            weekDetails[msg.sender][weekNo].demand = 40 + (int(keccak256(abi.encode(block.difficulty, block.timestamp)))%15);
+            weekDetails[msg.sender][weekNo].demand = retailerDemand[weekNo];
         }
 
         
@@ -90,57 +88,86 @@ contract SupplyChain {
         }
     }
 
-    function updateDetails (uint role, address add, address upAdd) public{
+    function updateDetails (uint role, address add, address upAdd) private{
 
+        // setting inventory received
         if(role != 4) {
-            if(weekNo-deliveryLeadTime >= 0) 
-                weekDetails[add][weekNo].inventoryReceived = weekDetails[upAdd][weekNo-deliveryLeadTime].shippingQuantityDemand + weekDetails[upAdd][weekNo-deliveryLeadTime].shippingQuantityBackOrder;
-
-            if(weekNo-1-orderLeadTime >= 0)
+            if(weekNo - orderLeadTime - deliveryLeadTime >= 0) {
+                weekDetails[add][weekNo].inventoryReceivedBackOrder = weekDetails[upAdd][weekNo-orderLeadTime-deliveryLeadTime].shippingQuantityBackOrder;
+                weekDetails[add][weekNo].inventoryReceivedDemand = weekDetails[upAdd][weekNo-orderLeadTime-deliveryLeadTime].shippingQuantityDemand;
+            }
+            //setting demand
+            if(int(weekNo-1-orderLeadTime) >= 0)
                 weekDetails[upAdd][weekNo].demand = weekDetails[add][weekNo-1-orderLeadTime].orderPlaced;
 
         }
         else {
-            if(weekNo-deliveryLeadTime >= 0)
-                weekDetails[add][weekNo].inventoryReceived = weekDetails[add][weekNo-deliveryLeadTime].orderPlaced;
+            if(int(weekNo-orderLeadTime-1-deliveryLeadTime) >= 0)
+                weekDetails[add][weekNo].inventoryReceivedDemand = weekDetails[add][weekNo-orderLeadTime-1-deliveryLeadTime].orderPlaced;
         }
-
+        //previous inventory
         weekDetails[add][weekNo].inventoryPrevious = weekDetails[add][weekNo-1].inventoryLeft;
 
-        int totalInventory = weekDetails[add][weekNo].inventoryReceived + weekDetails[add][weekNo].inventoryPrevious;
+        int beginInventory = weekDetails[add][weekNo].inventoryReceivedBackOrder + weekDetails[add][weekNo].inventoryReceivedDemand + max(0, weekDetails[add][weekNo].inventoryPrevious);
+        int prevInventory = weekDetails[add][weekNo].inventoryPrevious;
 
-        if(totalInventory < weekDetails[add][weekNo].demand)
-            weekDetails[add][weekNo].backOrder = weekDetails[add][weekNo].demand - totalInventory;
+        //shipping quantity BackOrder
+        if(prevInventory > 0)
+            weekDetails[add][weekNo].shippingQuantityBackOrder = 0;
+        else if(beginInventory >= 0) {
+            if(beginInventory >= abs(prevInventory))
+                weekDetails[add][weekNo].shippingQuantityBackOrder = abs(prevInventory);
+            else
+                weekDetails[add][weekNo].shippingQuantityBackOrder = beginInventory;
+        }
 
-        if(totalInventory  >= 0)
-            weekDetails[add][weekNo].shippingQuantityBackOrder = weekDetails[add][weekNo-1].backOrder;
-        else
-            weekDetails[add][weekNo].shippingQuantityBackOrder = weekDetails[add][weekNo].inventoryReceived;
-
-        if(weekDetails[add][weekNo].demand < totalInventory) {
+        //shipping quantity demand
+        if(beginInventory - weekDetails[add][weekNo].shippingQuantityBackOrder >= weekDetails[add][weekNo].demand) {
             weekDetails[add][weekNo].shippingQuantityDemand = weekDetails[add][weekNo].demand;       
         }
         else { 
-            if(totalInventory >= 0)
-                weekDetails[add][weekNo].shippingQuantityDemand = totalInventory;
+                weekDetails[add][weekNo].shippingQuantityDemand = beginInventory - weekDetails[add][weekNo].shippingQuantityBackOrder;
         }
 
+        //inventory left
+        weekDetails[add][weekNo].inventoryLeft = beginInventory - weekDetails[add][weekNo].shippingQuantityBackOrder - weekDetails[add][weekNo].demand;
 
-        weekDetails[add][weekNo].inventoryLeft = totalInventory - weekDetails[add][weekNo].demand;
+        //expected quantity
+        if(weekNo-orderLeadTime-deliveryLeadTime >= 0)
+            weekDetails[add][weekNo].expectedQuantity = weekDetails[add][weekNo-orderLeadTime-deliveryLeadTime].orderPlaced;
 
-        inventory[players[add].role-1] = weekDetails[add][weekNo].inventoryLeft;
+        //expected quantity BackOrder
+        if(role != 4) {
+            if(weekNo-orderLeadTime-deliveryLeadTime >= 0)
+                weekDetails[add][weekNo].expectedQuantityBackOrder = weekDetails[upAdd][weekNo-orderLeadTime-deliveryLeadTime].backOrder;                
+        }
+
+        //backOrder
+        weekDetails[add][weekNo].backOrder = abs(min(0, int(weekDetails[add][weekNo].inventoryLeft)));
+
+        inventory[players[add].role-1] = max(0,weekDetails[add][weekNo].inventoryLeft);
 
     }
 
 
     function order(int _amt) public {
-
-        weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0,0,0));
+        weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0,0,0,0,0,0));
         weekDetails[msg.sender][weekNo-1].orderPlaced = _amt;
 
         orderState[players[msg.sender].role - 1] = 1;
-
         checkWeekEnd(); 
+    }
+
+    function max(int a, int b) private pure returns (int){
+        return a>b ? a : b;
+    }
+
+    function min(int a, int b) private pure returns (int){
+        return a<b ? a : b;
+    }
+
+    function abs(int a) private pure returns (int){
+        return a>0 ? int(a) : int(0-a);
     }
 
 }

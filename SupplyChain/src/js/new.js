@@ -19,15 +19,15 @@ App = {
     }
 }
 
-    if (typeof web3 !== 'undefined') {
+    //if (typeof web3 !== 'undefined') {
       // If a web3 instance is already provided by Meta Mask.
-      App.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
-    } else {
+    //  App.web3Provider = web3.currentProvider;
+    //  web3 = new Web3(web3.currentProvider);
+    //} else {
       // Specify default instance if no web3 instance provided
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
       web3 = new Web3(App.web3Provider);
-    }
+    //}
     return App.initContract();
   },
 
@@ -79,58 +79,108 @@ App = {
         
         
         instance.weekNo().then(function(weeks){
-          //console.log(weeks.c[0]);
+          //console.log(weeks.words[0]);
           //console.log(numWeeks);
 
           document.getElementById("accountAddress").innerHTML = role_add;
-          document.getElementById("currentWeek").innerHTML = weeks.c[0];
+          document.getElementById("currentWeek").innerHTML = weeks.words[0];
           
 
         var table = document.getElementById("DetailsTable");
-        for(var i=0; i<weeks.c[0]; i++)
+        for(var i=0; i<weeks.words[0]; i++)
           var row = table.insertRow();
 
-        var a=0;
-        for(i=0; i<weeks.c[0]; i++) {
-              var pos, row;
+        var a=0,b=0;
+        for(i=0; i<weeks.words[0]; i++) {
+            var pos, row;
             instance.weekDetails(role_add,i).then(function(player){   
 
             console.log(player);
             console.log("---");           
-              pos = player[0].c[0];
+              pos = player[0].words[0];
               console.log(pos);
               row = table.rows[pos];
 
-              for(var j=0; j<4; j++){
+              var j;
+
+              for(j=0; j<3; j++){
                 var cell = row.insertCell(j);
-                cell.innerHTML = player[j].c[0] * player[j].s;  
+                cell.innerHTML = player[j].words[0] ;  
               }
 
-              var cell = row.insertCell(4);
-              cell.innerHTML = 0;
-              if(a!=0) {
-                console.log(a);
-                instance.weekDetails(role_add,a-1).then(function(player_old){
-                  var cell = row.cells[4];
-                  console.log(player_old[8].c[0]);
-                  cell.innerHTML = player_old[8].c[0] * player_old[j].s; 
-                });
+              var cell = row.insertCell(j);
+              if(player[3].negative == 1)
+                cell.innerHTML = -player[3].words[0];
+              else
+                cell.innerHTML = player[3].words[0];
+              j++;
+
+              var cell = row.insertCell(j);
+              cell.innerHTML = player[1].words[0] + player[2].words[0] + (1-player[3].negative)*player[3].words[0];
+              j++;
+
+
+             
+
+              for(var k=4; k<7; k++,j++) {
+                var cell = row.insertCell(j);
+                cell.innerHTML = player[k].words[0]; 
               }
 
-              for(var j=5; j<=player.length; j++){
+              var cell = row.insertCell(j);
+              if(player[7].negative == 1)
+                cell.innerHTML = -player[7].words[0];
+              else
+                cell.innerHTML = player[7].words[0];
+              j++;
+
+              for(var k=8; k<10; k++,j++) {
                 var cell = row.insertCell(j);
-                console.log(player.length);
-                cell.innerHTML = player[j-1].c[0] * player[j-1].s;  
+                cell.innerHTML = player[k].words[0]; 
               }
-              a++;
+
+             
+
+              for(var k=10; k<12; k++,j++) {
+                var cell = row.insertCell(j);
+                cell.innerHTML = player[k].words[0];
+              }               
+
+
             });
-          }
+        }
             
         });
+
        });
       })
     });
+     // App.addDetails();
+    },
 
+    addDetails: function() {
+      var qs= window.location.search;
+      //var v1=qs.get("role")
+      console.log(qs);
+      const urlParams = new URLSearchParams(qs);
+      const v1= urlParams.get('role');
+      var table = document.getElementById("DetailsTable");
+      App.contracts.SupplyChain.deployed().then(function(instance) {
+
+        instance.adds(v1).then(function(role_add){
+          instance.weekNo().then(function(weeks){
+            for(i=1; i<weeks.words[0]; i++) {
+              var r = table.rows[i-1];
+              console.log(r);
+              cell.innerHTML = r.cells[13].innerHTML;
+            }
+          });
+         });
+      });
+    },
+
+    max: function(a,b) {
+      return a>b ? a : b;
     }
 
 
