@@ -27,8 +27,9 @@ let myContract = new web3.eth.Contract(abi);
 defaultAccount = "0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34";
 
 app.use(express.static('src'));
+app.use(express.static('build/contracts'));
 
-app.get('/deployGame/:weeks', deployGame);
+app.get('/deployGame/:totalWeeks/:start/:end/:dLeadTime/:oLeadTime/:rhCost/:whCost/:dhCost/:fhCost/:rlCost/:wlCost/:dlCost/:flCost', deployGame);
 
 app.listen(process.env.PORT || 3000, function(){
     console.log('Your node js server is running');
@@ -36,8 +37,26 @@ app.listen(process.env.PORT || 3000, function(){
 
 function deployGame(req, res) {
 	console.log("\n\n\n");
-	var weeks = Number(req.params.weeks);
-	console.log("Number of weeks: " + weeks);
+	var totalWeeks = Number(req.params.totalWeeks);
+	var start = Number(req.params.start);
+	var end = Number(req.params.end);
+	var dLeadTime = Number(req.params.dLeadTime);
+	var oLeadTime = Number(req.params.oLeadTime);
+
+	var rhCost = Number(req.params.rhCost);
+	var whCost = Number(req.params.whCost);
+	var dhCost = Number(req.params.dhCost);
+	var fhCost = Number(req.params.fhCost);
+	var hCost = [rhCost,whCost,dhCost,fhCost];
+
+	var rlCost = Number(req.params.rlCost);
+	var wlCost = Number(req.params.wlCost);
+	var dlCost = Number(req.params.dlCost);
+	var flCost = Number(req.params.flCost);
+	var lsCost = [rlCost,wlCost,dlCost,flCost];
+
+	console.log("Number of weeks: " + totalWeeks);
+	console.log(hCost)
 	var players = {retailer: {}, wholesaler: {}, distributer: {}, factory: {}};
 
 //retailer account
@@ -83,7 +102,7 @@ players["GameID"] = (len-1)/4;
 
 myContract.deploy({
     data: bytecode,
-    arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1]]
+    arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1], totalWeeks, start, end, dLeadTime, oLeadTime, hCost, lsCost]
 })
 .send({
     from: '0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34',

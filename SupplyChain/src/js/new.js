@@ -95,22 +95,26 @@ App = {
         for(i=0; i<weeks.words[0]; i++) {
             instance.weekDetails(role_add,i).then(function(player){
               var pos = player[0].words[0];
-              console.log(pos);
-              console.log(pos);
               var row = table.rows[pos];
-              console.log(player);
-              for(var j = 0;j<7;j++){
+              var j;
+
+              for(j=0;j<3;j++){
                 var cell = row.insertCell(j);
-                //console.log(j);
-                console.log(player[j]);
-                console.log(player[j].words[0]);
                 cell.innerHTML = player[j].words[0];  
               }
-              var cell1= row.insertCell(j);
-              cell1.innerHTML= Math.abs(player[3].words[0]-player[4].words[0]); 
+
+              var cell = row.insertCell(j);
+              cell.innerHTML = player[1].words[0]+player[2].words[0];
               j++;
+
+              for(var k=3; k<9; k++,j++) {
+                var cell = row.insertCell(j);
+                cell.innerHTML = player[k].words[0];    
+              }            
+
+
               var cell1= row.insertCell(j);
-              cell1.innerHTML= Math.abs(player[7].words[0]);
+              cell1.innerHTML= Math.abs(player[9].words[0]);
               //cell1.setAttribute('href','hello');
               cell1.style.color = 'blue';
               var blockNumber = cell1.innerHTML;

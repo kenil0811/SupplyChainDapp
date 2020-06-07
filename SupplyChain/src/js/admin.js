@@ -29,9 +29,24 @@ xhttp.onreadystatechange = function() {
 
 
 function deployContract() {
-    var weeks = document.getElementById("weeks").value;
+    var weeks = document.getElementById("totalWeeks").value;
+    var start = document.getElementById("start").value;
+    var end = document.getElementById("end").value;
+    var dLeadTime = document.getElementById("dLeadTime").value;
+    var oLeadTime = document.getElementById("oLeadTime").value;
+
+    var rhCost = document.getElementById("rhCost").value;
+    var whCost = document.getElementById("whCost").value;
+    var dhCost = document.getElementById("dhCost").value;
+    var fhCost = document.getElementById("fhCost").value;
+
+    var rlCost = document.getElementById("rlCost").value;
+    var wlCost = document.getElementById("wlCost").value;
+    var dlCost = document.getElementById("dlCost").value;
+    var flCost = document.getElementById("flCost").value;
+
     if(weeks != ""){
-	   xhttp.open("GET", url+"/"+weeks, true);
+	   xhttp.open("GET", url+"/"+weeks+"/"+start+"/"+end+"/"+dLeadTime+"/"+oLeadTime+"/"+rhCost+"/"+whCost+"/"+dhCost+"/"+fhCost+"/"+rlCost+"/"+wlCost+"/"+dlCost+"/"+flCost, true);
 	   xhttp.send();
     }
 }

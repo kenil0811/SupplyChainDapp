@@ -59,20 +59,20 @@ App = {
 
   checkValidity: function() {
 
-    var address = document.getElementById("address").value;
+    // var address = document.getElementById("address").value;
     var password = document.getElementById("password").value;
 
     App.contracts.SupplyChain.deployed().then(function(instance) {
 
       instance.adds(App.role).then(function(exp_add) {
         console.log(exp_add);
-        if(exp_add !== address) {
-          //window.location.href = "error.html?val=1";
-            console.log("incorrect");
-            return;
-        }
+        // if(exp_add !== address) {
+        //   //window.location.href = "error.html?val=1";
+        //     console.log("incorrect");
+        //     return;
+        // }
 
-      web3.eth.personal.unlockAccount(address, password, function(error, res){
+      web3.eth.personal.unlockAccount(exp_add, password, function(error, res){
       if(error){
         window.location.href = "error.html?val=2";
         console.log("incorrect");

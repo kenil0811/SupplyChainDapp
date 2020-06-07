@@ -47,7 +47,7 @@ App = {
 
       web3.eth.getAccounts().then(function(acc) {
         console.log(acc);
-        App.account = acc[App.role];
+        App.account = acc[acc.length - 5 + parseInt(App.role)];
         console.log(App.account);
 
       switch(App.role) {
@@ -67,20 +67,33 @@ App = {
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
 
-        instance.players(App.account).then(function(player) {
-          var role = player.role.words[0]-1;
-          instance.orderState(role).then(function(state) {
-            console.log(state.words[0]);
-            if(state.words[0] == 1) {
-              document.getElementById("placeOrder").style.display = "none"; 
-              document.getElementById("orderPlaced").style.display = "block";
-            }
-            else {
-              document.getElementById("placeOrder").style.display = "block"; 
-              document.getElementById("orderPlaced").style.display = "none";
-            }
-          });
+        instance.weekNo().then(function(weekNo) {
+          instance.maxWeeks().then(function(maxWeeks) {
+            instance.players(App.account).then(function(player) {
+              var role = player.role.words[0]-1;
+              instance.orderState(role).then(function(state) {
+                console.log(state.words[0]);
+                if(weekNo>maxWeeks) {
+                 document.getElementById("placeOrder").style.display = "none"; 
+                  document.getElementById("gameOver").style.display = "block";
+                }
+                else if(state.words[0] == 1) {
+                  document.getElementById("placeOrder").style.display = "none"; 
+                  document.getElementById("orderPlaced").style.display = "block";
+                }
+                else {
+                  document.getElementById("placeOrder").style.display = "block"; 
+                  document.getElementById("orderPlaced").style.display = "none";
+                }
+          
+
+            
+            });
         });
+          });          
+        });
+
+        
       });
 
 
@@ -123,6 +136,10 @@ App = {
           document.getElementById("deliveryLeadTime").innerHTML = deliveryLeadTime;
         });
 
+        instance.maxWeeks().then(function(totalWeeks) {
+          document.getElementById("totalWeeks").innerHTML = totalWeeks;
+        });
+
         instance.inventory(0).then(function(array) {
           $("#ret_inv").html(array.words[0]);
         });
@@ -154,25 +171,6 @@ App = {
         document.getElementById("rec_inv").innerHTML = details[1].words[0];
         document.getElementById("ship_quan").innerHTML = details[4].words[0];
 
-        var orderLeadTime, deliveryLeadTime;
-        instance.orderLeadTime().then(function(leadTime) {
-          orderLeadTime = leadTime.words[0];
-        
-        instance.deliveryLeadTime().then(function(leadTime) {
-          deliveryLeadTime = leadTime.words[0];
-
-        var totalLeadTime = orderLeadTime + deliveryLeadTime;
-        
-        if(weekNo.words[0]-1-totalLeadTime >= 0) {
-          instance.weekDetails(App.account, weekNo.words[0]-totalLeadTime-1).then(function(details) {
-            document.getElementById("expectedQuantity").innerHTML = details[5].words[0];
-
-          });
-        } 
-                        
-
-      });
-    });
     });
     });
     });

@@ -15,7 +15,43 @@
     </div>
   </div>
 
-<input type="number" class="form-control" id="weeks" placeholder="Enter number of weeks:"  aria-describedby="basic-addon2"><br><br>
+<label for="weeks">Enter number of weeks:</label>
+<input type="number"  id="totalWeeks" value="25" ><br><br>
+
+<label for="weeks">Enter performance evaluation start time:</label>
+<input type="number"  id="start" value="2" ><br><br>
+
+<label for="weeks">Enter performance evaluation end time:</label>
+<input type="number"  id="end" value="22" ><br><br>
+
+<label for="weeks">Enter delivery lead time:</label>
+<input type="number"  id="dLeadTime" value="1" ><br><br>
+
+<label for="weeks">Enter order lead time:</label>
+<input type="number"  id="oLeadTime" value="0" ><br><br>
+
+<h2>Enter Holding costs:</h2>
+<label for="weeks">Retailer:</label>
+<input type="number"  id="rhCost" value="5" >
+<label for="weeks">Wholesaler:</label>
+<input type="number"  id="whCost" value="4" >
+<label for="weeks">Distributer:</label>
+<input type="number"  id="dhCost" value="3" >
+<label for="weeks">Factory:</label>
+<input type="number"  id="fhCost" value="1" >
+<br><br>
+
+<h2>Enter Lost Sales costs:</h2>
+<label for="weeks">Retailer:</label>
+<input type="number"  id="rlCost" value="10" >
+<label for="weeks">Wholesaler:</label>
+<input type="number"  id="wlCost" value="8" >
+<label for="weeks">Distributer:</label>
+<input type="number"  id="dlCost" value="6" >
+<label for="weeks">Factory:</label>
+<input type="number"  id="flCost" value="2" >
+
+<br><br>
 
 <button class="btn btn-outline-secondary" style="width: 150px;" onclick="deployContract()" type="button">Deploy Contract</button><br>
 
