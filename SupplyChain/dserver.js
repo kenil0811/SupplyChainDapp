@@ -5,6 +5,10 @@ app.use(cors());
 app.options('*', cors());
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
+const csv = require('fast-csv');
+const upload = multer({ dest: 'tmp/csv/' });
+
 const Web3 = require('web3');
 web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
 web3 = new Web3(web3Provider);
@@ -24,40 +28,61 @@ let bytecode = jsonOutput['bytecode'];
 
 let myContract = new web3.eth.Contract(abi);
 
+
 defaultAccount = "0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34";
 
 app.use(express.static('src'));
 app.use(express.static('build/contracts'));
 
-app.get('/deployGame/:totalWeeks/:start/:end/:dLeadTime/:oLeadTime/:rhCost/:whCost/:dhCost/:fhCost/:rlCost/:wlCost/:dlCost/:flCost', deployGame);
-
 app.listen(process.env.PORT || 3000, function(){
     console.log('Your node js server is running');
 });
 
-function deployGame(req, res) {
-	console.log("\n\n\n");
-	var totalWeeks = Number(req.params.totalWeeks);
-	var start = Number(req.params.start);
-	var end = Number(req.params.end);
-	var dLeadTime = Number(req.params.dLeadTime);
-	var oLeadTime = Number(req.params.oLeadTime);
+app.post('/deployGameWithFile', upload.single('uploadCsv'), deployGameWithFile);
 
-	var rhCost = Number(req.params.rhCost);
-	var whCost = Number(req.params.whCost);
-	var dhCost = Number(req.params.dhCost);
-	var fhCost = Number(req.params.fhCost);
+app.get('/getPlayers', getPlayers);
+
+
+var players = {retailer: {}, wholesaler: {}, distributer: {}, factory: {}};
+
+function deployGameWithFile(req, res) {
+  // open uploaded file
+
+console.log("\n\n\n");
+  const fileRows = [];
+  csv.parseFile(req.file.path)
+    .on("data", function (data) {
+      fileRows.push(data); // push each row
+    })
+    .on("end", function () {
+      console.log(fileRows)
+      fs.unlinkSync(req.file.path);   // remove temp file
+      //process "fileRows" and respond
+    });
+    console.log("\n");
+    console.log(req.body);
+    console.log("\n");
+	var totalWeeks = Number(req.body.totalWeeks);
+	var start = Number(req.body.start);
+	var end = Number(req.body.end);
+	var dLeadTime = Number(req.body.dLeadTime);
+	var oLeadTime = Number(req.body.oLeadTime);
+
+	var rhCost = Number(req.body.rhCost);
+	var whCost = Number(req.body.whCost);
+	var dhCost = Number(req.body.dhCost);
+	var fhCost = Number(req.body.fhCost);
 	var hCost = [rhCost,whCost,dhCost,fhCost];
 
-	var rlCost = Number(req.params.rlCost);
-	var wlCost = Number(req.params.wlCost);
-	var dlCost = Number(req.params.dlCost);
-	var flCost = Number(req.params.flCost);
+	var rlCost = Number(req.body.rlCost);
+	var wlCost = Number(req.body.wlCost);
+	var dlCost = Number(req.body.dlCost);
+	var flCost = Number(req.body.flCost);
 	var lsCost = [rlCost,wlCost,dlCost,flCost];
 
 	console.log("Number of weeks: " + totalWeeks);
 	console.log(hCost)
-	var players = {retailer: {}, wholesaler: {}, distributer: {}, factory: {}};
+	
 
 //retailer account
 web3.eth.personal.newAccount("pass1").then(function(newAcc) {
@@ -120,9 +145,15 @@ myContract.deploy({
 	web3.eth.personal.lockAccount(accounts[len-4]);
 
 	console.log("Success");
-	res.status(200).send(players);
 
 });
 });
 });});});});
+
+	res.status(200).send(players);
+}
+
+function getPlayers(req, res){
+	console.log(players);
+	res.status(200).send(players);
 }

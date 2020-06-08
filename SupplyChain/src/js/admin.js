@@ -28,7 +28,21 @@ xhttp.onreadystatechange = function() {
 }
 
 
-function deployContract() {
+
+var request = new XMLHttpRequest();
+    request.onreadystatechange = function (){
+        if(request.readyState == 4 && request.status == 200) {
+        console.log("yey");
+
+        setTimeout(function () {
+            xhttp.open("GET", "http://localhost:3000/getPlayers", true);
+            xhttp.send();
+        }, 2000);
+        
+    }
+    }
+function deployContractWithFile() {
+
     var weeks = document.getElementById("totalWeeks").value;
     var start = document.getElementById("start").value;
     var end = document.getElementById("end").value;
@@ -44,9 +58,27 @@ function deployContract() {
     var wlCost = document.getElementById("wlCost").value;
     var dlCost = document.getElementById("dlCost").value;
     var flCost = document.getElementById("flCost").value;
+    if(weeks != "" && document.getElementById('inputFile').files.length != 0){
+        var csv=document.getElementById('inputFile').files[0];
+        var formData = new FormData();
+        formData.append("uploadCsv",csv);
+        formData.append("totalWeeks", weeks);
+        formData.append("start", start);
+        formData.append("end", end);
+        formData.append("dLeadTime", dLeadTime);
+        formData.append("oLeadTime", oLeadTime);
 
-    if(weeks != ""){
-	   xhttp.open("GET", url+"/"+weeks+"/"+start+"/"+end+"/"+dLeadTime+"/"+oLeadTime+"/"+rhCost+"/"+whCost+"/"+dhCost+"/"+fhCost+"/"+rlCost+"/"+wlCost+"/"+dlCost+"/"+flCost, true);
-	   xhttp.send();
+        formData.append("rhCost", rhCost);
+        formData.append("whCost", whCost);
+        formData.append("dhCost", dhCost);
+        formData.append("fhCost", fhCost);
+
+        formData.append("rlCost", rlCost);
+        formData.append("wlCost", wlCost);
+        formData.append("dlCost", dlCost);
+        formData.append("flCost", flCost);
+
+        request.open("POST","http://localhost:3000/deployGameWithFile", true);
+        request.send(formData);
     }
 }
