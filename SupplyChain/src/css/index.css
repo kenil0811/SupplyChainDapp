@@ -1,0 +1,64 @@
+
+
+.thick {
+	height: 4px;
+	background-color: black;
+}
+
+.heading {
+	text-align: center;
+	color: black;
+	font-family: Emmett;
+}
+
+.heading2 {
+	text-align: center;
+	color: black;
+	font-family: Arial Rounded MT Bold;	
+}
+
+.head2 {
+	border: 2px solid black;
+	width: 400px;
+	border-radius: 8px;
+}
+
+.paraCSS {
+	text-align: center;
+	color: black;
+	font-family: Rockwell;
+	padding: 10px 150px 10px 150px;
+	font-size: 20px;
+}
+
+.writeUp {
+	border: 2px solid black;
+	border-radius: 8px;
+	margin: 0px 150px 0px 150px;
+}
+
+.subHeading {
+	font-size: 30px;
+}
+
+.color2 {
+	background-image: linear-gradient(to bottom,#FDFEFE,#B3B6B7);
+}
+
+.color3 {
+	background-image: linear-gradient(to top right, #5DADE2,#EBF5FB,#5DADE2);
+}
+
+.fontCSS {
+	font-family: Rockwell;
+}
+
+.bgCSS{
+      background-image: url('../PngItem.png');
+      background-color: #AED6F1;
+    }
+
+.heading3 {
+	margin-left: 450px;
+	font-family: Arial Rounded MT Bold;		
+}    
