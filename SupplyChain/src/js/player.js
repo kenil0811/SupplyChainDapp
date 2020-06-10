@@ -87,7 +87,9 @@ App = {
               var role = player.role.words[0]-1;
               instance.orderState(role).then(function(state) {
                 console.log(state.words[0]);
-                if(weekNo>maxWeeks) {
+                if(weekNo>maxWeeks.words[0]) {
+                  console.log(weekNo);
+                  console.log(maxWeeks);
                  document.getElementById("placeOrder").style.display = "none"; 
                   document.getElementById("gameOver").style.display = "block";
                 }
