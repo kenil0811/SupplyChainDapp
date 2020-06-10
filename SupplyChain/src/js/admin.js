@@ -18,7 +18,7 @@ var request = new XMLHttpRequest();
     else {
         console.log("Error!!!!!!!1");
         console.log(request.status);
-        document.getElementById("players").innerHTML = "Error!!!!!" + request.status;
+        document.getElementById("players").innerHTML = "Please Wait ...." + request.status;
     }
     }
 function deployContractWithFile() {
@@ -28,6 +28,7 @@ function deployContractWithFile() {
     var end = document.getElementById("end").value;
     var dLeadTime = document.getElementById("dLeadTime").value;
     var oLeadTime = document.getElementById("oLeadTime").value;
+    var initialInv = document.getElementById("initialInv").value;
 
     var rhCost = document.getElementById("rhCost").value;
     var whCost = document.getElementById("whCost").value;
@@ -52,6 +53,7 @@ function deployContractWithFile() {
         formData.append("end", end);
         formData.append("dLeadTime", dLeadTime);
         formData.append("oLeadTime", oLeadTime);
+        formData.append("initialInv", initialInv);
 
         formData.append("rhCost", rhCost);
         formData.append("whCost", whCost);

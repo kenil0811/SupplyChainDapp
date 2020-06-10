@@ -32,6 +32,7 @@ contract SupplyChain {
     uint[4] public inventory;
     uint[4] public holdingCost;
     uint[4] public lostSalesCost;
+    uint[] private customerDemand;
 
     mapping(address => Player) public players;
     mapping(address => Details[]) public weekDetails;
@@ -44,16 +45,20 @@ contract SupplyChain {
 
 
 
-    constructor(address add1, address add2, address add3, address add4, uint totalWeeks, uint start, uint end, uint dLeadTime, uint oLeadTime, uint[4] memory hCost, uint[4] memory lsCost) public{
+    constructor(address add1, address add2, address add3, address add4, uint totalWeeks, uint start, uint end, uint dLeadTime, uint oLeadTime, uint[4] memory hCost, uint[4] memory lsCost, uint initialInv, uint[] memory distribution) public{
         players[add1] = Player(1, add2, add1);
         players[add2] = Player(2, add3, add1);
         players[add3] = Player(3,add4, add2);
         players[add4] = Player(4, add4, add3);
 
-        weekDetails[add1].push(Details(1, 0, 50, 30, 30, 20, 0, 0, 0, 0));
-        weekDetails[add2].push(Details(1, 0, 50, 0, 0, 50, 0, 0, 0, 0));
-        weekDetails[add3].push(Details(1, 0, 50, 0, 0, 50, 0, 0, 0, 0));
-        weekDetails[add4].push(Details(1, 0, 50, 0, 0, 50, 0, 0, 0, 0));
+        if(initialInv>=distribution[0])
+            weekDetails[add1].push(Details(1, 0, initialInv, distribution[0], distribution[0], initialInv-distribution[0], 0, 0, 0, 0));
+        else
+            weekDetails[add1].push(Details(1, 0, initialInv, distribution[0], initialInv, 0, 0, 0, distribution[0]-initialInv, 0));
+
+        weekDetails[add2].push(Details(1, 0, initialInv, 0, 0, initialInv, 0, 0, 0, 0));
+        weekDetails[add3].push(Details(1, 0, initialInv, 0, 0, initialInv, 0, 0, 0, 0));
+        weekDetails[add4].push(Details(1, 0, initialInv, 0, 0, initialInv, 0, 0, 0, 0));
 
 
         adds[1] = add1;
@@ -74,13 +79,14 @@ contract SupplyChain {
 
         inventory = [20, 50, 50, 50];
         orderState = [0,0,0,0];
+        customerDemand = distribution;
     }
 
 
     function checkWeekEnd() private {
 
         if(players[msg.sender].role == 1) {
-            weekDetails[msg.sender][weekNo].demand = uint(40 + (int(keccak256(abi.encode(block.difficulty, block.timestamp)))%15));
+            weekDetails[msg.sender][weekNo].demand = customerDemand[weekNo%maxWeeks];
         }
 
         

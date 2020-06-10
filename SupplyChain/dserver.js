@@ -57,7 +57,7 @@ function deployGameWithFile(req, res) {
   // open uploaded file
 
 console.log("\n\n\n");
-  const fileRows = [];
+  var fileRows = [];
   if(req.file){
   	//file is uploaded
   	csv.parseFile(req.file.path)
@@ -72,6 +72,7 @@ console.log("\n\n\n");
 
 	}
 	else {
+		fileRows = [79, 64, 91, 95, 70, 82, 79, 74, 86, 104, 75, 88, 87, 80, 103, 96, 97, 88, 66, 67, 79, 84, 90, 79, 81];
 		//file not found
 	}
     console.log("\n");
@@ -82,6 +83,7 @@ console.log("\n\n\n");
 	var end = Number(req.body.end);
 	var dLeadTime = Number(req.body.dLeadTime);
 	var oLeadTime = Number(req.body.oLeadTime);
+	var initialInv = Number(req.body.initialInv);
 
 	var rhCost = Number(req.body.rhCost);
 	var whCost = Number(req.body.whCost);
@@ -153,7 +155,7 @@ players["GameID"] = (len-1)/4;
 
 myContract.deploy({
     data: bytecode,
-    arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1], totalWeeks, start, end, dLeadTime, oLeadTime, hCost, lsCost]
+    arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1], totalWeeks, start, end, dLeadTime, oLeadTime, hCost, lsCost, initialInv, fileRows]
 })
 .send({
     from: '0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34',

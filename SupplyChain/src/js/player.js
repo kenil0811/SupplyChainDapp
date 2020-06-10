@@ -47,7 +47,7 @@ App = {
       App.role= urlParams.get('role');
 
       web3.eth.getAccounts().then(function(acc) {
-        console.log(acc);
+      //  console.log(acc);
         App.account = acc[acc.length - 5 + parseInt(App.role)];
         console.log(App.account);
         
@@ -64,6 +64,19 @@ App = {
         case '4': document.getElementById('player').innerHTML = "Factory";
                   document.getElementById('downstream').innerHTML = "Distributer Demand";
                   break;
+      }
+
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET","http://localhost:3000/gameInfo", true);
+      xhttp.send();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.status == 200  && xhttp.readyState == 4){
+          var k = xhttp.response;
+          console.log(k);
+          console.log(k['distribution']);
+          console.log(xhttp.response);
+        }
       }
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
@@ -213,14 +226,7 @@ App = {
 
 $(function() {
   $(window).load(function() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function(){
-      if (xhttp.status == 200  && xhttp.readyState == 4){
-        console.log(xhttp.response);
-      }
-    }
-    xhttp.open("GET","http://localhost:3000/gameInfo", true);
-    xhttp.send();
+    
     App.init();
   });
 });
