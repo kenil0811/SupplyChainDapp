@@ -47,6 +47,16 @@ app.get('/gameInfo', function(req, res) {
 	});
 });
 
+app.get('/adminLogin/:password', function(req, res) {
+	var pass = String(req.params.password);
+	console.log(pass);
+	if(pass == "admin") {
+		res.status(200).send();
+	}
+	else {
+		res.status(401).send();
+	}
+})
 
 app.post('/deployGameWithFile', upload.single('uploadCsv'), deployGameWithFile);
 

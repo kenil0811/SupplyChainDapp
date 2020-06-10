@@ -74,7 +74,7 @@ App = {
               inventoryLeft.push(player[5].words[0]);
 
               var val,r,c;
-              if(order_det.length == endWeek.words[0]-startWeek.words[0]) {
+              if(order_det.length == endWeek.words[0]-startWeek.words[0]+1) {
                 //console.log(inventoryLeft);
                 val = App.variance(order_det);
                 r = table.rows[1];

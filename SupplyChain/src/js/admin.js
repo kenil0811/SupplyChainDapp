@@ -15,10 +15,13 @@ var request = new XMLHttpRequest();
         document.getElementById("distributer").innerHTML =  "Distributer:<br>&emsp;Address: " + distributer.address + "<br>&emsp;Password: " + distributer.password;
         document.getElementById("factory").innerHTML =  "Factory:<br>&emsp;Address: " + factory.address + "<br>&emsp;Password: " + factory.password;
     }
+    else if(request.status==0) {
+        document.getElementById("players").innerHTML = "Please Wait ....";
+    }
     else {
         console.log("Error!!!!!!!1");
         console.log(request.status);
-        document.getElementById("players").innerHTML = "Please Wait ...." + request.status;
+        document.getElementById("players").innerHTML = "Error!!!";
     }
     }
 function deployContractWithFile() {
