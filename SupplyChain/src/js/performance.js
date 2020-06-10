@@ -68,6 +68,10 @@ App = {
 
             instance.weekDetails(role_add,i).then(function(player){ 
               order_det.push(player[7].words[0]);
+
+              App.displayGraph(order_det,role,startWeek.words[0],endWeek.words[0]);
+
+
               demand.push(player[3].words[0]);
               lostSales.push(player[8].words[0]);
               shippingQuantity.push(player[4].words[0]);
@@ -174,7 +178,75 @@ App = {
       for(i=0; i<arr.length; i++)
         s += arr[i];
       return s;
+    },
+
+    displayGraph: function(data,role,startWk,endWk){
+
+      if(role<5){
+
+      var container="";
+      var title="";
+
+        if(role==1)
+           {container="chartContainer1";
+            title="Retailer Order to Wholesaler"}
+         if(role==2)
+           {container="chartContainer2";
+            title="Wholesaler Order to Distributor"}
+         if(role==3)
+           {container="chartContainer3";
+            title="Distributor Order to Factory"}
+         if(role==4)
+           {container="chartContainer4";
+            title="Factory Order to Production Shop"}
+
+        console.log(startWk);
+        console.log(endWk);
+
+      
+      console.log(data);
+      
+      var dataPoints = [];
+
+      for (var i = startWk; i <=endWk; i++) {
+        dataPoints.push({
+          x: i,
+          y: data[i-startWk]
+        });
+      }
+      var chart = new CanvasJS.Chart(container, {
+        title: {
+          text: title
+        },
+         axisX:{
+       title: "Week",
+       interval:1
+      },
+       axisY:{
+       title: "Order Quantity",
+       interval: 10
+      },
+        data: [{
+          type: "line",
+          indexLabel: "{y}",
+          dataPoints: dataPoints
+        }],
+        options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
     }
+      });
+
+      chart.render();
+
+
+    }
+  }
 
 
   };
