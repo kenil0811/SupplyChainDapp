@@ -5,6 +5,7 @@ App = {
   role:null,
 
   init: function() {
+    
     return App.initWeb3();
   },
 
@@ -49,7 +50,7 @@ App = {
         console.log(acc);
         App.account = acc[acc.length - 5 + parseInt(App.role)];
         console.log(App.account);
-
+        
       switch(App.role) {
         case '1': document.getElementById('player').innerHTML = "Retailer";
                   document.getElementById('downstream').innerHTML = "Customer Demand";
@@ -208,8 +209,18 @@ App = {
 
 };
   
+
+
 $(function() {
   $(window).load(function() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+      if (xhttp.status == 200  && xhttp.readyState == 4){
+        console.log(xhttp.response);
+      }
+    }
+    xhttp.open("GET","http://localhost:3000/gameInfo", true);
+    xhttp.send();
     App.init();
   });
 });

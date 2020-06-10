@@ -128,6 +128,18 @@
 
 <input type="file" accept=".csv" id="inputFile"/>
 
+
+<label for="distribution">Choose a distribution:</label>
+
+<select name="distribution" id="distribution">
+  <option value="normal">Normal</option>
+  <option value="poisson">Poisson</option>
+  <option value="binomial">binomial</option>
+</select>
+
+<input type="number" placeholder="Enter Standard Deviation" id="stdDev">
+<input type="number" placeholder="Enter Mean" id="mean">
+
 <center>
 <div>
     <button class="btn btn-outline-primary" style="width: 150px;" onclick="deployContractWithFile()" type="button">Deploy Contract</button>  
