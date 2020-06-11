@@ -44,23 +44,34 @@ App = {
 
     App.contracts.SupplyChain.deployed().then(function(instance) {
 
+      instance.startWeek().then(function(startWeek) {
+      instance.endWeek().then(function(endWeek) {
+      instance.holdingCost(0).then(function(rhCost) {
+      instance.holdingCost(1).then(function(whCost) {
+      instance.holdingCost(2).then(function(dhCost) {
+      instance.holdingCost(3).then(function(fhCost) {
+      instance.backOrderCost(0).then(function(rbCost) {
+      instance.backOrderCost(1).then(function(wbCost) {
+      instance.backOrderCost(2).then(function(dbCost) {
+      instance.backOrderCost(3).then(function(fbCost) {
+
       for(rolee=1; rolee<=4; rolee++) {
         var role=1;
         var totalCost=0;
       instance.adds(rolee).then(function(role_add){                 
-        instance.weekNo().then(function(weeks){
 
           var order_det=[], demand=[], backorder=[], shippingQuantityDemand=[], inventoryLeft=[];
-          for(i=0; i<10; i++) {
+          for(i=startWeek.words[0]-1; i<endWeek.words[0]; i++) {
             instance.weekDetails(role_add,i).then(function(player){  
               order_det.push(player[10].words[0]);
+              App.displayGraph(order_det,role,startWeek.words[0],endWeek.words[0]);
               demand.push(player[4].words[0]);
               backorder.push(player[11].words[0]);
               shippingQuantityDemand.push(player[6].words[0]);
               inventoryLeft.push(player[7].words[0]*(1-player[7].negative));
 
               var val,r,c;
-              if(order_det.length == 10) {
+              if(order_det.length == endWeek.words[0]-startWeek.words[0]+1) {
                 //console.log(inventoryLeft);
                 val = App.variance(order_det);
                 r = table.rows[1];
@@ -92,20 +103,20 @@ App = {
                 c = r.insertCell(role);
                 // console.log(val);
                 switch(role) {
-                  case 1: c.innerHTML = "Rs " + val*10; totalCost+=val*10; break;
-                  case 2: c.innerHTML = "Rs " + val*8; totalCost+=val*8; break;
-                  case 3: c.innerHTML = "Rs " + val*6; totalCost+=val*6; break;
-                  case 4: c.innerHTML = "Rs " + val*2; totalCost+=val*2; break;
+                  case 1: c.innerHTML = "Rs " + val*rbCost; totalCost+=val*rbCost; break;
+                  case 2: c.innerHTML = "Rs " + val*wbCost; totalCost+=val*wbCost; break;
+                  case 3: c.innerHTML = "Rs " + val*dbCost; totalCost+=val*dbCost; break;
+                  case 4: c.innerHTML = "Rs " + val*fbCost; totalCost+=val*fbCost; break;
                 }
 
                 val = App.sum(inventoryLeft);
                 r = table.rows[7];
                 c = r.insertCell(role);
                 switch(role) {
-                  case 1: c.innerHTML = "Rs " + val*5; totalCost+=val*5; break;
-                  case 2: c.innerHTML = "Rs " + val*4; totalCost+=val*4; break;
-                  case 3: c.innerHTML = "Rs " + val*3; totalCost+=val*3; break;
-                  case 4: c.innerHTML = "Rs " + val*1; totalCost+=val*1; break;
+                  case 1: c.innerHTML = "Rs " + val*rhCost; totalCost+=val*rhCost; break;
+                  case 2: c.innerHTML = "Rs " + val*whCost; totalCost+=val*whCost; break;
+                  case 3: c.innerHTML = "Rs " + val*dhCost; totalCost+=val*dhCost; break;
+                  case 4: c.innerHTML = "Rs " + val*fhCost; totalCost+=val*fhCost; break;
                 }
 
                 role++;
@@ -123,7 +134,6 @@ App = {
           }
 
         });
-       });
     }
       });
     },
@@ -151,8 +161,75 @@ App = {
       for(i=0; i<arr.length; i++)
         s += arr[i];
       return s;
-    }
+    },
 
+  displayGraph: function(data,role,startWk,endWk){
+
+      if(role<5){
+
+      var container="";
+      var title="";
+
+        if(role==1)
+           {container="chartContainer1";
+            title="Retailer Order to Wholesaler"}
+         if(role==2)
+           {container="chartContainer2";
+            title="Wholesaler Order to Distributor"}
+         if(role==3)
+           {container="chartContainer3";
+            title="Distributor Order to Factory"}
+         if(role==4)
+           {container="chartContainer4";
+            title="Factory Order to Production Shop"}
+
+        console.log(startWk);
+        console.log(endWk);
+
+      
+      console.log(data);
+      
+      var dataPoints = [];
+
+      for (var i = startWk; i <=endWk; i++) {
+        dataPoints.push({
+          x: i,
+          y: data[i-startWk]
+        });
+      }
+      var chart = new CanvasJS.Chart(container, {
+        title: {
+          text: title
+        },
+         axisX:{
+       title: "Week",
+       interval:1
+      },
+       axisY:{
+       title: "Order Quantity",
+       interval: 10
+      },
+        data: [{
+          type: "line",
+          indexLabel: "{y}",
+          dataPoints: dataPoints
+        }],
+        options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+      });
+
+      chart.render();
+
+
+    }
+  }
 
   };
 

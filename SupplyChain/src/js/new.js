@@ -137,16 +137,20 @@ App = {
               for(var k=8; k<10; k++,j++) {
                 var cell = row.insertCell(j);
                 cell.innerHTML = player[k].words[0]; 
-              }
+              }             
 
-             
-
-              for(var k=10; k<12; k++,j++) {
+              for(var k=10; k<13; k++,j++) {
                 var cell = row.insertCell(j);
                 cell.innerHTML = player[k].words[0];
               }               
 
-
+              var cell1= row.insertCell(j);
+              cell1.innerHTML= Math.abs(player[9].words[0]);
+              //cell1.setAttribute('href','hello');
+              cell1.style.color = 'blue';
+              var blockNumber = cell1.innerHTML;
+              cell1.setAttribute('type','button')
+              cell1.setAttribute('onclick','App.showTransaction('+blockNumber+','+v1+')')
             });
         }
             
@@ -158,25 +162,53 @@ App = {
      // App.addDetails();
     },
 
-    addDetails: function() {
-      var qs= window.location.search;
-      //var v1=qs.get("role")
-      console.log(qs);
-      const urlParams = new URLSearchParams(qs);
-      const v1= urlParams.get('role');
-      var table = document.getElementById("DetailsTable");
-      App.contracts.SupplyChain.deployed().then(function(instance) {
+    showTransaction: function(blockNumber,role) {
+      //alert('Hello');
+      var modal = document.getElementById("transactionModal");
+       if(blockNumber!=0){
+          modal.style.display = "block"; 
+       }
+       
 
-        instance.adds(v1).then(function(role_add){
-          instance.weekNo().then(function(weeks){
-            for(i=1; i<weeks.words[0]; i++) {
-              var r = table.rows[i-1];
-              console.log(r);
-              cell.innerHTML = r.cells[13].innerHTML;
-            }
-          });
-         });
-      });
+      var closeBtn1 = document.getElementById("closeBtn");
+      //var closeBtn2 = document.getElementById("closeBtn2");
+
+       closeBtn1.onclick = function() {
+          modal.style.display = "none";
+        } 
+
+        var player;
+        if(role==1){
+             player = "Retailer";          
+        }
+        else if(role==2){
+             player = "Wholesaler";    
+        }
+        else if(role==3){
+            player = "Distributer"; 
+        }
+        else if(role==4){
+            player = "Factory"; 
+        }
+
+        //fetch data from the block
+        web3.eth.getBlock(blockNumber).then(function(block){
+
+            web3.eth.getTransaction(block.transactions[0]).then(function(tx) {
+            console.log(tx);
+
+            var num = tx.blockNumber;
+            var hash = tx.hash;
+            var time = block.timestamp;
+            var from = tx.from;
+
+            document.getElementById("bnumber").innerHTML = num;
+            document.getElementById("hash").innerHTML = hash;
+            document.getElementById("timestamp").innerHTML = time;
+            document.getElementById("creater").innerHTML = from+"   ("+player+")";            
+            });
+
+        })
     },
 
     max: function(a,b) {

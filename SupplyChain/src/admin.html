@@ -1,18 +1,166 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  </head>
+  <style type="text/css">
+    .thick {
+      height: 1px;
+      background-color: black;
+    }
+    .styleInput {
+      margin-left: 10px;
+      border-radius: 4px;
+    }
+
+    .headStyle {
+      background-color: #00FFFF;
+    }
+  </style>
 <body>
 
-<h2>HTML Buttons</h2>
-<p>HTML buttons are defined with the button tag:</p>
+<div class="jumbotron jumbotron-fluid bg-dark text-white" style="padding-bottom: 20px; padding-top: 30px;">
+    <div class="container">
+      <h2 class="display-6" id="player">ADMIN</h2>
+    </div>
+  </div>
 
-<button onclick="deployContract()" id="btnDeploy">Deploy Contract</button>
+<div class="headStyle">
+  <hr class="thick">
+  <h5 style="margin-left: 10px;"> Enter Basic details </h5>
+  <hr class="thick">
+</div>
 
-<h3 id="players"> </h3>
-<h4 id="retailer"> </h3>
-<h4 id="wholesaler"> </h3>
-<h4 id="distributer"> </h3>
-<h4 id="factory"> </h3>
+<div class="row">  
+  <label style="margin-left: 20px" for="weeks">Enter number of weeks: </label>
+  <input type="number" class="styleInput" id="totalWeeks" value="25" >
 
+  <label style="margin-left: 20px" for="initialInv">Enter initial inventory:</label>
+  <input type="number" class="styleInput" id="initialInv" value="190" >  
+</div>
+<br>
+<div class="row">
+  <label style="margin-left: 20px" for="weeks">Enter order lead time:</label>
+  <input type="number" class="styleInput" id="oLeadTime" value="0" >
+
+  <label style="margin-left: 20px" for="weeks">Enter delivery lead time:</label>
+  <input type="number" class="styleInput" id="dLeadTime" value="1" >
+</div>
+
+
+<div class="headStyle">
+  <hr class="thick">
+  <h5 style="margin-left: 10px">Performance Evaluation: Enter values for starting and ending week</h5>
+  <hr class="thick">  
+</div>
+
+<div class="row">
+      <label for="weeks" style="margin-left: 20px">Starting Week: </label>
+      <input type="number" class="styleInput" id="start" value="2" >
+      <label for="weeks" style="margin-left: 20px">Ending Week: </label>
+      <input type="number" class="styleInput" id="end" value="22" >    
+
+</div>
+
+
+<div class="headStyle">
+  <hr class="thick">
+  <h5 style="margin-left: 10px">Enter Holding Cost Details</h5>
+  <hr class="thick">  
+</div>
+
+      <label for="weeks" style="margin-left: 30px;">Retailer:</label>
+      <input type="number" class="styleInput" id="rhCost" value="5" > 
+
+      <label for="weeks" style="margin-left: 30px;">Wholesaler:</label>
+      <input type="number" class="styleInput" id="whCost" value="4" >
+
+      <label for="weeks" style="margin-left: 30px;">Distributer:</label>
+      <input type="number" class="styleInput" id="dhCost" value="3" >   
+
+      <label for="weeks" style="margin-left: 30px;">Factory:</label>
+      <input type="number" class="styleInput"  id="fhCost" value="1" >    
+
+<div class="headStyle">
+  <hr class="thick">
+  <h5 style="margin-left: 10px">Enter Back Order Cost of Supply Chain</h5>
+  <hr class="thick">  
+</div>
+
+      <label for="weeks" style="margin-left: 30px;">Retailer:</label>
+      <input type="number" class="styleInput" id="rbCost" value="10" >    
+
+      <label for="weeks" style="margin-left: 30px;">Wholesaler:</label>
+      <input type="number" class="styleInput" id="wbCost" value="8" >
+
+      <label for="weeks" style="margin-left: 30px;">Distributer:</label>
+      <input type="number" class="styleInput" id="dbCost" value="6" >    
+
+      <label for="weeks" style="margin-left: 30px;">Factory:</label>
+      <input type="number" class="styleInput" id="fbCost" value="2" >
+
+<hr class="thick">
+
+<div class="headStyle">
+  <hr class="thick">
+  <h5 style="margin-left: 10px">Enter Customer Demand Distribution Details</h5>
+  <hr class="thick">  
+</div>
+
+    <label for="distribution" style="margin-left: 30px;">Choose a distribution:</label>
+    <select name="distribution" id="distribution" onchange="selectDistribution(this);">
+      <option id="normal" value="normal">Normal</option>
+      <option id="uniform" value="uniform">Uniform</option>
+    </select>
+
+      <label for="mean" style="margin-left: 30px;" id="variable1">Enter Mean:</label>
+      <input type="number" class="styleInput" id="mean" value="80">
+
+      <label for="stdDev" style="margin-left: 30px;" id="variable2">Enter Standard Deviation:</label>
+      <input type="number" class="styleInput" id="stdDev" value="10" >
+
+    
+<input style="margin-left: 30px;" type="file" accept=".csv" id="inputFile"/>
+
+<center>
+<div>
+    <button class="btn btn-outline-primary" style="width: 150px;" onclick="deployContractWithFile()" type="button">Deploy Contract</button>  
+</div>
+</center>
+
+<h3 id="players"> </h3><br>
+<div id="retailer"> </div><br>
+<div id="wholesaler"> </div><br>
+<div id="distributer"> </div><br>
+<div id="factory"> </div><br>
+
+<script type="text/javascript">
+    function selectDistribution(nameSelect){
+
+      if(nameSelect){
+        
+
+          if(nameSelect.value == "normal"){
+            document.getElementById("variable1").innerHTML = "Enter Mean";
+            document.getElementById("variable2").innerHTML = "Enter Standard Deviation";
+            
+          }
+          else if(nameSelect.value == "uniform"){
+            document.getElementById("variable1").innerHTML = "Enter Lower Limit";
+            document.getElementById("variable2").innerHTML = "Enter Upper Limit";
+            }
+
+      }
+
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/admin.js"></script>
 </body>
 </html>

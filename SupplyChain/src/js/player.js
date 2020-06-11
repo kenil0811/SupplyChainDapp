@@ -46,12 +46,10 @@ App = {
       console.log(App.role);
 
       web3.eth.getAccounts().then(function(acc) {
-        console.log(acc);
         console.log(App.role);
 
         App.account = acc[acc.length - 5 + parseInt(App.role)];
         console.log(App.account);
-        console.log(acc[5]);
 
       switch(App.role) {
         case '1': document.getElementById('player').innerHTML = "Retailer";
@@ -68,8 +66,34 @@ App = {
                   break;
       }
 
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET","http://localhost:3000/gameInfo", true);
+      xhttp.send();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.status == 200  && xhttp.readyState == 4){
+          var k = xhttp.response;
+          var distributionDetails = JSON.parse(k);
+          console.log(k);
+          console.log(distributionDetails['mean']);
+          //console.log(xhttp.response);
+          if(distributionDetails['distribution']=="Normal"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Mean:  "+distributionDetails['mean'];
+              document.getElementById("var2").innerHTML = "Standard Deviation:  "+distributionDetails['stdDev'];  
+          }
+          else if(distributionDetails['distribution']=="Uniform"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Lower Limit:  "+distributionDetails['mean'];
+              document.getElementById("var2").innerHTML = "Upper Limit:  "+distributionDetails['stdDev']; 
+          }
+          
+        }
+       }
+
       App.contracts.SupplyChain.deployed().then(function(instance) {
 
+        instance.weekNo().then(function(weekNo) {
+          instance.maxWeeks().then(function(maxWeeks) {
         instance.players(App.account).then(function(player) {
           var role = player.role.words[0]-1;
           instance.orderState(role).then(function(state) {
@@ -85,6 +109,8 @@ App = {
           });
         });
       });
+          });
+        });
 
 
      App.listenForEvents();

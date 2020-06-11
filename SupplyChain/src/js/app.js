@@ -77,22 +77,19 @@ App = {
   
   checkValidity: function() {
 
-    var address = document.getElementById("address").value;
     var password = document.getElementById("password").value;
 
     App.contracts.SupplyChain.deployed().then(function(instance) {
 
       instance.adds(App.role).then(function(exp_add) {
         console.log(exp_add);
-        if(exp_add !== address) {
-          console.log(exp_add);
-          console.log(address);
-          //window.location.href = "error.html?val=1";
-            console.log("incorrect");
-            return;
-        }
+        // if(exp_add !== address) {
+        //   //window.location.href = "error.html?val=1";
+        //     console.log("incorrect");
+        //     return;
+        // }
 
-      web3.eth.personal.unlockAccount(address, password, function(error, res){
+      web3.eth.personal.unlockAccount(exp_add, password, function(error, res){
       if(error){
         window.location.href = "error.html?val=2";
         console.log("incorrect");
@@ -106,44 +103,6 @@ App = {
       })
 
     })
-  },
-
-  getDetails: function() {
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-      instance.players(web3.eth.accounts).then(function(player) {
-        
-        document.getElementById("id1").innerHTML = "<h2> Your Inventory: <b id=\"Inventory\"> </h2> <hr>";
-        document.getElementById("Inventory").innerHTML = player[1].c[0];
-
-        document.getElementById("id2").innerHTML = "<h2> Orders Received: <b id=\"Demand\"> </h2> <hr>";
-        document.getElementById("Demand").innerHTML = player[2].c[0];
-
-        document.getElementById("id3").innerHTML = "<h2> Order Placed: <b id=\"Req\"> </h2> <hr>";
-        document.getElementById("Req").innerHTML = player[3].c[0];
-      })
-    })
-  },
-
-  submitOrder: function() {
-    web3.eth.getCoinbase(function(err, account) {
-      if (err === null) {App.account = account;}
-    });
-
-    var orderAmount = document.getElementById("amount").value;
-    console.log(orderAmount);
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-        
-        instance.players(App.account).then(function(player) {
-          var role = player[0].c[0];
-        });
-
-        return instance.order1(orderAmount, {from: App.account}); 
-    }).then(function(result) {
-      document.getElementById("postOrder").style.display = 'none';
-      document.getElementById("orderPlaced").style.display = 'block';
-    }).catch(function(err) {
-      console.error(err);
-    });
   }
 };
   

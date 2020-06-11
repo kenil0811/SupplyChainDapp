@@ -16,6 +16,7 @@ contract SupplyChain {
         int expectedQuantityBackOrder;        
         int orderPlaced;
         int backOrder;
+        int blockNumber;
         }
 
     struct Player {
@@ -25,11 +26,16 @@ contract SupplyChain {
     }
 
     uint public weekNo;
+    uint public maxWeeks;
+    uint public startWeek; 
+    uint public endWeek;
     uint public deliveryLeadTime;
     uint public orderLeadTime;
     uint[4] public orderState;
     int[4] public inventory;
-    int[25] private retailerDemand;
+    uint[4] public holdingCost;
+    uint[4] public backOrderCost;
+    int[] private customerDemand;
 
     mapping(address => Player) public players;
     mapping(address => Details[]) public weekDetails;
@@ -42,16 +48,19 @@ contract SupplyChain {
 
 
 
-    constructor (address add1, address add2, address add3, address add4) public {
+    constructor (address add1, address add2, address add3, address add4, uint totalWeeks, uint start, uint end, uint dLeadTime, uint oLeadTime, int initialInv, uint[4] memory hCost, uint[4] memory boCost, int[] memory distribution) public {
         players[add1] = Player(1, add2, add1);
         players[add2] = Player(2, add3, add1);
         players[add3] = Player(3,add4, add2);
         players[add4] = Player(4, add4, add3);
 
-        weekDetails[add1].push(Details(1, 0, 0, 190, 87, 0, 87, 103, 0, 0, 0, 0));
-        weekDetails[add2].push(Details(1, 0, 0, 190, 0, 0, 0, 190, 0, 0, 0, 0));
-        weekDetails[add3].push(Details(1, 0, 0, 190, 0, 0, 0, 190, 0, 0, 0, 0));
-        weekDetails[add4].push(Details(1, 0, 0, 190, 0, 0, 0, 190, 0, 0, 0, 0));
+        if(initialInv>=distribution[0])
+            weekDetails[add1].push(Details(1, 0, 0, initialInv, distribution[0], 0, distribution[0], initialInv-distribution[0], 0, 0, 0, 0, 0));
+        else
+            weekDetails[add1].push(Details(1, 0, 0, initialInv, distribution[0], 0, initialInv, initialInv-distribution[0], 0, 0, 0, distribution[0]-initialInv, 0));
+        weekDetails[add2].push(Details(1, 0, 0, initialInv, 0, 0, 0, initialInv, 0, 0, 0, 0, 0));
+        weekDetails[add3].push(Details(1, 0, 0, initialInv, 0, 0, 0, initialInv, 0, 0, 0, 0, 0));
+        weekDetails[add4].push(Details(1, 0, 0, initialInv, 0, 0, 0, initialInv, 0, 0, 0, 0, 0));
 
         adds[1] = add1;
         adds[2] = add2;
@@ -61,7 +70,7 @@ contract SupplyChain {
         weekNo = 1;
         deliveryLeadTime = 1;
         orderLeadTime = 0;
-        inventory = [103, 190, 190, 190];
+        inventory = [initialInv-distribution[0], initialInv, initialInv, initialInv];
         orderState = [0,0,0,0];
         retailerDemand = [87,77,76,80,88,67,95,81,85,77,75,88,87,80,103,96,97,88,66,67,79,84,90,79,81]; 
     }
