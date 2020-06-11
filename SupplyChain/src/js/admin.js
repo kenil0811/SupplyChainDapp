@@ -73,6 +73,7 @@ function deployContractWithFile() {
         formData.append("distribution", distribution);
 
 
+
         request.open("POST","http://localhost:3000/deployGameWithFile", true);
         request.send(formData);
     }

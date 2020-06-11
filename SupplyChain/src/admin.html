@@ -39,16 +39,16 @@
   <label style="margin-left: 20px" for="weeks">Enter number of weeks: </label>
   <input type="number" class="styleInput" id="totalWeeks" value="25" >
 
-  <label style="margin-left: 20px" for="weeks">Enter order lead time:</label>
-  <input type="number" class="styleInput" id="oLeadTime" value="0" >
+  <label style="margin-left: 20px" for="initialInv">Enter initial inventory:</label>
+  <input type="number" class="styleInput" id="initialInv" value="190" >  
 </div>
 <br>
 <div class="row">
+  <label style="margin-left: 20px" for="weeks">Enter order lead time:</label>
+  <input type="number" class="styleInput" id="oLeadTime" value="0" >
+
   <label style="margin-left: 20px" for="weeks">Enter delivery lead time:</label>
   <input type="number" class="styleInput" id="dLeadTime" value="1" >
-
-  <label style="margin-left: 20px" for="initialInv">Enter initial inventory:</label>
-  <input type="number" class="styleInput" id="initialInv" value="190" >
 </div>
 
 
@@ -112,21 +112,18 @@
 </div>
 
     <label for="distribution" style="margin-left: 30px;">Choose a distribution:</label>
-    <select name="distribution" id="distribution">
-      <option value="normal">Normal</option>
-      <option value="poisson">Poisson</option>
-      <option value="binomial">binomial</option>
+    <select name="distribution" id="distribution" onchange="selectDistribution(this);">
+      <option id="normal" value="normal">Normal</option>
+      <option id="uniform" value="uniform">Uniform</option>
     </select>
 
-    <label for="mean" style="margin-left: 30px;">Enter Mean:</label>
-    <input type="number" class="styleInput" id="mean" value="80">
+      <label for="mean" style="margin-left: 30px;" id="variable1">Enter Mean:</label>
+      <input type="number" class="styleInput" id="mean" value="80">
 
-      <label for="stdDev" style="margin-left: 30px;">Enter Standard Deviation</label>
+      <label for="stdDev" style="margin-left: 30px;" id="variable2">Enter Standard Deviation:</label>
       <input type="number" class="styleInput" id="stdDev" value="10" >
 
-
-
-
+    
 <input style="margin-left: 30px;" type="file" accept=".csv" id="inputFile"/>
 
 <center>
@@ -140,6 +137,27 @@
 <div id="wholesaler"> </div><br>
 <div id="distributer"> </div><br>
 <div id="factory"> </div><br>
+
+<script type="text/javascript">
+    function selectDistribution(nameSelect){
+
+      if(nameSelect){
+        
+
+          if(nameSelect.value == "normal"){
+            document.getElementById("variable1").innerHTML = "Enter Mean";
+            document.getElementById("variable2").innerHTML = "Enter Standard Deviation";
+            
+          }
+          else if(nameSelect.value == "uniform"){
+            document.getElementById("variable1").innerHTML = "Enter Lower Limit";
+            document.getElementById("variable2").innerHTML = "Enter Upper Limit";
+            }
+
+      }
+
+    }
+</script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="js/bootstrap.min.js"></script>

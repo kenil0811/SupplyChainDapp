@@ -73,9 +73,21 @@ App = {
       xhttp.onreadystatechange = function(){
         if (xhttp.status == 200  && xhttp.readyState == 4){
           var k = xhttp.response;
+          var distributionDetails = JSON.parse(k);
           console.log(k);
-          console.log(k['distribution']);
-          console.log(xhttp.response);
+          console.log(distributionDetails['mean']);
+          //console.log(xhttp.response);
+          if(distributionDetails['distribution']=="Normal"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Mean:  "+distributionDetails['mean'];
+              document.getElementById("var2").innerHTML = "Standard Deviation:  "+distributionDetails['stdDev'];  
+          }
+          else if(distributionDetails['distribution']=="Uniform"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Lower Limit:  "+distributionDetails['mean'];
+              document.getElementById("var2").innerHTML = "Upper Limit:  "+distributionDetails['stdDev']; 
+          }
+          
         }
       }
 
