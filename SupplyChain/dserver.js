@@ -42,7 +42,7 @@ app.get('/gameInfo', function(req, res) {
 	fs.readFile('gameInfo.json', (err, data)=> {
 		if (err) throw err;
     var gameInfo = JSON.parse(data);
-    console.log(gameInfo);
+    //console.log(gameInfo);
     res.status(200).send(gameInfo);
 	});
 });
@@ -116,8 +116,9 @@ console.log("\n\n\n");
 
 	var gameInfo = {};
 	gameInfo.distribution = distribution;
-	gameInfo.stdDev = stdDev;
 	gameInfo.mean = mean;
+	gameInfo.stdDev = stdDev;
+	
 	console.log(gameInfo);
 
 	var data = JSON.stringify(gameInfo);
@@ -165,7 +166,7 @@ players["GameID"] = (len-1)/4;
 
 myContract.deploy({
     data: bytecode,
-    arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1], totalWeeks, start, end, dLeadTime, oLeadTime, hCost, lsCost, initialInv, fileRows]
+    arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1], totalWeeks, start, end, dLeadTime, oLeadTime, initialInv, hCost, lsCost, fileRows]
 })
 .send({
     from: '0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34',
@@ -177,10 +178,10 @@ myContract.deploy({
 	let formattedJson = JSON.stringify(jsonOutput, null, 4);
 	fs.writeFileSync(jsonFile, formattedJson);
 
-	web3.eth.personal.lockAccount(accounts[len-1]);
-	web3.eth.personal.lockAccount(accounts[len-2]);
-	web3.eth.personal.lockAccount(accounts[len-3]);
-	web3.eth.personal.lockAccount(accounts[len-4]);
+	web3.eth.personal.unlockAccount(accounts[len-1],"pass4");
+	web3.eth.personal.unlockAccount(accounts[len-2],"pass3");
+	web3.eth.personal.unlockAccount(accounts[len-3],"pass2");
+	web3.eth.personal.unlockAccount(accounts[len-4],"pass1");
 
 	console.log("Success");
 	console.log(players);

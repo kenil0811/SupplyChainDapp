@@ -87,6 +87,12 @@ App = {
               document.getElementById("var1").innerHTML = "Lower Limit:  "+distributionDetails['mean'];
               document.getElementById("var2").innerHTML = "Upper Limit:  "+distributionDetails['stdDev']; 
           }
+          else if(distributionDetails['distribution']=="Poisson"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Lambda:  "+distributionDetails['mean'];
+              document.getElementById("var2").style.display = "none";
+          }
+
           
         }
       }
@@ -197,6 +203,7 @@ App = {
         document.getElementById("demand").innerHTML = details[3].words[0];
         document.getElementById("prev_inv").innerHTML = details[2].words[0];
         document.getElementById("rec_inv").innerHTML = details[1].words[0];
+        document.getElementById("exp_inv").innerHTML = details[6].words[0];
         document.getElementById("ship_quan").innerHTML = details[4].words[0];
 
     });

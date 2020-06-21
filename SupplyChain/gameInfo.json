@@ -1,1 +1,1 @@
-{"distribution":"Uniform","stdDev":10,"mean":80}
+{"distribution":"Poisson","mean":14,"stdDev":10}

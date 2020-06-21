@@ -45,7 +45,7 @@ contract SupplyChain {
 
 
 
-    constructor(address add1, address add2, address add3, address add4, uint totalWeeks, uint start, uint end, uint dLeadTime, uint oLeadTime, uint[4] memory hCost, uint[4] memory lsCost, uint initialInv, uint[] memory distribution) public{
+    constructor(address add1, address add2, address add3, address add4, uint totalWeeks, uint start, uint end, uint dLeadTime, uint oLeadTime, uint initialInv, uint[4] memory hCost, uint[4] memory lsCost, uint[] memory distribution) public{
         players[add1] = Player(1, add2, add1);
         players[add2] = Player(2, add3, add1);
         players[add3] = Player(3,add4, add2);
@@ -77,7 +77,7 @@ contract SupplyChain {
         deliveryLeadTime = dLeadTime;
         orderLeadTime = oLeadTime;
 
-        inventory = [20, 50, 50, 50];
+        inventory = [initialInv-distribution[0], initialInv, initialInv, initialInv];
         orderState = [0,0,0,0];
         customerDemand = distribution;
     }
@@ -131,7 +131,7 @@ contract SupplyChain {
 
         weekDetails[add][weekNo].lostSales = weekDetails[add][weekNo].demand - weekDetails[add][weekNo].shippingQuantity;
 
-        inventory[players[add].role-1] = weekDetails[add][weekNo].inventoryLeft;
+        inventory[role-1] = beginInventory-weekDetails[add][weekNo].shippingQuantity;
 
     }
 

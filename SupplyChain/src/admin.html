@@ -115,6 +115,8 @@
     <select name="distribution" id="distribution" onchange="selectDistribution(this);">
       <option id="normal" value="normal">Normal</option>
       <option id="uniform" value="uniform">Uniform</option>
+      <option id="poisson" value="poisson">Poisson</option>
+      <option id="exponential" value="exponential">Exponential</option>
     </select>
 
       <label for="mean" style="margin-left: 30px;" id="variable1">Enter Mean:</label>
@@ -140,19 +142,32 @@
 
 <script type="text/javascript">
     function selectDistribution(nameSelect){
+      if(document.getElementById('variable2').style.display == "none") {
+        document.getElementById("variable2").style.display = "inline";
+            document.getElementById("stdDev").style.display = "inline";
+      }
 
       if(nameSelect){
         
 
           if(nameSelect.value == "normal"){
-            document.getElementById("variable1").innerHTML = "Enter Mean";
-            document.getElementById("variable2").innerHTML = "Enter Standard Deviation";
-            
+            document.getElementById("variable1").innerHTML = "Enter Mean: ";
+            document.getElementById("variable2").innerHTML = "Enter Standard Deviation: ";            
           }
           else if(nameSelect.value == "uniform"){
-            document.getElementById("variable1").innerHTML = "Enter Lower Limit";
-            document.getElementById("variable2").innerHTML = "Enter Upper Limit";
+            document.getElementById("variable1").innerHTML = "Enter Lower Limit: ";
+            document.getElementById("variable2").innerHTML = "Enter Upper Limit: ";
             }
+          else if(nameSelect.value == "poisson"){
+            document.getElementById("variable1").innerHTML = "Enter lambda value: ";
+            document.getElementById("variable2").style.display = "none";
+            document.getElementById("stdDev").style.display = "none";
+          }
+          else if(nameSelect.value == "exponential"){
+            document.getElementById("variable1").innerHTML = "Enter lambda value: ";
+            document.getElementById("variable2").style.display = "none";
+            document.getElementById("stdDev").style.display = "none";
+          }
 
       }
 

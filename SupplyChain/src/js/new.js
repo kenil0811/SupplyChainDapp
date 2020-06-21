@@ -2,6 +2,7 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
+  role: 0,
 
   init: function() {
     return App.initWeb3();
@@ -53,6 +54,7 @@ App = {
       const urlParams = new URLSearchParams(qs);
       const v1= urlParams.get('role');
       console.log(v1);
+      App.role = v1;
 
 
       if(v1==1){
@@ -82,6 +84,10 @@ App = {
         
         
         instance.weekNo().then(function(weeks){
+
+        instance.maxWeeks().then(function(maxWeeks) {
+
+
           //console.log(weeks.words[0]);
           //console.log(numWeeks);
 
@@ -89,11 +95,15 @@ App = {
 
         var table = document.getElementById("DetailsTable");
         console.log(weeks.words[0]);
+        var t=0;
         for(var i=0; i<weeks.words[0]; i++)
           var row = table.insertRow();
 
         for(i=0; i<weeks.words[0]; i++) {
+            if(i==maxWeeks.words[0])
+              continue;
             instance.weekDetails(role_add,i).then(function(player){
+              t++;
               var pos = player[0].words[0];
               var row = table.rows[pos];
               var j;
@@ -120,12 +130,18 @@ App = {
               var blockNumber = cell1.innerHTML;
               cell1.setAttribute('type','button')
               cell1.setAttribute('onclick','App.showTransaction('+blockNumber+','+v1+')')
+
+              if(t==weeks.words[0]-1) {
+                 document.getElementById('download_btn').style.display = 'block';
+                 console.log("lol");
+                }
             });
           }
            
 
 
         });
+      });
        });
       })
     });
@@ -180,7 +196,46 @@ App = {
             });
 
         })
+    },
+
+    exportTableToExcel: function(tableID){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    var filename;
+    console.log(App.role);
+    switch(App.role) {
+      case '1': filename = 'retailer_details.xlsx'; break;
+      case '2': filename = 'wholesaler_details.xlsx'; break;
+      case '3': filename = 'distributer_details.xlsx'; break;
+      case '4': filename = 'factory_details.xlsx'; break;
     }
+
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
 
   };
 
