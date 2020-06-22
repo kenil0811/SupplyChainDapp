@@ -16,7 +16,7 @@ contract SupplyChain {
         int expectedQuantityBackOrder;        
         int orderPlaced;
         int backOrder;
-        int blockNumber;
+        uint blockNumber;
         }
 
     struct Player {
@@ -54,10 +54,13 @@ contract SupplyChain {
         players[add3] = Player(3,add4, add2);
         players[add4] = Player(4, add4, add3);
 
-        if(initialInv>=distribution[0])
-            weekDetails[add1].push(Details(1, 0, 0, initialInv, distribution[0], 0, distribution[0], initialInv-distribution[0], 0, 0, 0, 0, 0));
-        else
-            weekDetails[add1].push(Details(1, 0, 0, initialInv, distribution[0], 0, initialInv, initialInv-distribution[0], 0, 0, 0, distribution[0]-initialInv, 0));
+        weekDetails[add1].push(Details(1, 0, 0, initialInv, distribution[0], 0, distribution[0], initialInv-distribution[0], 0, 0, 0, 0, 0));
+
+        if(initialInv < distribution[0]) {
+            weekDetails[add1][0].shippingQuantityDemand = initialInv;
+            weekDetails[add1][0].backOrder = distribution[0]-initialInv;
+        }
+
         weekDetails[add2].push(Details(1, 0, 0, initialInv, 0, 0, 0, initialInv, 0, 0, 0, 0, 0));
         weekDetails[add3].push(Details(1, 0, 0, initialInv, 0, 0, 0, initialInv, 0, 0, 0, 0, 0));
         weekDetails[add4].push(Details(1, 0, 0, initialInv, 0, 0, 0, initialInv, 0, 0, 0, 0, 0));
@@ -68,18 +71,23 @@ contract SupplyChain {
         adds[4] = add4;
 
         weekNo = 1;
-        deliveryLeadTime = 1;
-        orderLeadTime = 0;
+        maxWeeks=totalWeeks;
+        startWeek=start;
+        endWeek=end;
+        deliveryLeadTime = dLeadTime;
+        orderLeadTime = oLeadTime;
+        holdingCost=hCost;
+        backOrderCost=boCost;
         inventory = [initialInv-distribution[0], initialInv, initialInv, initialInv];
         orderState = [0,0,0,0];
-        retailerDemand = [87,77,76,80,88,67,95,81,85,77,75,88,87,80,103,96,97,88,66,67,79,84,90,79,81]; 
+        customerDemand = distribution; 
     }
 
 
     function checkWeekEnd() private {
 
         if(players[msg.sender].role == 1) {
-            weekDetails[msg.sender][weekNo].demand = retailerDemand[weekNo];
+            weekDetails[msg.sender][weekNo].demand = customerDemand[weekNo%customerDemand.length];
         }
 
         
@@ -154,14 +162,16 @@ contract SupplyChain {
         //backOrder
         weekDetails[add][weekNo].backOrder = abs(min(0, int(weekDetails[add][weekNo].inventoryLeft)));
 
-        inventory[players[add].role-1] = max(0,weekDetails[add][weekNo].inventoryLeft);
+        inventory[role-1] = max(0,beginInventory-weekDetails[add][weekNo].shippingQuantityBackOrder-weekDetails[add][weekNo].shippingQuantityDemand);
 
     }
 
 
     function order(int _amt) public {
-        weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0,0,0,0,0,0));
+        weekDetails[msg.sender].push(Details(weekNo+1,0,0,0,0,0,0,0,0,0,0,0,0));
+
         weekDetails[msg.sender][weekNo-1].orderPlaced = _amt;
+        weekDetails[msg.sender][weekNo-1].blockNumber = block.number;
 
         orderState[players[msg.sender].role - 1] = 1;
         checkWeekEnd(); 

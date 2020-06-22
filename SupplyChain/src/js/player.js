@@ -43,10 +43,8 @@ App = {
       var qs= window.location.search;
       const urlParams = new URLSearchParams(qs);
       App.role= urlParams.get('role');
-      console.log(App.role);
 
       web3.eth.getAccounts().then(function(acc) {
-        console.log(App.role);
 
         App.account = acc[acc.length - 5 + parseInt(App.role)];
         console.log(App.account);
@@ -86,6 +84,16 @@ App = {
               document.getElementById("var1").innerHTML = "Lower Limit:  "+distributionDetails['mean'];
               document.getElementById("var2").innerHTML = "Upper Limit:  "+distributionDetails['stdDev']; 
           }
+          else if(distributionDetails['distribution']=="Poisson"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Lambda:  "+distributionDetails['mean'];
+              document.getElementById("var2").style.display = "none";
+          }
+          else if(distributionDetails['distribution']=="Exponential"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Lambda:  "+distributionDetails['mean'];
+              document.getElementById("var2").style.display = "none";
+          }
           
         }
        }
@@ -94,20 +102,24 @@ App = {
 
         instance.weekNo().then(function(weekNo) {
           instance.maxWeeks().then(function(maxWeeks) {
-        instance.players(App.account).then(function(player) {
-          var role = player.role.words[0]-1;
-          instance.orderState(role).then(function(state) {
-            console.log(state.words[0]);
-            if(state.words[0] == 1) {
-              document.getElementById("placeOrder").style.display = "none"; 
-              document.getElementById("orderPlaced").style.display = "block";
-            }
-            else {
-              document.getElementById("placeOrder").style.display = "block"; 
-              document.getElementById("orderPlaced").style.display = "none";
-            }
+            instance.players(App.account).then(function(player) {
+              var role = player.role.words[0]-1;
+              instance.orderState(role).then(function(state) {
+                console.log(state.words[0]);
+                if(weekNo>maxWeeks.words[0]) {
+                 document.getElementById("placeOrder").style.display = "none"; 
+                  document.getElementById("gameOver").style.display = "block";
+                }            
+                else if(state.words[0] == 1) {
+                  document.getElementById("placeOrder").style.display = "none"; 
+                  document.getElementById("orderPlaced").style.display = "block";
+                }
+                else {
+                  document.getElementById("placeOrder").style.display = "block"; 
+                  document.getElementById("orderPlaced").style.display = "none";
+                }
+            });
           });
-        });
       });
           });
         });
@@ -139,7 +151,6 @@ App = {
 
       $("#accountAddress").html(App.account);
 
-
       App.contracts.SupplyChain.deployed().then(function(instance) {
         instance.weekNo().then(function(weekNo) {
           document.getElementById("currentWeek").innerHTML = weekNo;
@@ -153,17 +164,21 @@ App = {
           document.getElementById("deliveryLeadTime").innerHTML = deliveryLeadTime;
         });
 
+        instance.maxWeeks().then(function(totalWeeks) {
+          document.getElementById("totalWeeks").innerHTML = totalWeeks;
+        });
+
         instance.inventory(0).then(function(array) {
-          $("#ret_inv").html(array.words[0]);
+          $("#ret_inv").html(array.words[0]*(1-array.negative));
         });
         instance.inventory(1).then(function(array) {
-          $("#who_inv").html(array.words[0]);
+          $("#who_inv").html(array.words[0]*(1-array.negative));
         });
         instance.inventory(2).then(function(array) {
-          $("#dis_inv").html(array.words[0]);
+          $("#dis_inv").html(array.words[0]*(1-array.negative));
         });
         instance.inventory(3).then(function(array) {
-          $("#fac_inv").html(array.words[0]);
+          $("#fac_inv").html(array.words[0]*(1-array.negative));
         });
 
 
@@ -177,12 +192,18 @@ App = {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       instance.weekNo().then(function(weekNo) {
       instance.weekDetails(App.account, weekNo.words[0]-1).then(function(details) {
-      console.log(details);
-      console.log(weekNo.words[0]);
-      console.log(details[3].words[0]);
+        
         document.getElementById("demand").innerHTML = details[4].words[0];
-        document.getElementById("backorder").innerHTML = details[11].words[0];
-        document.getElementById("totalDemand").innerHTML = details[4].words[0] + details[11].words[0];
+        if(weekNo.words[0]==1) {
+          document.getElementById("backorder").innerHTML = '0';
+          document.getElementById("totalDemand").innerHTML = details[4].words[0];
+        }
+        else {
+          instance.weekDetails(App.account, weekNo.words[0]-2).then(function(prev_details) {
+            document.getElementById("backorder").innerHTML = prev_details[11].words[0];
+            document.getElementById("totalDemand").innerHTML = details[4].words[0] + prev_details[11].words[0];
+          })
+        }
         document.getElementById("rec_back").innerHTML = details[1].words[0];
         document.getElementById("rec_inv").innerHTML = details[2].words[0];
         document.getElementById("ship_quan_back").innerHTML = details[5].words[0];

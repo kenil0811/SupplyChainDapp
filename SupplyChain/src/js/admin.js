@@ -63,10 +63,10 @@ function deployContractWithFile() {
         formData.append("dhCost", dhCost);
         formData.append("fhCost", fhCost);
 
-        formData.append("rbCost", rlCost);
-        formData.append("wbCost", wlCost);
-        formData.append("dbCost", dlCost);
-        formData.append("fbCost", flCost);
+        formData.append("rbCost", rbCost);
+        formData.append("wbCost", wbCost);
+        formData.append("dbCost", dbCost);
+        formData.append("fbCost", fbCost);
 
         formData.append("mean", mean);
         formData.append("stdDev", stdDev);

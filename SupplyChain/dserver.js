@@ -42,14 +42,14 @@ app.get('/gameInfo', function(req, res) {
 	fs.readFile('gameInfo.json', (err, data)=> {
 		if (err) throw err;
     var gameInfo = JSON.parse(data);
-    console.log(gameInfo);
+//    console.log(gameInfo);
     res.status(200).send(gameInfo);
 	});
 });
 
 app.get('/adminLogin/:password', function(req, res) {
 	var pass = String(req.params.password);
-	console.log(pass);
+//	console.log(pass);
 	if(pass == "admin") {
 		res.status(200).send();
 	}
@@ -75,7 +75,7 @@ console.log("\n\n\n");
       	fileRows.push(data); // push each row
     	})
     	.on("end", function () {
-      	console.log(fileRows)
+//      	console.log(fileRows)
       	fs.unlinkSync(req.file.path);   // remove temp file
      	 //process "fileRows" and respond
     	});
@@ -85,9 +85,9 @@ console.log("\n\n\n");
 		fileRows = [79, 64, 91, 95, 70, 82, 79, 74, 86, 104, 75, 88, 87, 80, 103, 96, 97, 88, 66, 67, 79, 84, 90, 79, 81];
 		//file not found
 	}
-    console.log("\n");
-    console.log(req.body);
-    console.log("\n");
+//    console.log("\n");
+//    console.log(req.body);
+//    console.log("\n");
 	var totalWeeks = Number(req.body.totalWeeks);
 	var start = Number(req.body.start);
 	var end = Number(req.body.end);
@@ -108,7 +108,7 @@ console.log("\n\n\n");
 	var boCost = [rbCost,wbCost,dbCost,fbCost];
 
 	console.log("Number of weeks: " + totalWeeks);
-	console.log(hCost)
+//	console.log(hCost)
 	
 	var distribution = req.body.distribution;
 	var stdDev = Number(req.body.stdDev);
@@ -116,9 +116,10 @@ console.log("\n\n\n");
 
 	var gameInfo = {};
 	gameInfo.distribution = distribution;
-	gameInfo.stdDev = stdDev;
 	gameInfo.mean = mean;
-	console.log(gameInfo);
+	gameInfo.stdDev = stdDev;
+	
+//	console.log(gameInfo);
 
 	var data = JSON.stringify(gameInfo);
 	fs.writeFileSync('gameInfo.json', data);
@@ -177,10 +178,10 @@ myContract.deploy({
 	let formattedJson = JSON.stringify(jsonOutput, null, 4);
 	fs.writeFileSync(jsonFile, formattedJson);
 
-	web3.eth.personal.lockAccount(accounts[len-1]);
-	web3.eth.personal.lockAccount(accounts[len-2]);
-	web3.eth.personal.lockAccount(accounts[len-3]);
-	web3.eth.personal.lockAccount(accounts[len-4]);
+	web3.eth.personal.unlockAccount(accounts[len-1],"pass4");
+	web3.eth.personal.unlockAccount(accounts[len-2],"pass3");
+	web3.eth.personal.unlockAccount(accounts[len-3],"pass2");
+	web3.eth.personal.unlockAccount(accounts[len-4],"pass1");
 
 	console.log("Success");
 	console.log(players);

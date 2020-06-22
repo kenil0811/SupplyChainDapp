@@ -54,25 +54,8 @@ App = {
     else if(v1==4){
       document.getElementById("player").innerHTML = "Factory login" 
     }
-
-      //return App.render();
     });
   },
-
-  // Listen for events emitted from the contract
- /* listenForEvents: function() {
-    App.contracts.SupplyChain.deployed().then(function(instance) {
-      // Restart Chrome if you are unable to receive this event
-      // This is a known issue with Metamask
-      // https://github.com/MetaMask/metamask-extension/issues/2393
-      instance.orderPlaced({}, {
-      }).watch(function(error, event) {
-        console.log("event triggered", event)
-        // Reload when a new vote is recorded
-        App.getDetails();
-      });
-    });
-  }, */
 
   
   checkValidity: function() {

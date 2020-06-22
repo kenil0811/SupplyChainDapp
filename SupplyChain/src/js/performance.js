@@ -55,6 +55,7 @@ App = {
       instance.backOrderCost(2).then(function(dbCost) {
       instance.backOrderCost(3).then(function(fbCost) {
 
+
       for(rolee=1; rolee<=4; rolee++) {
         var role=1;
         var totalCost=0;
@@ -62,9 +63,12 @@ App = {
 
           var order_det=[], demand=[], backorder=[], shippingQuantityDemand=[], inventoryLeft=[];
           for(i=startWeek.words[0]-1; i<endWeek.words[0]; i++) {
+
             instance.weekDetails(role_add,i).then(function(player){  
               order_det.push(player[10].words[0]);
+
               App.displayGraph(order_det,role,startWeek.words[0],endWeek.words[0]);
+
               demand.push(player[4].words[0]);
               backorder.push(player[11].words[0]);
               shippingQuantityDemand.push(player[6].words[0]);
@@ -72,6 +76,9 @@ App = {
 
               var val,r,c;
               if(order_det.length == endWeek.words[0]-startWeek.words[0]+1) {
+
+                document.getElementById('download_btn').style.display = 'block';
+
                 //console.log(inventoryLeft);
                 val = App.variance(order_det);
                 r = table.rows[1];
@@ -135,6 +142,16 @@ App = {
 
         });
     }
+      })
+      })  
+      })  
+      })  
+      })  
+      })  
+      })        
+      })
+    })
+      })
       });
     },
 
@@ -229,7 +246,40 @@ App = {
 
 
     }
-  }
+  },
+
+  exportTableToExcel: function(tableID){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    var filename = 'performance.xlsx';
+
+
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
 
   };
 

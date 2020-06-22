@@ -2,6 +2,7 @@ App = {
   web3Provider: null,
   contracts: {},
   account: '0x0',
+  role: 0,
 
   init: function() {
     return App.initWeb3();
@@ -46,11 +47,11 @@ App = {
       var content = $("#content");
 
       var qs= window.location.search;
-      //var v1=qs.get("role")
       console.log(qs);
       const urlParams = new URLSearchParams(qs);
       const v1= urlParams.get('role');
       console.log(v1);
+      App.role = v1;
 
 
       if(v1==1){
@@ -69,6 +70,7 @@ App = {
       web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         App.account = account;
+        $("#accountAddress").html("Your Account: " + account);
       }
 
 
@@ -77,26 +79,30 @@ App = {
 
         instance.adds(v1).then(function(role_add){ 
         
-        
         instance.weekNo().then(function(weeks){
+
+        instance.maxWeeks().then(function(maxWeeks) { 
+        
+
           //console.log(weeks.words[0]);
           //console.log(numWeeks);
 
-          document.getElementById("accountAddress").innerHTML = role_add;
-          document.getElementById("currentWeek").innerHTML = weeks.words[0];
-          
+          document.getElementById("currentWeek").innerHTML = role_add;          
 
         var table = document.getElementById("DetailsTable");
+        var t=0;
         for(var i=0; i<weeks.words[0]; i++)
           var row = table.insertRow();
 
-        var a=0,b=0;
         for(i=0; i<weeks.words[0]; i++) {
+            if(i==maxWeeks)
+                continue;
+            
             var pos, row;
             instance.weekDetails(role_add,i).then(function(player){   
-
-            console.log(player);
-            console.log("---");           
+              t++;
+              console.log(player);
+              console.log("---");           
               pos = player[0].words[0];
               console.log(pos);
               row = table.rows[pos];
@@ -117,10 +123,7 @@ App = {
 
               var cell = row.insertCell(j);
               cell.innerHTML = player[1].words[0] + player[2].words[0] + (1-player[3].negative)*player[3].words[0];
-              j++;
-
-
-             
+              j++;             
 
               for(var k=4; k<7; k++,j++) {
                 var cell = row.insertCell(j);
@@ -139,23 +142,28 @@ App = {
                 cell.innerHTML = player[k].words[0]; 
               }             
 
-              for(var k=10; k<13; k++,j++) {
+              for(var k=10; k<12; k++,j++) {
                 var cell = row.insertCell(j);
                 cell.innerHTML = player[k].words[0];
               }               
 
               var cell1= row.insertCell(j);
-              cell1.innerHTML= Math.abs(player[9].words[0]);
+              cell1.innerHTML= Math.abs(player[12].words[0]);
               //cell1.setAttribute('href','hello');
               cell1.style.color = 'blue';
               var blockNumber = cell1.innerHTML;
               cell1.setAttribute('type','button')
               cell1.setAttribute('onclick','App.showTransaction('+blockNumber+','+v1+')')
+
+              if(t==weeks.words[0]-1) {
+                 document.getElementById('download_btn').style.display = 'block';
+                 console.log("lol");
+                }
             });
         }
             
         });
-
+});
        });
       })
     });
@@ -211,9 +219,44 @@ App = {
         })
     },
 
-    max: function(a,b) {
-      return a>b ? a : b;
+    exportTableToExcel: function(tableID){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    var filename;
+    console.log(App.role);
+    switch(App.role) {
+      case '1': filename = 'retailer_details.xlsx'; break;
+      case '2': filename = 'wholesaler_details.xlsx'; break;
+      case '3': filename = 'distributer_details.xlsx'; break;
+      case '4': filename = 'factory_details.xlsx'; break;
     }
+
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
 
 
   };
