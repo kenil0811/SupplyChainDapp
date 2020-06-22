@@ -28431,12 +28431,13 @@
                 }
             },
             "links": {},
-            "address": "0xAb5261c4A70f45c1d819f0eF2316684c1294b505",
-            "transactionHash": "0x26106b0061b7f37f9465d83d9cf60d0e3e00a484489c88912588385d8bd4969f"
+            "address": "0x9DBe7D12Cb40CBA946c62f78420733f711952A17",
+            "transactionHash": "0xd6620db5e57c6eaa4c555b582ae4bb1295127f76e2d81bc53af88e89809b0b22"
         }
     },
     "schemaVersion": "3.0.17",
-    "updatedAt": "2020-06-22T06:51:01.982Z",
+    "updatedAt": "2020-06-22T07:22:16.275Z",
+    "networkType": "ethereum",
     "devdoc": {
         "methods": {}
     },
