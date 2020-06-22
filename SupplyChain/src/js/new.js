@@ -38,10 +38,7 @@ App = {
       App.contracts.SupplyChain = TruffleContract(supplyChain);
       // Connect provider to interact with contract
       App.contracts.SupplyChain.setProvider(App.web3Provider);
-
-    //App.listenForEvents();
      return App.displayDetails();
-      //return App.render();
     });
   },
 
@@ -94,7 +91,6 @@ App = {
           document.getElementById("currentWeek").innerHTML = role_add ;
 
         var table = document.getElementById("DetailsTable");
-        console.log(weeks.words[0]);
         var t=0;
         for(var i=0; i<weeks.words[0]; i++)
           var row = table.insertRow();

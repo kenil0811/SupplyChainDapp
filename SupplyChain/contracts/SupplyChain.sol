@@ -77,7 +77,9 @@ contract SupplyChain {
         deliveryLeadTime = dLeadTime;
         orderLeadTime = oLeadTime;
 
-        inventory = [initialInv-distribution[0], initialInv, initialInv, initialInv];
+        inventory = [0, initialInv, initialInv, initialInv];
+        if(initialInv>distribution[0])
+            inventory[0]=initialInv-distribution[0];
         orderState = [0,0,0,0];
         customerDemand = distribution;
     }

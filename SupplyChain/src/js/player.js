@@ -5,7 +5,6 @@ App = {
   role:null,
 
   init: function() {
-    
     return App.initWeb3();
   },
 
@@ -23,7 +22,6 @@ App = {
 
     // if (typeof web3 !== 'undefined') {
     //   // If a web3 instance is already provided by Meta Mask.
-    //   console.log("heythere");
     //   App.web3Provider = web3.currentProvider;
     //   web3 = new Web3(web3.currentProvider);
     // } else {
@@ -66,7 +64,6 @@ App = {
                   break;
       }
 
-
       var xhttp = new XMLHttpRequest();
       xhttp.open("GET","http://localhost:3000/gameInfo", true);
       xhttp.send();
@@ -92,7 +89,11 @@ App = {
               document.getElementById("var1").innerHTML = "Lambda:  "+distributionDetails['mean'];
               document.getElementById("var2").style.display = "none";
           }
-
+          else if(distributionDetails['distribution']=="Exponential"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").innerHTML = "Lambda:  "+distributionDetails['mean'];
+              document.getElementById("var2").style.display = "none";
+          }
           
         }
       }
@@ -106,8 +107,6 @@ App = {
               instance.orderState(role).then(function(state) {
                 console.log(state.words[0]);
                 if(weekNo>maxWeeks.words[0]) {
-                  console.log(weekNo);
-                  console.log(maxWeeks);
                  document.getElementById("placeOrder").style.display = "none"; 
                   document.getElementById("gameOver").style.display = "block";
                 }
@@ -118,10 +117,7 @@ App = {
                 else {
                   document.getElementById("placeOrder").style.display = "block"; 
                   document.getElementById("orderPlaced").style.display = "none";
-                }
-          
-
-            
+                }   
             });
         });
           });          
@@ -175,9 +171,11 @@ App = {
         });
 
         instance.inventory(0).then(function(array) {
+          console.log(array);
           $("#ret_inv").html(array.words[0]);
         });
         instance.inventory(1).then(function(array) {
+          console.log(array);
           $("#who_inv").html(array.words[0]);
         });
         instance.inventory(2).then(function(array) {
@@ -196,10 +194,8 @@ App = {
   getDetails: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       instance.weekNo().then(function(weekNo) {
-        console.log(App.account);
       instance.weekDetails(App.account, weekNo.words[0]-1).then(function(details) {
-      console.log(details);
-      console.log(weekNo.words[0]);
+
         document.getElementById("demand").innerHTML = details[3].words[0];
         document.getElementById("prev_inv").innerHTML = details[2].words[0];
         document.getElementById("rec_inv").innerHTML = details[1].words[0];

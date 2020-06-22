@@ -53,9 +53,7 @@ App = {
       instance.lostSalesCost(0).then(function(rlCost) {
       instance.lostSalesCost(1).then(function(wlCost) {
       instance.lostSalesCost(2).then(function(dlCost) {
-      instance.lostSalesCost(3).then(function(flCost) {
-        
-      
+      instance.lostSalesCost(3).then(function(flCost) {     
 
 
       for(rolee=1; rolee<=4; rolee++) {
@@ -71,7 +69,6 @@ App = {
 
               App.displayGraph(order_det,role,startWeek.words[0],endWeek.words[0]);
 
-
               demand.push(player[3].words[0]);
               lostSales.push(player[8].words[0]);
               shippingQuantity.push(player[4].words[0]);
@@ -79,6 +76,9 @@ App = {
 
               var val,r,c;
               if(order_det.length == endWeek.words[0]-startWeek.words[0]+1) {
+
+                document.getElementById('download_btn').style.display = 'block';
+
                 //console.log(inventoryLeft);
                 val = App.variance(order_det);
                 r = table.rows[1];
@@ -108,7 +108,7 @@ App = {
                  val = App.sum(lostSales);
                  r = table.rows[6];
                  c = r.insertCell(role);
-                 console.log(val);
+                 //console.log(val);
                  switch(role) {
                    case 1: c.innerHTML = "Rs " + val*rlCost; totalCost+=val*rlCost; break;
                    case 2: c.innerHTML = "Rs " + val*wlCost; totalCost+=val*wlCost; break;
