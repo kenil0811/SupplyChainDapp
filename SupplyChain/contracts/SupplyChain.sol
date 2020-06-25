@@ -88,7 +88,7 @@ contract SupplyChain {
     function checkWeekEnd() private {
 
         if(players[msg.sender].role == 1) {
-            weekDetails[msg.sender][weekNo].demand = customerDemand[weekNo%maxWeeks];
+            weekDetails[msg.sender][weekNo].demand = customerDemand[weekNo%customerDemand.length];
         }
 
         
