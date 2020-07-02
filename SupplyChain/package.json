@@ -1,23 +1,18 @@
 {
-  "name": "pet-shop",
+  "name": "scrpg",
   "version": "1.0.0",
   "description": "",
   "main": "truffle.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "dev": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dserver.js"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "lite-server": "^2.3.0"
-  },
   "dependencies": {
     "ethereumjs-tx": "^2.1.2",
     "express": "^4.17.1",
+    "fast-csv": "^4.3.0",
+    "multer": "^1.4.2",
     "requirejs": "^2.3.6",
     "truffle-contract": "^4.0.31",
     "truffle-hdwallet-provider": "^1.0.17",
