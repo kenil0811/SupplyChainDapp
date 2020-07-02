@@ -44,14 +44,14 @@ App = {
 
 
   displayDetails: function() {
+    
       var content = $("#content");
-
       var qs= window.location.search;
       console.log(qs);
       const urlParams = new URLSearchParams(qs);
       const v1= urlParams.get('role');
       console.log(v1);
-      App.role = v1;
+      App.role=v1;
 
 
       if(v1==1){
@@ -67,28 +67,24 @@ App = {
             document.getElementById("roleDetails").innerHTML = "Factory Details" 
           }
 
-      web3.eth.getCoinbase(function(err, account) {
-      if (err === null) {
-        App.account = account;
-        $("#accountAddress").html("Your Account: " + account);
-      }
-
-
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
 
         instance.adds(v1).then(function(role_add){ 
+
+          App.account=role_add;
+        
         
         instance.weekNo().then(function(weeks){
 
-        instance.maxWeeks().then(function(maxWeeks) { 
-        
+          instance.maxWeeks().then(function(maxWeeks) {
 
           //console.log(weeks.words[0]);
           //console.log(numWeeks);
 
-          document.getElementById("currentWeek").innerHTML = role_add;          
+          document.getElementById("currentWeek").innerHTML = role_add ;
 
+        var table = document.getElementById("DetailsTable");
         var table = document.getElementById("DetailsTable");
         var t=0;
         for(var i=0; i<weeks.words[0]; i++)
@@ -161,16 +157,21 @@ App = {
                 }
             });
         }
-            
+           
+
+
         });
-});
+      });    
        });
       })
-    });
-     // App.addDetails();
+
+
     },
 
+
     showTransaction: function(blockNumber,role) {
+
+
       //alert('Hello');
       var modal = document.getElementById("transactionModal");
        if(blockNumber!=0){
@@ -202,19 +203,24 @@ App = {
         //fetch data from the block
         web3.eth.getBlock(blockNumber).then(function(block){
 
-            web3.eth.getTransaction(block.transactions[0]).then(function(tx) {
-            console.log(tx);
+            for(var i=0; i<block.transactions.length; i++) {
 
-            var num = tx.blockNumber;
-            var hash = tx.hash;
-            var time = block.timestamp;
-            var from = tx.from;
+              web3.eth.getTransaction(block.transactions[i]).then(function(tx) {
 
-            document.getElementById("bnumber").innerHTML = num;
-            document.getElementById("hash").innerHTML = hash;
-            document.getElementById("timestamp").innerHTML = time;
-            document.getElementById("creater").innerHTML = from+"   ("+player+")";            
-            });
+                if(tx.from == App.account) {
+                  console.log(tx);
+
+                  document.getElementById("bnumber").innerHTML = tx.blockNumber;
+                  document.getElementById("hash").innerHTML = tx.hash;
+                  document.getElementById("nonce").innerHTML = tx.nonce;
+                  document.getElementById("gas").innerHTML = tx.gas;
+                  document.getElementById("gas_price").innerHTML = tx.gasPrice;
+                  document.getElementById("timestamp").innerHTML = new Date(block.timestamp*1000);
+                  document.getElementById("creater").innerHTML = tx.from + "   ("+player+")";   
+                  document.getElementById("receiver").innerHTML = tx.to + " (Smart Contract)";
+                }         
+              });
+            }
 
         })
     },
@@ -229,10 +235,10 @@ App = {
     var filename;
     console.log(App.role);
     switch(App.role) {
-      case '1': filename = 'retailer_details.xlsx'; break;
-      case '2': filename = 'wholesaler_details.xlsx'; break;
-      case '3': filename = 'distributer_details.xlsx'; break;
-      case '4': filename = 'factory_details.xlsx'; break;
+      case '1': filename = 'retailer_details.xls'; break;
+      case '2': filename = 'wholesaler_details.xls'; break;
+      case '3': filename = 'distributer_details.xls'; break;
+      case '4': filename = 'factory_details.xls'; break;
     }
 
     
