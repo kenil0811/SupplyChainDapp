@@ -38,8 +38,11 @@ App = {
   displayDetails: function() {
 
     var table = document.getElementById("DetailsTable");
-    for(i=0; i<7; i++) 
-      var row = table.insertRow();  
+    for(i=1; i<=7; i++) {
+      for(j=1; j<=4; j++) {
+        table.rows[i].insertCell(j);
+      }
+    }
 
 
     App.contracts.SupplyChain.deployed().then(function(instance) {
@@ -55,16 +58,28 @@ App = {
       instance.lostSalesCost(2).then(function(dlCost) {
       instance.lostSalesCost(3).then(function(flCost) {     
 
-
+      var customer_det=[];
       for(rolee=1; rolee<=4; rolee++) {
         var role=1;
         var totalCost=0;
       instance.adds(rolee).then(function(role_add){    
 
+          instance.players(role_add).then(function(p) {
+              k=p[0].words[0];
+              console.log(k);
+              console.log("-----");
+              
           var order_det=[], demand=[], lostSales=[], shippingQuantity=[], inventoryLeft=[];
           for(i=startWeek.words[0]-1; i<endWeek.words[0]; i++) {
+            var k;
+            
+            
 
             instance.weekDetails(role_add,i).then(function(player){ 
+              if(k==1) {
+              //console.log(player[3].words[0]);
+                customer_det.push(player[3].words[0]);
+              }
               order_det.push(player[7].words[0]);      
               demand.push(player[3].words[0]);
               lostSales.push(player[8].words[0]);
@@ -74,41 +89,41 @@ App = {
               var val,r,c;
               if(order_det.length == endWeek.words[0]-startWeek.words[0]+1) {
 
-                App.displayGraph(order_det,role,startWeek.words[0],endWeek.words[0]);
+                App.displayGraph(order_det,k,startWeek.words[0],endWeek.words[0]);
 
                 document.getElementById('download_btn').style.display = 'block';
 
                 //console.log(inventoryLeft);
                 val = App.variance(order_det);
                 r = table.rows[1];
-                c = r.insertCell(role);
+                c = r.cells[k];
                 c.innerHTML = Math.round(val*100)/100;
 
                 val = App.sum(demand);
                 r = table.rows[2];
-                c = r.insertCell(role);
+                c = r.cells[k];
                 c.innerHTML = val;
 
                 val = App.sum(lostSales);
                 r = table.rows[3];
-                c = r.insertCell(role);
+                c = r.cells[k];
                 c.innerHTML = val;
 
                 val = (App.sum(demand) - App.sum(lostSales))/App.sum(demand);
                 r = table.rows[4];
-                c = r.insertCell(role);
+                c = r.cells[k];
                 c.innerHTML = Math.round(val*100)/100;
 
                 val = App.sum(inventoryLeft);
                 r = table.rows[5];
-                c = r.insertCell(role);
+                c = r.cells[k];
                 c.innerHTML = val;
 
                  val = App.sum(lostSales);
                  r = table.rows[6];
-                 c = r.insertCell(role);
+                 c = r.cells[k];
                  //console.log(val);
-                 switch(role) {
+                 switch(k) {
                    case 1: c.innerHTML = "Rs " + val*rlCost; totalCost+=val*rlCost; break;
                    case 2: c.innerHTML = "Rs " + val*wlCost; totalCost+=val*wlCost; break;
                    case 3: c.innerHTML = "Rs " + val*dlCost; totalCost+=val*dlCost; break;
@@ -117,8 +132,8 @@ App = {
 
                  val = App.sum(inventoryLeft);
                  r = table.rows[7];
-                 c = r.insertCell(role);
-                 switch(role) {
+                 c = r.cells[k];
+                 switch(k) {
                    case 1: c.innerHTML = "Rs " + val*rhCost; totalCost+=val*rhCost; break;
                    case 2: c.innerHTML = "Rs " + val*whCost; totalCost+=val*whCost; break;
                    case 3: c.innerHTML = "Rs " + val*dhCost; totalCost+=val*dhCost; break;
@@ -126,11 +141,20 @@ App = {
                  }
 
                 role++;
-                 console.log(totalCost);
+                 //console.log(totalCost);
                  if(role==5) {
-                   var cost = document.getElementById("totalCost");
-                   cost.innerHTML = "Total Supply Chain Cost = Rs " + totalCost;
+                   c = table.rows[9].cells[1];
+                   //console.log(customer_det);
+                   c.innerHTML ="<center>" + Math.round(App.variance(customer_det)*100)/100 + "</center>";
 
+                   c = table.rows[10].cells[1];
+                   c.innerHTML ="<center>" + Math.round((table.rows[1].cells[4].innerHTML / table.rows[9].cells[1].innerText)*100)/100 + "</center>";
+
+                   c = table.rows[11].cells[1];
+                   c.innerHTML ="<center>" + table.rows[4].cells[1].innerHTML + "</center>";
+
+                   c = table.rows[12].cells[1];
+                   c.innerHTML ="<center>" + "Rs. " + totalCost + "</center>";
                  }
                 console.log(role);
               }
@@ -138,6 +162,7 @@ App = {
 
             });
           }
+          });
 
         });
     }
@@ -188,22 +213,22 @@ App = {
 
         if(role==1)
            {container="chartContainer1";
-            title="Retailer Order to Wholesaler"}
+            title="Retailer"}
          if(role==2)
            {container="chartContainer2";
-            title="Wholesaler Order to Distributor"}
+            title="Wholesaler"}
          if(role==3)
            {container="chartContainer3";
-            title="Distributor Order to Factory"}
+            title="Distributor"}
          if(role==4)
            {container="chartContainer4";
-            title="Factory Order to Production Shop"}
+            title="Factory"}
 
-        console.log(startWk);
-        console.log(endWk);
+        //console.log(startWk);
+        //console.log(endWk);
 
       
-      console.log(data);
+      //console.log(data);
       
       var dataPoints = [];
 
@@ -254,7 +279,7 @@ App = {
     var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
     
     // Specify file name
-    var filename = 'performance.xlsx';
+    var filename = 'performance.xls';
 
 
     

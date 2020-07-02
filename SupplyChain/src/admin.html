@@ -117,6 +117,7 @@
       <option id="uniform" value="uniform">Uniform</option>
       <option id="poisson" value="poisson">Poisson</option>
       <option id="exponential" value="exponential">Exponential</option>
+      <option id="unknown" value="unknown">Unknown</option>
     </select>
 
       <label for="mean" style="margin-left: 30px;" id="variable1">Enter Mean:</label>
@@ -146,6 +147,10 @@
         document.getElementById("variable2").style.display = "inline";
             document.getElementById("stdDev").style.display = "inline";
       }
+      if(document.getElementById('variable1').style.display == "none") {
+        document.getElementById("variable1").style.display = "inline";
+            document.getElementById("mean").style.display = "inline";
+      }
 
       if(nameSelect){
         
@@ -165,6 +170,12 @@
           }
           else if(nameSelect.value == "exponential"){
             document.getElementById("variable1").innerHTML = "Enter lambda value: ";
+            document.getElementById("variable2").style.display = "none";
+            document.getElementById("stdDev").style.display = "none";
+          }
+          else if(nameSelect.value == "unknown"){
+            document.getElementById("variable1").style.display = "none";
+            document.getElementById("mean").style.display = "none";
             document.getElementById("variable2").style.display = "none";
             document.getElementById("stdDev").style.display = "none";
           }

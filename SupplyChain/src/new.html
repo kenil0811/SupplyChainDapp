@@ -78,7 +78,9 @@
     </tr>
   </thead>
 </table>
+<center>
 <button class="btn btn-secondary" id="download_btn" style="width: 150px; display: none" onclick="App.exportTableToExcel('DetailsTable')" type="button">Download Details</button>
+</center>
 </div>
 
 <div id="transactionModal" class="modalcss">
@@ -95,11 +97,23 @@
         <label>Transaction Hash</label>
         <p id="hash"></p>
         <hr>
+        <label>Nonce</label>
+        <p id="nonce"></p>
+        <hr>
+        <label>Gas Used</label>
+        <p id="gas"></p>
+        <hr>
+        <label>Gas Price</label>
+        <p id="gas_price"></p>
+        <hr>
         <label>Block Timestamp</label>
         <p id="timestamp"></p>
         <hr>
         <label>Transaction initiated by</label>
         <p id="creater"></p>
+        <hr>
+        <label>Transaction sent to</label>
+        <p id="receiver"></p>
         <hr>
         
       </div>
@@ -120,5 +134,3 @@
   <script src="js/new.js"></script>
 </body>
 </html>
-
-

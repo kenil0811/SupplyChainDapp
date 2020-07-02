@@ -94,6 +94,11 @@ App = {
               document.getElementById("var1").innerHTML = "Lambda:  "+distributionDetails['mean'];
               document.getElementById("var2").style.display = "none";
           }
+          else if(distributionDetails['distribution']=="Unknown"){
+              document.getElementById("distribution").innerHTML = "Distribution:  "+distributionDetails['distribution'];
+              document.getElementById("var1").style.display = "none";
+              document.getElementById("var2").style.display = "none";
+          }
           
         }
       }
@@ -155,8 +160,10 @@ App = {
 
       App.contracts.SupplyChain.deployed().then(function(instance) {
         instance.weekNo().then(function(weekNo) {
-          document.getElementById("currentWeek").innerHTML = weekNo;
-        })
+          instance.maxWeeks().then(function(maxWeeks) {
+            if(weekNo<=maxWeeks)
+              document.getElementById("currentWeek").innerHTML = weekNo;
+          
 
         instance.orderLeadTime().then(function(orderLeadTime) {
           document.getElementById("orderLeadTime").innerHTML = orderLeadTime;
@@ -166,25 +173,27 @@ App = {
           document.getElementById("deliveryLeadTime").innerHTML = deliveryLeadTime;
         });
 
-        instance.maxWeeks().then(function(totalWeeks) {
-          document.getElementById("totalWeeks").innerHTML = totalWeeks;
-        });
+        document.getElementById("totalWeeks").innerHTML = maxWeeks;
 
-        instance.inventory(0).then(function(array) {
-          $("#ret_inv").html(array.words[0]);
-        });
-        instance.inventory(1).then(function(array) {
-          $("#who_inv").html(array.words[0]);
-        });
-        instance.inventory(2).then(function(array) {
-          $("#dis_inv").html(array.words[0]);
-        });
-        instance.inventory(3).then(function(array) {
-          $("#fac_inv").html(array.words[0]);
-        });
+        if(weekNo<=maxWeeks) {
+          instance.inventory(0).then(function(array) {
+            $("#ret_inv").html(array.words[0]);
+          });
+          instance.inventory(1).then(function(array) {
+            $("#who_inv").html(array.words[0]);
+          });
+          instance.inventory(2).then(function(array) {
+            $("#dis_inv").html(array.words[0]);
+          });
+          instance.inventory(3).then(function(array) {
+            $("#fac_inv").html(array.words[0]);
+          });
+         }
 
 
       });
+          })
+        })
 
        //content.show();
     },
@@ -192,14 +201,18 @@ App = {
   getDetails: function() {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       instance.weekNo().then(function(weekNo) {
-      instance.weekDetails(App.account, weekNo.words[0]-1).then(function(details) {
+      instance.maxWeeks().then(function(maxWeeks) {
+      if(weekNo <= maxWeeks) {
+        instance.weekDetails(App.account, weekNo.words[0]-1).then(function(details) {
 
-        document.getElementById("demand").innerHTML = details[3].words[0];
-        document.getElementById("prev_inv").innerHTML = details[2].words[0];
-        document.getElementById("rec_inv").innerHTML = details[1].words[0];
-        document.getElementById("exp_inv").innerHTML = details[6].words[0];
-        document.getElementById("ship_quan").innerHTML = details[4].words[0];
+          document.getElementById("demand").innerHTML = details[3].words[0];
+          document.getElementById("prev_inv").innerHTML = details[2].words[0];
+          document.getElementById("rec_inv").innerHTML = details[1].words[0];
+          document.getElementById("exp_inv").innerHTML = details[6].words[0];
+          document.getElementById("ship_quan").innerHTML = details[4].words[0];
 
+        });
+      }
     });
     });
     });

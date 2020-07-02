@@ -33,7 +33,7 @@
           <div class="card text-white bg-dark" style="border-color: #fff">
             <div class="card-body">
               <h6 class="card-title" >Current Week</h6>
-              <h4 class="card-text" id="currentWeek" ></h4>
+              <h4 class="card-text" id="currentWeek" >NA</h4>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
       </div>  
       </div>  
     </div>
-    
+
       <div class="row" style="padding: 20px 0px 0px 350px;">
         <center>
       <label class="labelClass" id="distribution"> &nbsp&nbsp</label>
@@ -73,7 +73,7 @@
       <label class="labelClass" id="var2">&nbsp&nbsp</label>
         </center>
       </div>
-    
+
   </div>
 
   <div class="container">
@@ -84,33 +84,33 @@
           <ul class="list-group" style="font-size: 18px">
             <li class="list-group-item d-flex justify-content-between align-items-center">
                <i id="downstream"> Demand: </i>
-              <span class="badge badge-primary badge-pill" id="demand"></span>
+              <span class="badge badge-primary badge-pill" id="demand">NA</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
               Previous Inventory:
-              <span class="badge badge-primary badge-pill" id="prev_inv"></span>
+              <span class="badge badge-primary badge-pill" id="prev_inv">NA</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
               Recieved Quantity:
-              <span class="badge badge-primary badge-pill" id="rec_inv">0</span>
+              <span class="badge badge-primary badge-pill" id="rec_inv">NA</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
               Shipment to be received(next week):
-              <span class="badge badge-primary badge-pill" id="exp_inv">0</span>
+              <span class="badge badge-primary badge-pill" id="exp_inv">NA</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
               Shipping Quantity:
-              <span class="badge badge-primary badge-pill" id="ship_quan">0</span>
+              <span class="badge badge-primary badge-pill" id="ship_quan">NA</span>
             </li>
           </ul>      
           <br>        
         <div id="placeOrder">  
           <div class="row" >
             <div class="col-9" >
-              <input type="text" class="form-control" id="order" placeholder="Current Week Order"  aria-describedby="basic-addon2">
+              <input type="text" class="form-control" autocomplete="off" id="order" placeholder="Current Week Order"  aria-describedby="basic-addon2">
             </div>  
             <div class="col-3">
-              <button class="btn btn-outline-secondary" style="width: 110px;" onclick="App.order()" type="button">Order</button>
+              <button class="btn btn-outline-primary" style="width: 110px; background-color: #00A0ff; color: white" onclick="App.order()" type="button">ORDER</button>
             </div>
           </div>
         </div>  
@@ -119,7 +119,7 @@
           </div>
 
           <div class="alert alert-success" id ="gameOver" role="alert" style="display: none">
-            <button class="btn btn-outline-secondary" style="width: 300px;" onclick="parent.location='performance.html'" type="button">Game over. Check Performance</button>
+            <button class="btn btn-outline-secondary" style="width: 350px; background-color: #00A0ff; color: white" onclick="parent.location='performance.html'" type="button">GAME OVER!! CHECK PERFORMANCE</button>
           </div>
 
         
@@ -135,7 +135,7 @@
           <div class="card text-white bg-dark">
             <div class="card-body" style="padding-bottom: 5px">
               <h6 class="card-title">Factory</h6>
-              <h3 class="card-title" id="fac_inv" style="text-align: right;"></h3>
+              <h3 class="card-title" id="fac_inv" style="text-align: right;">NA</h3>
             </div>
             </div>
         </div>
@@ -143,7 +143,7 @@
             <div class="card text-white bg-dark mb-3" >
             <div class="card-body" style="padding-bottom: 5px">
               <h6 class="card-title">Distributor</h6>
-              <h3 class="card-title" id="dis_inv" style="text-align: right;"></h3>
+              <h3 class="card-title" id="dis_inv" style="text-align: right;">NA</h3>
             </div>
             </div>  
         </div>
@@ -154,7 +154,7 @@
           <div class="card text-white bg-dark mb-3" >
             <div class="card-body" style="padding-bottom: 5px">
               <h6 class="card-title">Wholesaler</h6>
-              <h3 class="card-title" id="who_inv" style="text-align: right;"></h3>
+              <h3 class="card-title" id="who_inv" style="text-align: right;">NA</h3>
             </div>
             </div>
         </div>
@@ -162,7 +162,7 @@
             <div class="card text-white bg-dark " >
             <div class="card-body" style="padding-bottom: 5px">
               <h6 class="card-title">Retailer</h6>
-              <h3 class="card-title" id="ret_inv" style="text-align: right;"></h3>
+              <h3 class="card-title" id="ret_inv" style="text-align: right;">NA</h3>
             </div>
             </div>  
         </div>

@@ -78,6 +78,8 @@ App = {
       App.contracts.SupplyChain.deployed().then(function(instance) {
 
         instance.adds(v1).then(function(role_add){ 
+
+         App.account=role_add;
         
         
         instance.weekNo().then(function(weeks){
@@ -146,6 +148,7 @@ App = {
 
 
     showTransaction: function(blockNumber,role) {
+      console.log("hey");
       //alert('Hello');
       var modal = document.getElementById("transactionModal");
        if(blockNumber!=0){
@@ -176,20 +179,26 @@ App = {
 
         //fetch data from the block
         web3.eth.getBlock(blockNumber).then(function(block){
+          console.log(block);
 
-            web3.eth.getTransaction(block.transactions[0]).then(function(tx) {
-            console.log(tx);
+            for(var i=0; i<block.transactions.length; i++) {
 
-            var num = tx.blockNumber;
-            var hash = tx.hash;
-            var time = block.timestamp;
-            var from = tx.from;
+              web3.eth.getTransaction(block.transactions[i]).then(function(tx) {
 
-            document.getElementById("bnumber").innerHTML = num;
-            document.getElementById("hash").innerHTML = hash;
-            document.getElementById("timestamp").innerHTML = time;
-            document.getElementById("creater").innerHTML = from+"   ("+player+")";            
-            });
+                if(tx.from == App.account) {
+                  console.log(tx);
+
+                  document.getElementById("bnumber").innerHTML = tx.blockNumber;
+                  document.getElementById("hash").innerHTML = tx.hash;
+                  document.getElementById("nonce").innerHTML = tx.nonce;
+                  document.getElementById("gas").innerHTML = tx.gas;
+                  document.getElementById("gas_price").innerHTML = tx.gasPrice;
+                  document.getElementById("timestamp").innerHTML = new Date(block.timestamp*1000);
+                  document.getElementById("creater").innerHTML = tx.from + "   ("+player+")";   
+                  document.getElementById("receiver").innerHTML = tx.to + " (Smart Contract)";
+                }         
+              });
+            }
 
         })
     },
@@ -204,10 +213,10 @@ App = {
     var filename;
     console.log(App.role);
     switch(App.role) {
-      case '1': filename = 'retailer_details.xlsx'; break;
-      case '2': filename = 'wholesaler_details.xlsx'; break;
-      case '3': filename = 'distributer_details.xlsx'; break;
-      case '4': filename = 'factory_details.xlsx'; break;
+      case '1': filename = 'retailer_details.xls'; break;
+      case '2': filename = 'wholesaler_details.xls'; break;
+      case '3': filename = 'distributer_details.xls'; break;
+      case '4': filename = 'factory_details.xls'; break;
     }
 
     
