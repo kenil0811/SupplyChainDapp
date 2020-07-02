@@ -171,11 +171,9 @@ App = {
         });
 
         instance.inventory(0).then(function(array) {
-          console.log(array);
           $("#ret_inv").html(array.words[0]);
         });
         instance.inventory(1).then(function(array) {
-          console.log(array);
           $("#who_inv").html(array.words[0]);
         });
         instance.inventory(2).then(function(array) {

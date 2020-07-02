@@ -65,10 +65,7 @@ App = {
           for(i=startWeek.words[0]-1; i<endWeek.words[0]; i++) {
 
             instance.weekDetails(role_add,i).then(function(player){ 
-              order_det.push(player[7].words[0]);
-
-              App.displayGraph(order_det,role,startWeek.words[0],endWeek.words[0]);
-
+              order_det.push(player[7].words[0]);      
               demand.push(player[3].words[0]);
               lostSales.push(player[8].words[0]);
               shippingQuantity.push(player[4].words[0]);
@@ -76,6 +73,8 @@ App = {
 
               var val,r,c;
               if(order_det.length == endWeek.words[0]-startWeek.words[0]+1) {
+
+                App.displayGraph(order_det,role,startWeek.words[0],endWeek.words[0]);
 
                 document.getElementById('download_btn').style.display = 'block';
 

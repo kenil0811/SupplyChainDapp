@@ -85,9 +85,9 @@ console.log("\n\n\n");
 		fileRows = [79, 64, 91, 95, 70, 82, 79, 74, 86, 104, 75, 88, 87, 80, 103, 96, 97, 88, 66, 67, 79, 84, 90, 79, 81];
 		//file not found
 	}
-    console.log("\n");
-    console.log(req.body);
-    console.log("\n");
+    // console.log("\n");
+    // console.log(req.body);
+    // console.log("\n");
 	var totalWeeks = Number(req.body.totalWeeks);
 	var start = Number(req.body.start);
 	var end = Number(req.body.end);
@@ -108,7 +108,7 @@ console.log("\n\n\n");
 	var lsCost = [rlCost,wlCost,dlCost,flCost];
 
 	console.log("Number of weeks: " + totalWeeks);
-	console.log(hCost)
+	// console.log(hCost)
 	
 	var distribution = req.body.distribution;
 	var stdDev = Number(req.body.stdDev);
@@ -119,7 +119,7 @@ console.log("\n\n\n");
 	gameInfo.mean = mean;
 	gameInfo.stdDev = stdDev;
 	
-	console.log(gameInfo);
+	// console.log(gameInfo);
 
 	var data = JSON.stringify(gameInfo);
 	fs.writeFileSync('gameInfo.json', data);
