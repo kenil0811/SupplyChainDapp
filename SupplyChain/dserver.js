@@ -192,3 +192,32 @@ myContract.deploy({
 
 	
 }
+
+
+const routes = require("./routes");
+const bodyParser = require('body-parser');
+
+
+var port = 3000;
+
+'use strict';
+
+app.disable('etag');
+
+app.use(bodyParser.urlencoded({'extended':'true'}));
+app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
+
+app.post('/api/configureEthereum:type', routes.configureEthereum);
+app.post('/api/ethereum:type', routes.ethereum);
+app.post('/api/startWeb3', routes.startWeb3);
+app.post('/api/checkEthereum', routes.checkEthereum);
+app.post('/api/deleteEverything', routes.deleteEverything);
+app.get('/api/checkDAG', routes.checkDAG);
+app.get('/api/check', routes.check);
+app.get('/api/getAddress', routes.getAddress);
+app.get('/api/checkDeployed', routes.checkDeployed);
+app.get('/api/checkAccountPresent', routes.checkAccountPresent);
+
+console.log("Script started. Head over to http://localhost:"+port+ " on your browser");

@@ -4,7 +4,7 @@ var request = new XMLHttpRequest();
 request.onreadystatechange = function (){
     if (request.status == 200  && request.readyState == 4) {
     	console.log("jii");
-   	window.location.href = 'admin.html';
+   	window.location.href = 'adminSetup1.html';
     }
     else {
     	document.getElementById('invalid').style.display = "block";

@@ -17,6 +17,8 @@
     "truffle-contract": "^4.0.31",
     "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.2.6",
-    "xmlhttprequest": "^1.8.0"
+    "xmlhttprequest": "^1.8.0",
+    "body-parser": "^1.18.2",
+    "web3admin": "^0.4.4"
   }
 }

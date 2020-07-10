@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>Getting Started with Ethereum</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
+		<div id="loader"></div>
+		<div class="container" id="loadedOptions">
+			<div class="row">
+				<div class="col-12">
+					<h1 class="title">Create Account and start Blockchain nodes</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-8 text-center">
+					<p>It looks like that you've already set up Ethereum completely or had at least initiated the process. You may choose from one of the following options below to proceed. </p>
+					<button type="button" class="btn btn-primary btn-large" style="margin-bottom: 20px;" id="moveToStep2">Move to Part 2</button><br/>
+					<button type="button" class="btn btn-danger btn-large" id="deleteEverything">Delete Everything and start Fresh</button>
+					<p><b>Warning:</b> Doing so will delete all the Ethereum node data and the game will be terminated. Only do so if you are willing to lose all of it.</p>
+				</div>
+			</div>
+		</div>
+		<div class="container" id="mainContent">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<h1 class="title">Start Blockchain</h1>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div id="accordion" role="tablist" aria-multiselectable="true">
+				  <div class="card">
+					<div class="card-header" role="tab" id="headingOne">
+					  <h5 class="mb-0">
+						<a data-toggle="collapse" data-parent="#accordion" href="#createAccount" aria-expanded="true" aria-controls="createAccount">1. Create Admin account</a>
+					  </h5>
+					</div>
+					<div id="createAccount" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+					  <div class="card-block">
+						<p>Create an account for the admin</p>
+						<form id="createNewAccount" class="data-entry-form">
+							<div class="form-group row">
+								<div class="col-12">
+									<input type="text" autocomplete="off" class="form-control" id="passwordNode1" placeholder="Enter your Password here for admin">	
+								</div>
+								<div class="col-12 text-center">
+									<button type="submit" class="btn btn-primary">Create Account</button>
+								</div>
+							</div>
+							<label for="accountAddressNode1">Public address of admin</label>
+							<input type="text" class="form-control" id="accountAddressNode1" placeholder="Your Account Addresss for Node_1" readonly>
+						</form>
+					  </div>
+					</div>
+				  </div>
+
+				  <div class="card">
+					<div class="card-header" role="tab" id="headingOne">
+					  	<h5 class="mb-0">
+							<a data-toggle="collapse" data-parent="#accordion" href="#startBlockchain" aria-expanded="true" aria-controls="startBlockchain">2. Start the Blockchain</a>
+						</h5>
+					</div>
+					<div id="startBlockchain" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+					  <div class="card-block">
+
+						
+						<form id="startBlockchain" class="data-entry-form">
+							<p> Enter time interval of mining (Enter 0 for auto mining)</p>
+							<input type="number" class="form-control" id="blockTime" placeholder="Enter Mining Interval Time" value="0">
+							<br>
+							<p>Enter ip addresses of the nodes</p>
+							<div class="form-group row">
+								<div class="col-6">
+									<input type="text" class="form-control" id="ip1" placeholder="Enter ip of retailer node" value="192.168.20.1">	
+								</div>
+								<div class="col-6">
+									<input type="text" class="form-control" id="ip2" placeholder="Enter ip of wholesaler node">	
+								</div>
+								<div class="col-6">
+									<input type="text" class="form-control" id="ip3" placeholder="Enter ip of distributer node">	
+								</div>
+								<div class="col-6">
+									<input type="text" class="form-control" id="ip4" placeholder="Enter ip of factory node">	
+								</div>
+								<div class="col-12 text-center">
+									<button type="submit" class="btn btn-primary" id="startNodes">Start the Nodes</button>
+								</div>
+							</div>
+							<label for="blockchainStatus">Status</label>
+							<input type="text" class="form-control" id="blockchainStatus" placeholder="Blockchain start status" readonly>
+						</form>
+					  </div>
+					</div>
+				  </div>
+
+				</div>
+			</div>
+			<div class="row text-center" style="padding-top:10px; padding-bottom: 30px;">
+				<div class="col-12">
+					<button type="button" class="btn btn-dark btn-large" disabled id="nextStep">Move to Part 2</button>
+				</div>
+			</div>
+		</div>		
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/popper.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+	<script type="text/javascript">
+		$("#mainContent").fadeOut("fast");
+		$("#loadedOptions").fadeOut("fast");
+		$(window).on('load', function(){
+			$.ajax({
+				url: '/api/checkEthereum', 
+				type: 'POST', 
+				contentType: 'application/json'}
+			).done(function(resp){
+				if(resp.status == "error"){
+					alert(resp.errorDetails);
+					$("#loadedOptions").fadeIn('fast');
+					$("#loader").fadeOut('slow');
+
+				}else if(resp.status == "complete"){
+					$("#mainContent").fadeIn("slow");
+					$("#loader").fadeOut('slow');
+				}
+			});
+			
+		});
+	</script>
+	</body>
+</html>
