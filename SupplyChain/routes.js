@@ -5,7 +5,7 @@ var crypto = require('crypto');
 const Web3 = require('web3');
 var web3, admin, txPool;
 const web3Admin = require('web3-eth-admin');
-const web3txPool = req('web3-eth-txpool');
+const web3txPool = require('web3-eth-txpool');
 var directoryNode1;
 exec('pwd', (err,stdout,stderr) => {
 	var s = stdout.substring(6);
@@ -166,26 +166,29 @@ module.exports = {
 			setTimeout(function(){
 				try{
 					admin = web3Admin.Admin(web3.currentProvider);
-					txPool = web3txPool.txPool(web3.currentProvider);
+					txPool = web3txPool.TxPool(web3.currentProvider);
 					web3.eth.net.isListening();
 					admin.getNodeInfo().then(function(r){enode1=r.enode});
-					web3.eth.getAccounts().then(function(acc){coinbase1 = acc[0]};
+					web3.eth.getAccounts().then(function(acc){coinbase1 = acc[0]});
+					console.log("lol");
+					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
 
 				}catch(e){
+					console.log(e);
+					console.log("hmm");
 					resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});	
 					return;
 				}
 				
 			}, 1000);
 			connected = true;
-			resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
 		}
 		else{
 			try{
 				admin = web3Admin.Admin(web3.currentProvider);
 				web3.eth.net.isListening();
 				admin.getNodeInfo().then(function(r){enode1=r.enode});
-				web3.eth.getAccounts().then(function(acc){coinbase1 = acc[0]};
+				web3.eth.getAccounts().then(function(acc){coinbase1 = acc[0]});
 
 			}catch(e){
 				resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});	
