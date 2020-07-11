@@ -3,9 +3,9 @@ var fs = require('fs');
 const { exec } = require('child_process');
 var crypto = require('crypto');
 const Web3 = require('web3');
-var web3 = new Web3();
-var web3Node2 = new Web3();
-const web3Admin = require('web3admin');
+var web3, admin, txPool;
+const web3Admin = require('web3-eth-admin');
+const web3txPool = req('web3-eth-txpool');
 var directoryNode1;
 exec('pwd', (err,stdout,stderr) => {
 	var s = stdout.substring(6);
@@ -162,51 +162,56 @@ module.exports = {
 	},
 	startWeb3: function(req, resp){
 		if(connected == false){
-			web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
+			web3  = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 			setTimeout(function(){
 				try{
-					web3Admin.extend(web3);
+					admin = web3Admin.Admin(web3.currentProvider);
+					txPool = web3txPool.txPool(web3.currentProvider);
+					web3.eth.net.isListening();
+					admin.getNodeInfo().then(function(r){enode1=r.enode});
+					web3.eth.getAccounts().then(function(acc){coinbase1 = acc[0]};
+
 				}catch(e){
 					resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});	
 					return;
 				}
-				if(web3.eth.net.isListening()){
-					enode1 = web3.admin.nodeInfo.enode;
-					coinbase1 = web3.eth.coinbase;
-					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
-				}
-				else
-					resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});
+				
 			}, 1000);
 			connected = true;
+			resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
 		}
 		else{
-			if(web3.eth.net.isListening()){
-				enode1 = web3.admin.nodeInfo.enode;
-				coinbase1 = web3.eth.coinbase;
-				resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
-			}else{
-				connected = false;
+			try{
+				admin = web3Admin.Admin(web3.currentProvider);
+				web3.eth.net.isListening();
+				admin.getNodeInfo().then(function(r){enode1=r.enode});
+				web3.eth.getAccounts().then(function(acc){coinbase1 = acc[0]};
+
+			}catch(e){
 				resp.json({"status":"error", "errorDetails":"Unable to connect to Ethereum. Please go back and start it."});	
+				return;
 			}
+			resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
+
 		}	
 	},
 	ethereum: function(req,resp){
 		var type = req.params.type;
 		if(connected == false) {
-			web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
-			web3Admin.extend(web3);
+			web3  = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+			admin = web3Admin.Admin(web3.currentProvider);
+			admin.getNodeInfo().then(function(r){enode1=r.enode});
 		}
 		if(type == ":getEnode"){
-			resp.json({"enode":web3.admin.nodeInfo.enode});
+			resp.json({"enode":enode1});
 		}else if(type == ":addPeer"){
 			console.log(req.body.enode1);
 			var result;
 			try{
-				result = web3.admin.addPeer(req.body.enode1);
-				// result = web3.admin.addPeer(req.body.enode2);
-				// result = web3.admin.addPeer(req.body.enode3);
-				// result = web3.admin.addPeer(req.body.enode4);
+				result = admin.addPeer(req.body.enode1);
+				// result = admin.addPeer(req.body.enode2);
+				// result = admin.addPeer(req.body.enode3);
+				// result = admin.addPeer(req.body.enode4);
 			}catch(e){
 				var index = e.toString().indexOf("invalid enode");
 				if(index!=1){
@@ -218,35 +223,28 @@ module.exports = {
 		}else if(type == ":peerCount"){
 			var node = req.body.node;
 			var count;
-			if(node == 1)
-				count = web3.net.peerCount;
-			else if(node == 2)
-				count = web3Node2.net.peerCount;
-			resp.json({"status":"complete", "count":count});
+			admin.getPeers().then(function(peers){
+				resp.json({"status":"complete", "count":peers.length});
+			});
+			
 		}else if(type == ":balance"){
-			var node = req.body.node;
-			var balanceWei = [];
-			var balanceEther = [];
-			var accounts;
-			if(node == 1){
-				accounts = web3.eth.accounts;
-				for(var i=0; i<accounts.length; i++){
-					var balance = web3.eth.getBalance(accounts[i]);	
-					balanceWei.push(balance);
-					balanceEther.push(web3.fromWei(balance, "ether"));
-				}
-			}
-			resp.json({"status":"complete", "account":accounts, "wei":balanceWei, "ether":balanceEther});
-		}else if(type == ":minerStart"){
-			var status = web3.miner.start(1);
-			resp.json({"status":"complete", "message":"Miner Started"});
+			var balanceWei;
+			var balanceEther;
+			web3.eth.getAccounts().then(function(acc){
+				web3.eth.getBalance(acc[0]).then(function(bal){
+					balanceWei=bal;
+					balanceEther = web3.utils.fromWei(balance, "ether");			
+					resp.json({"status":"complete", "account":accounts, "wei":balanceWei, "ether":balanceEther});
+				});	
+			});
+					
 		}else if(type == ":transaction"){
 			var amount = req.body.amount;
 
-			var transactionObj1 = {from:web3.eth.coinbase, to:req.body.addr1, value:web3.toWei(amount, "ether")};
-			// var transactionObj2 = {from:web3.eth.coinbase, to:req.body.addr2, value:web3.toWei(amount, "ether")};
-			// var transactionObj3 = {from:web3.eth.coinbase, to:req.body.addr3, value:web3.toWei(amount, "ether")};
-			// var transactionObj4 = {from:web3.eth.coinbase, to:req.body.addr4, value:web3.toWei(amount, "ether")};
+			var transactionObj1 = {from:coinbase1, to:req.body.addr1, value:web3.utils.toWei(amount, "ether")};
+			// var transactionObj2 = {from:coinbase1, to:req.body.addr2, value:web3.utils.toWei(amount, "ether")};
+			// var transactionObj3 = {from:coinbase1, to:req.body.addr3, value:web3.utils.toWei(amount, "ether")};
+			// var transactionObj4 = {from:coinbase1, to:req.body.addr4, value:web3.utils.toWei(amount, "ether")};
 
 			var status;
 			try{
@@ -271,8 +269,9 @@ module.exports = {
 			}
 			resp.json({"status":"complete", "transactionStatus":"Transactions successfully submitted."});
 		}else if(type == ":transactionStatus"){
-			var status = web3.txpool.status;	
-			resp.json({"status":"complete", "pending":parseInt(status.pending,16), "queued":parseInt(status.queued,16)});
+			txPool.getStatus().then(function(status) {
+				resp.json({"status":"complete", "pending":status.pending, "queued":status.queued});	
+			})	
 		}
 	},
 	checkDAG: function(req, resp){
@@ -287,7 +286,7 @@ module.exports = {
 		resp.json({"status":"complete"});
 	},
 	getAddress: function(req, resp){
-		resp.json({"addr": web3.eth.coinbase});
+		resp.json({"addr": coinbase1});
 	},
 	checkDeployed: function(req, resp){
 		resp.json({"deployed": deployed});
@@ -303,6 +302,7 @@ module.exports = {
 					resp.json({"status":"error", "accountAddress1":"null"});
 				}
 				else {
+					coinbase1="0x"+stdout.substring(index+1, index2);
 					resp.json({"status":"correct", "accountAddress1":"0x"+stdout.substring(index+1, index2)});
 					return;
 				}

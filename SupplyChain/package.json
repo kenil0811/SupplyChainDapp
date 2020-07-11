@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "ethereumjs-tx": "^2.1.2",
     "express": "^4.17.1",
     "fast-csv": "^4.3.0",
@@ -16,9 +17,9 @@
     "requirejs": "^2.3.6",
     "truffle-contract": "^4.0.31",
     "truffle-hdwallet-provider": "^1.0.17",
-    "web3": "^1.2.6",
-    "xmlhttprequest": "^1.8.0",
-    "body-parser": "^1.18.2",
-    "web3admin": "^0.4.4"
+    "web3": "^2.0.0-alpha",
+    "web3-eth-admin": "",
+    "web3-eth-txpool": "",
+    "xmlhttprequest": "^1.8.0"
   }
 }
