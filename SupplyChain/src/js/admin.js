@@ -1,3 +1,5 @@
+$(document).ready(function(){
+
 var url = "http://localhost:3000/deployGame";   
 var request = new XMLHttpRequest();
     request.onreadystatechange = function (){
@@ -24,7 +26,9 @@ var request = new XMLHttpRequest();
         document.getElementById("players").innerHTML = "Error!!!";
     }
     }
-function deployContractWithFile() {
+
+$("#deployContract").on('click', function(e){
+        e.preventDefault();
 
     var weeks = document.getElementById("totalWeeks").value;
     var start = document.getElementById("start").value;
@@ -77,12 +81,18 @@ function deployContractWithFile() {
             type: 'GET', 
             contentType: 'application/json'
         }).done(function(resp){
-            formData.append("addresses", resp.addrs);
+            console.log(resp);
+            formData.append("coinbase", resp.addrs.coinbase);
+            formData.append("addr1", resp.addrs.addr1);
+            formData.append("addr2", "0xF94DAdBCA5220f889f1CDb7b82285eA992893730");
+            formData.append("addr3", "0xFd38D67c35cb1A662CbA4F718336815067d9A5A1");
+            formData.append("addr4", "0x6D8591C2592b306cf6d792c6CB96CC093ffcF4F6");
+
+            request.open("POST","http://localhost:3000/deployGameWithFile", true);
+            request.send(formData);
         });
 
-
-
-        request.open("POST","http://localhost:3000/deployGameWithFile", true);
-        request.send(formData);
+        
     }
-}
+});
+});

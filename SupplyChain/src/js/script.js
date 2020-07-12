@@ -77,7 +77,7 @@ $(document).ready(function(){
 			$("#nextStep").prop("disabled", false);
 			$("#nextStep").removeClass("btn-dark");
 			$("#nextStep").addClass("btn-primary");
-		},5000);
+		},12000);
 		
 		$.ajax({
 		    url: '/api/configureEthereum:startAdmin', 

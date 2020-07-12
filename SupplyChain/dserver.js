@@ -10,8 +10,6 @@ const csv = require('fast-csv');
 const upload = multer({ dest: 'tmp/csv/' });
 
 const Web3 = require('web3');
-web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
-web3 = new Web3(web3Provider);
 let contract = "SupplyChain";
 let jsonOutputName = path.parse(contract).name + '.json';
 let jsonFile = './build/contracts/' + jsonOutputName;
@@ -26,7 +24,7 @@ let jsonOutput = JSON.parse(contractJsonContent);
 let abi = jsonOutput['abi'];
 let bytecode = jsonOutput['bytecode'];
 
-let myContract = new web3.eth.Contract(abi);
+
 
 
 app.use(express.static('src'));
@@ -62,9 +60,12 @@ app.post('/deployGameWithFile', upload.single('uploadCsv'), deployGameWithFile);
 var players = {retailer: {}, wholesaler: {}, distributer: {}, factory: {}};
 
 function deployGameWithFile(req, res) {
-  // open uploaded file
+ 
+	web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
+	web3 = new Web3(web3Provider);
+	let myContract = new web3.eth.Contract(abi);
 
-console.log("\n\n\n");
+	console.log("\n\n\n");
   var fileRows = [];
   if(req.file){
   	//file is uploaded
@@ -86,13 +87,15 @@ console.log("\n\n\n");
     // console.log("\n");
     // console.log(req.body);
     // console.log("\n");
-    var defaultAccount = req.body.addresses.coinbase;
+    var defaultAccount = req.body.coinbase;
     console.log(defaultAccount);
 
-    var retailerAddress = req.body.addresses.addr1;
-    var wholesalerAddress =  "0xF94DAdBCA5220f889f1CDb7b82285eA992893730"; //req.body.addresses.addr2;
-    var distributerAddress = "0xFd38D67c35cb1A662CbA4F718336815067d9A5A1"; //req.body.addresses.addr3;
-    var factoryAddress = "0x6D8591C2592b306cf6d792c6CB96CC093ffcF4F6"; //req.body.addresses.addr4;
+    var retailerAddress = req.body.addr1;
+    var wholesalerAddress = req.body.addr2;
+    var distributerAddress = req.body.addr3;
+    var factoryAddress = req.body.addr4;
+
+	console.log(retailerAddress+'\n'+wholesalerAddress+'\n'+distributerAddress+'\n'+factoryAddress);    
 
 	var totalWeeks = Number(req.body.totalWeeks);
 	var start = Number(req.body.start);
@@ -130,11 +133,7 @@ console.log("\n\n\n");
 	var data = JSON.stringify(gameInfo);
 	fs.writeFileSync('gameInfo.json', data);
 
-
-len = accounts.length;
-
-console.log("Game id:" + (len-1)/4);
-
+console.log("wait!!");
 
 myContract.deploy({
     data: bytecode,
@@ -156,8 +155,8 @@ myContract.deploy({
 	web3.eth.personal.lockAccount(factoryAddress);
 
 	console.log("Success");
-	console.log(players);
-	res.status(200).send(players);
+	routes.deployed=true;
+	res.status(200).send();
 });
 
 
