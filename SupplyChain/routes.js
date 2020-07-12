@@ -168,11 +168,13 @@ module.exports = {
 					admin = web3Admin.Admin(web3.currentProvider);
 					txPool = web3txPool.TxPool(web3.currentProvider);
 					web3.eth.net.isListening();
-					admin.getNodeInfo().then(function(r){enode1=r.enode});
-					web3.eth.getAccounts().then(function(acc){coinbase1 = acc[0]});
-					console.log("lol");
-					resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
-
+					admin.getNodeInfo().then(function(r){
+						web3.eth.getAccounts().then(function(acc){
+							coinbase1 = acc[0];
+							enode1=r.enode;
+							resp.json({"status":"complete", "message":"Connected with Ethereum node", "enode1":enode1, "coinbase1":coinbase1});
+						});
+					});				
 				}catch(e){
 					console.log(e);
 					console.log("hmm");
@@ -180,7 +182,7 @@ module.exports = {
 					return;
 				}
 				
-			}, 1000);
+			}, 3000);
 			connected = true;
 		}
 		else{
@@ -206,7 +208,10 @@ module.exports = {
 			admin.getNodeInfo().then(function(r){enode1=r.enode});
 		}
 		if(type == ":getEnode"){
-			resp.json({"enode":enode1});
+			admin.getNodeInfo().then(function(r){
+				enode1=r.enode;
+				resp.json({"enode":enode1});
+			});
 		}else if(type == ":addPeer"){
 			console.log(req.body.enode1);
 			var result;

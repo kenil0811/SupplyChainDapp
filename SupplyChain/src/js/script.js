@@ -480,7 +480,7 @@ $(document).ready(function(){
 					alert(resp.errorDetails);
 				}else if(resp.status == "complete"){
 					alert(resp.message);
-					window.location.href ='./index.html';
+					window.location.href ='./adminSetup1.html';
 				}
 			});			
 		}else{
