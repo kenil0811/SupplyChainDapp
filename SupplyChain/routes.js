@@ -21,7 +21,9 @@ var coinbase1;
 var coinbase2;
 var killing = false;
 var ips;
+var addrs;
 var deployed = false;
+var amountSent = false;
 
 module.exports = {
 	checkEthereum: function(req, resp){
@@ -129,7 +131,7 @@ module.exports = {
 								resp.json({"status":"error", "errorDetails":"Ethereum has not been configured right now."});
 								return;
 							}
-							exec('geth --datadir '+ directoryNode1 + ' --networkid 5777 --rpc --rpcport 8545 --rpccorsdomain "*" --nat "any" --rpcapi="txpool,db,eth,net,web3,personal,admin,miner" --unlock 0 --password ' + directoryNode1 + '/password.txt --allow-insecure-unlock', (err, stdout, stderr) =>{});
+							exec('geth --mine --datadir '+ directoryNode1 + ' --networkid 5777 --rpc --rpcport 8545 --rpccorsdomain "*" --nat "any" --rpcapi="txpool,db,eth,net,web3,personal,admin,miner" --unlock 0 --password ' + directoryNode1 + '/password.txt --allow-insecure-unlock', (err, stdout, stderr) =>{});
 						});
 					});
 				});
@@ -241,13 +243,15 @@ module.exports = {
 			web3.eth.getAccounts().then(function(acc){
 				web3.eth.getBalance(acc[0]).then(function(bal){
 					balanceWei=bal;
-					balanceEther = web3.utils.fromWei(balance, "ether");			
-					resp.json({"status":"complete", "account":accounts, "wei":balanceWei, "ether":balanceEther});
+					balanceEther = web3.utils.fromWei(balanceWei, "ether");			
+					resp.json({"status":"complete", "account":acc[0], "wei":balanceWei, "ether":balanceEther});
 				});	
 			});
 					
 		}else if(type == ":transaction"){
 			var amount = req.body.amount;
+			if(addrs==null)
+				addrs = {"coinbase":coinbase1, "addr1": req.body.addr1 /*, "addr2": req.body.addr2, "addr3": req.body.addr3, "addr4": req.body.addr4 */};
 
 			var transactionObj1 = {from:coinbase1, to:req.body.addr1, value:web3.utils.toWei(amount, "ether")};
 			// var transactionObj2 = {from:coinbase1, to:req.body.addr2, value:web3.utils.toWei(amount, "ether")};
@@ -275,6 +279,7 @@ module.exports = {
 				resp.json({"status":"complete", "transactionStatus":"An unknown error occured."});
 				return;
 			}
+			amountSent = true;
 			resp.json({"status":"complete", "transactionStatus":"Transactions successfully submitted."});
 		}else if(type == ":transactionStatus"){
 			txPool.getStatus().then(function(status) {
@@ -316,6 +321,12 @@ module.exports = {
 				}
 			}
 		})
+	},
+	checkAccountSent: function(req, resp){
+		resp.json({"status": amountSent});
+	},
+	getAddresses: function(req, resp){
+		resp.json({"addrs":addrs});
 	}
 
 }

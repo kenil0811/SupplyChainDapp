@@ -1,9 +1,9 @@
-var currentlyMining = false;
+
 var genesisContent,genesisData;
 $(document).ready(function(){
 	
 	var page1Buttons = [$("#createNewAccount button"), $("#startBlockchain button")];
-	var page2Buttons = [$("#connectToPeer button"), $("#checkPeer button"), $("#checkBalanceForm button"), $("#startMiner"), $("#checkAddresses button"), $("#checkTransactionForm button"), $("#submitProject"), $("#copyScore")];
+	var page2Buttons = [$("#connectToPeer button"), $("#checkPeer button"), $("#checkBalanceForm button"), $("#checkAddresses button"), $("#checkTransactionForm button")];
 	//Getting Started with Ethereum Functions
 	$("#createNewAccount").on('submit', function(e){
 		e.preventDefault();
@@ -207,10 +207,8 @@ $(document).ready(function(){
 						enableButtons(page2Buttons);
 					}else if(resp2.status == "complete"){
 						$("#peerStatus").val(resp2.addStatus);
-						//showShortModal();
 						setTimeout(function(){
 							enableButtons(page2Buttons);
-							//hideShortModal();
 						},2000);
 					}
 				});
@@ -237,10 +235,8 @@ $(document).ready(function(){
 				enableButtons(page2Buttons);
 			}else if(resp.status == "complete"){
 				$("#peerCount").val(resp.count);
-				//showShortModal();
 				setTimeout(function(){
 					enableButtons(page2Buttons);
-					//hideShortModal();
 				},2000);
 			}
 		});
@@ -260,42 +256,16 @@ $(document).ready(function(){
 				$("#balanceStatus").val(resp.errorDetails);
 				enableButtons(page2Buttons);
 			}else if(resp.status == "complete"){
-				addListAndBalance($("#accountList"),resp);
+				var temp = '<div class="col-6"><input type="text" class="form-control" id="accountAddress" placeholder="Account Address" readonly value='+ resp.account +'></div><div class="col-3"><input type="text" class="form-control" id="balanceWei" placeholder="Balance (in Weis)" readonly value='+ resp.wei +'></div><div class="col-3"><input type="text" class="form-control" id="balanceEther" placeholder="Balance (in Ether)" readonly value='+ resp.ether +'></div>';
+				$("#accountList").append(temp);
 				$("#balanceStatus").val("Account and balances fetched.");
-				//showShortModal();
 				setTimeout(function(){
 					enableButtons(page2Buttons);
-					//hideShortModal();
 				},2000);
 			}
 		});
 	});
 
-	$("#startMiner").on('click', function(e){
-		e.preventDefault();		
-		disableButtons(page2Buttons,$("#minerStatus"), "Miner starting...");
-		$.ajax({
-		    url: '/api/ethereum:minerStart', 
-		    type: 'POST', 
-		    contentType: 'application/json',
-		    data:JSON.stringify({"node":1})
-		}).done(function(resp){
-			if(resp.status == "error"){
-				alert(resp.errorDetails);
-				$("#minerStatus").val(resp.errorDetails);
-				enableButtons(page2Buttons);
-			}else if(resp.status == "complete"){
-				$("#minerStatus").val(resp.message);
-				currentlyMining = true;
-				//showLongModal();
-				// enableButtons(page2Buttons);
-				setTimeout(function(){
-					
-					enableButtons(page2Buttons);
-				},2000);
-			}
-		});
-	});
 
 	$("#checkAddresses").on('click', function(e){
 		e.preventDefault();
@@ -414,6 +384,7 @@ $(document).ready(function(){
 						$("#transactionStatus").val(resp.transactionStatus);
 						setTimeout(function(){
 							enableButtons(page2Buttons);
+							enableButtons([$("#deployContract")]);
 						},2000);
 					}
 				});
@@ -489,40 +460,14 @@ $(document).ready(function(){
 
 	});
 
-	$("#submitProject").on('click', function(e){
+	$("#deployContract").on('click', function(e){
 		e.preventDefault();
-		$.ajax({
-			url: '/api/submitScore', 
-		    type: 'GET', 
-		    contentType: 'application/json'
-		}).done(function(resp){
-			$("#submitScore").val(resp.hash);
-		});
+		window.location.href = './admin.html';
 	});
 
-	$("#copyScore").on('click', function(e){
-		e.preventDefault();
-		var copy = document.getElementById("submitScore");
-		if(!copy.value){
-			alert("Please generate your score first!");
-			return;
-		}
-		copy.select();
-		document.execCommand("Copy");
-		copy.selectionStart = copy.selectionEnd = -1;
-		alert("Copied to Clipboard")
-	});
 
 });
 
-function addListAndBalance(element, resp){
-	element.empty();
-	for(var i = 0; i <resp.account.length; i++){
-		var temp = '<div class="col-6"><input type="text" class="form-control" id="accountAddress" placeholder="Account Address" readonly value='+ resp.account[i] +'></div><div class="col-3"><input type="text" class="form-control" id="balanceWei" placeholder="Balance (in Weis)" readonly value='+ resp.wei[i] +'></div><div class="col-3"><input type="text" class="form-control" id="balanceEther" placeholder="Balance (in Ether)" readonly value='+ resp.ether[i] +'></div>';
-		element.append(temp);
-	}
-	
-}
 
 function disableButtons(elements, messageElement, message){
 	for(i=0; i<elements.length; i++){
@@ -547,95 +492,8 @@ function enableButtons(elements){
 		element.removeClass("btn-dark");
 		element.addClass("btn-primary");
 	}
-	if(currentlyMining == true){
-		element = $("#startMiner");
-		element.prop("disabled", true);
-		element.removeClass("btn-dark");
-		element.removeClass("btn-primary");
-	}
 }
 
-function removeElement(buttonList,element){
-	console.log(element);
-	console.log(buttonList.indexOf(element));
-	return buttonList.filter(function(e){
-		return e!=element;
-	});
-}
-
-function showShortModal(){
-	$("#shortModal").modal({
-		backdrop: 'static',
-		keyboard: false
-	});
-	var countDown = new Date().getTime() + 6000;
-	var testInterval = setInterval(function(){
-		var now = new Date().getTime();
-		var remain = countDown - now;
-
-		var mins = Math.floor((remain %(1000*60*60))/(1000*60));
-		var secs = Math.floor((remain % (1000*60)) / 1000);
-
-		document.getElementById("shortTimer").innerHTML = mins + "m " + secs + "s ";
-
-		if(remain<0){
-			clearInterval(testInterval);
-			document.getElementById("shortTimer").innerHTML = "0m 5s";
-		}
-
-	},1000);
-}
-
-function hideShortModal(){
-	$("#shortModal").modal('hide');
-}
-
-function showLongModal(){
-	$("#longModal").modal({
-		backdrop: 'static',
-		keyboard: false
-	});
-	var countDown = new Date().getTime() + (10 * 60 * 1000);
-	var longInterval = setInterval(function(){
-		var now = new Date().getTime();
-		var remain = countDown - now;
-
-		var mins = Math.floor((remain %(1000*60*60))/(1000*60));
-		var secs = Math.floor((remain % (1000*60)) / 1000);
-
-		document.getElementById("longTimer").innerHTML = mins + "m " + secs + "s ";
-
-		if(remain<0){
-			clearInterval(longInterval);
-			clearInterval(DAGInterval);
-			hideLongModal();
-			document.getElementById("longTimer").innerHTML = "5m 0s";
-		}
-
-	},1000);
-	var DAGInterval = setInterval(function(){
-		//Contact the backend. If true, hideLongModal and clear the above interval and this interval
-		$.ajax({
-			url: '/api/checkDAG', 
-			type: 'GET', 
-			contentType: 'application/json'}
-		).done(function(resp){
-			if(resp.status == "error"){
-				alert(resp.errorDetails);
-			}else if(resp.status == "complete"){
-				if(resp.dagStatus == true){
-					clearInterval(longInterval);
-					clearInterval(DAGInterval);
-					hideLongModal();
-				}
-			}
-		});
-	},15000);
-}
-
-function hideLongModal(){
-	$("#longModal").modal('hide');
-}
 
 function isValidIP(ipaddress) {
 	var isValid = false;
@@ -657,7 +515,17 @@ function isValidIP(ipaddress) {
 }
 
 $(window).on('load', function() {
-	console.log("hey");
+	disableButton($("#deployContract"));
 	disableButton($("#sendTransactionButton"));
-	console.log("lol");
+
+	$.ajax({
+		url: "/api/checkAccountSent",
+		type: 'GET',
+		dataType: 'application/json'
+	}).done(function(resp) {
+		if(resp.status == true)
+			enableButtons([$("#deployContract")]);
+	})
+
+
 });

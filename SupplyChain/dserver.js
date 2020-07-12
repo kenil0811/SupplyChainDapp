@@ -29,8 +29,6 @@ let bytecode = jsonOutput['bytecode'];
 let myContract = new web3.eth.Contract(abi);
 
 
-defaultAccount = "0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34";
-
 app.use(express.static('src'));
 app.use(express.static('build/contracts'));
 
@@ -88,6 +86,14 @@ console.log("\n\n\n");
     // console.log("\n");
     // console.log(req.body);
     // console.log("\n");
+    var defaultAccount = req.body.addresses.coinbase;
+    console.log(defaultAccount);
+
+    var retailerAddress = req.body.addresses.addr1;
+    var wholesalerAddress =  "0xF94DAdBCA5220f889f1CDb7b82285eA992893730"; //req.body.addresses.addr2;
+    var distributerAddress = "0xFd38D67c35cb1A662CbA4F718336815067d9A5A1"; //req.body.addresses.addr3;
+    var factoryAddress = "0x6D8591C2592b306cf6d792c6CB96CC093ffcF4F6"; //req.body.addresses.addr4;
+
 	var totalWeeks = Number(req.body.totalWeeks);
 	var start = Number(req.body.start);
 	var end = Number(req.body.end);
@@ -123,53 +129,19 @@ console.log("\n\n\n");
 
 	var data = JSON.stringify(gameInfo);
 	fs.writeFileSync('gameInfo.json', data);
-//retailer account
-web3.eth.personal.newAccount("pass1").then(function(newAcc) {
-	players.retailer["address"] = newAcc;
-	players.retailer["password"] = "pass1";
-	console.log(newAcc);
-	web3.eth.sendTransaction({from:defaultAccount, to:newAcc, value:web3.utils.toWei('0.5', 'ether')});
-	fs.appendFile('details', "Address: " + newAcc + "; Pass: pass1" + "\n" , function(err){});
-
-//wholesaler account
-web3.eth.personal.newAccount("pass2").then(function(newAcc) {
-	players.wholesaler["address"] = newAcc;
-	players.wholesaler["password"] = "pass2";
-	console.log(newAcc);
-	web3.eth.sendTransaction({from:defaultAccount, to:newAcc, value:web3.utils.toWei('0.5', 'ether')});
-	fs.appendFile('details', "Address: " + newAcc + "; Pass: pass2" + "\n" , function(err){});
-
-//distributer account
-web3.eth.personal.newAccount("pass3").then(function(newAcc) {
-	players.distributer["address"] = newAcc;
-	players.distributer["password"] = "pass3";
-	console.log(newAcc);
-	web3.eth.sendTransaction({from:defaultAccount, to:newAcc, value:web3.utils.toWei('0.5', 'ether')});
-	fs.appendFile('details', "Address: " + newAcc + "; Pass: pass3" + "\n" , function(err){});
-
-//factory account
-web3.eth.personal.newAccount("pass4").then(function(newAcc) {
-	players.factory["address"] = newAcc;
-	players.factory["password"] = "pass4";
-	console.log(newAcc);
-	web3.eth.sendTransaction({from:defaultAccount, to:newAcc, value:web3.utils.toWei('0.5', 'ether')});
-	fs.appendFile('details', "Address: " + newAcc + "; Pass: pass4" + "\n" , function(err){});
 
 
-web3.eth.getAccounts().then(function(accounts) {
 len = accounts.length;
 
-fs.appendFile('details', (len-1)/4 + '\n-----\n', function(err){});
 console.log("Game id:" + (len-1)/4);
 
-players["GameID"] = (len-1)/4;
 
 myContract.deploy({
     data: bytecode,
-    arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1], totalWeeks, start, end, dLeadTime, oLeadTime, initialInv, hCost, lsCost, fileRows]
+    arguments: [retailerAddress, wholesalerAddress, distributerAddress, factoryAddress, totalWeeks, start, end, dLeadTime, oLeadTime, initialInv, hCost, lsCost, fileRows]
 })
 .send({
-    from: '0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34',
+    from: defaultAccount,
     gas: 20000000,
 }, function(error, transactionHash){})
 .on('receipt', function(rec){
@@ -178,17 +150,16 @@ myContract.deploy({
 	let formattedJson = JSON.stringify(jsonOutput, null, 4);
 	fs.writeFileSync(jsonFile, formattedJson);
 
-	web3.eth.personal.unlockAccount(accounts[len-1],"pass4");
-	web3.eth.personal.unlockAccount(accounts[len-2],"pass3");
-	web3.eth.personal.unlockAccount(accounts[len-3],"pass2");
-	web3.eth.personal.unlockAccount(accounts[len-4],"pass1");
+	web3.eth.personal.lockAccount(retailerAddress);
+	web3.eth.personal.lockAccount(wholesalerAddress);
+	web3.eth.personal.lockAccount(distributerAddress);
+	web3.eth.personal.lockAccount(factoryAddress);
 
 	console.log("Success");
 	console.log(players);
 	res.status(200).send(players);
 });
-});
-});});});});
+
 
 	
 }
@@ -219,5 +190,7 @@ app.get('/api/check', routes.check);
 app.get('/api/getAddress', routes.getAddress);
 app.get('/api/checkDeployed', routes.checkDeployed);
 app.get('/api/checkAccountPresent', routes.checkAccountPresent);
+app.get('/api/checkAccountSent', routes.checkAccountSent);
+app.get('/api/getAddresses', routes.getAddresses);
 
 console.log("Script started. Head over to http://localhost:"+port+ " on your browser");

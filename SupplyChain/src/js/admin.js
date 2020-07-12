@@ -72,6 +72,14 @@ function deployContractWithFile() {
         formData.append("stdDev", stdDev);
         formData.append("distribution", distribution);
 
+        $.ajax({
+            url: '/api/getAddresses', 
+            type: 'GET', 
+            contentType: 'application/json'
+        }).done(function(resp){
+            formData.append("addresses", resp.addrs);
+        });
+
 
 
         request.open("POST","http://localhost:3000/deployGameWithFile", true);

@@ -99,17 +99,17 @@ function enableButtons(element){
 			}
 		})
 
-		// var interval = setInterval(function() {
-		// 	console.log("hey");
-		// 	$.ajax({
-		// 	    url: 'api/checkDeployed', 
-		// 	    type: 'GET', 
-		// 	    contentType: 'application/json'}
-		// 	).done(function(resp){
-		// 		if(resp.deployed == true)
-		// 			enableButtons($("#nextStep"));
-		// 	});
-		// }, 10000);
+		var interval = setInterval(function() {
+			console.log("hey");
+			$.ajax({
+			    url: 'api/checkDeployed', 
+			    type: 'GET', 
+			    contentType: 'application/json'}
+			).done(function(resp){
+				if(resp.deployed == true)
+					enableButtons($("#nextStep"));
+			});
+		}, 10000);
 
 
 	})

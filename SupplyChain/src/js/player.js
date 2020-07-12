@@ -46,7 +46,7 @@ App = {
 
       web3.eth.getAccounts().then(function(acc) {
       //  console.log(acc);
-        App.account = acc[acc.length - 5 + parseInt(App.role)];
+        App.account = acc[0];
         console.log(App.account);
         
       switch(App.role) {
