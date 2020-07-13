@@ -73,25 +73,25 @@ function enableButtons(element){
 		var role = urlparams.get('role');
 
 		switch(role) {
-			case '1': $("#id1").innerHTML = "Create Retailer Account";
-					$("#id2").innerHTML = "Create Retailer Account";
-					$("#id3").innerHTML = "Create an account for the Retailer";
-					$("#id4").innerHTML = "Public address of the Retailer";
+			case '1': document.getElementById("id1").innerHTML = "Create Retailer Account";
+					document.getElementById("id2").innerHTML = "Create Retailer Account";
+					document.getElementById("id3").innerHTML = "Create an account for the Retailer";
+					document.getElementById("id4").innerHTML = "Public address of the Retailer";
 					break;
-			case '2': $("#id1").innerHTML = "Create Wholesaler Account";
-					$("#id2").innerHTML = "Create Wholesaler Account";
-					$("#id3").innerHTML = "Create an account for the Wholesaler";
-					$("#id4").innerHTML = "Public address of the Wholesaler";
+			case '2': document.getElementById("id1").innerHTML = "Create Wholesaler Account";
+					document.getElementById("id2").innerHTML = "Create Wholesaler Account";
+					document.getElementById("id3").innerHTML = "Create an account for the Wholesaler";
+					document.getElementById("id4").innerHTML = "Public address of the Wholesaler";
 					break;
-			case '3': $("#id1").innerHTML = "Create Distributer Account";
-					$("#id2").innerHTML = "Create Distributer Account";
-					$("#id3").innerHTML = "Create an account for the Distributer";
-					$("#id4").innerHTML = "Public address of the Distributer";
+			case '3': document.getElementById("id1").innerHTML = "Create Distributer Account";
+					document.getElementById("id2").innerHTML = "Create Distributer Account";
+					document.getElementById("id3").innerHTML = "Create an account for the Distributer";
+					document.getElementById("id4").innerHTML = "Public address of the Distributer";
 					break;
-			case '4': $("#id1").innerHTML = "Create Factory Account";
-					$("#id2").innerHTML = "Create Factory Account";
-					$("#id3").innerHTML = "Create an account for the Factory";
-					$("#id4").innerHTML = "Public address of the Factory";
+			case '4': document.getElementById("id1").innerHTML = "Create Factory Account";
+					document.getElementById("id2").innerHTML = "Create Factory Account";
+					document.getElementById("id3").innerHTML = "Create an account for the Factory";
+					document.getElementById("id4").innerHTML = "Public address of the Factory";
 					break;
 		}
 
