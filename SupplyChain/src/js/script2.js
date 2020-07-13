@@ -75,19 +75,23 @@ function enableButtons(element){
 		switch(role) {
 			case '1': $("#id1").innerHTML = "Create Retailer Account";
 					$("#id2").innerHTML = "Create Retailer Account";
-					$("#id3").innerHTML = "Create Retailer Account";
+					$("#id3").innerHTML = "Create an account for the Retailer";
+					$("#id4").innerHTML = "Public address of the Retailer";
 					break;
 			case '2': $("#id1").innerHTML = "Create Wholesaler Account";
 					$("#id2").innerHTML = "Create Wholesaler Account";
-					$("#id3").innerHTML = "Create Wholesaler Account";
+					$("#id3").innerHTML = "Create an account for the Wholesaler";
+					$("#id4").innerHTML = "Public address of the Wholesaler";
 					break;
 			case '3': $("#id1").innerHTML = "Create Distributer Account";
 					$("#id2").innerHTML = "Create Distributer Account";
-					$("#id3").innerHTML = "Create Distributer Account";
+					$("#id3").innerHTML = "Create an account for the Distributer";
+					$("#id4").innerHTML = "Public address of the Distributer";
 					break;
 			case '4': $("#id1").innerHTML = "Create Factory Account";
 					$("#id2").innerHTML = "Create Factory Account";
-					$("#id3").innerHTML = "Create Factory Account";
+					$("#id3").innerHTML = "Create an account for the Factory";
+					$("#id4").innerHTML = "Public address of the Factory";
 					break;
 		}
 

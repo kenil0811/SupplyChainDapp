@@ -340,8 +340,10 @@ module.exports = {
 		fs.writeFile(jsonFile, formattedJson, function(err) {
 			if(err)
 				resp.json({"status": "error"});
-			else
+			else {
+				deployed = true;
 				resp.json({"status": "correct"});
+			}
 		});
 
 	}
