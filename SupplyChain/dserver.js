@@ -45,7 +45,7 @@ app.get('/gameInfo', function(req, res) {
 
 app.get('/adminLogin/:password', function(req, res) {
 	var pass = String(req.params.password);
-	console.log(pass);
+	//console.log(pass);
 	if(pass == "admin") {
 		res.status(200).send();
 	}
@@ -61,9 +61,9 @@ var players = {retailer: {}, wholesaler: {}, distributer: {}, factory: {}};
 
 function deployGameWithFile(req, res) {
  
-	web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
-	web3 = new Web3(web3Provider);
+	var web3  = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 	let myContract = new web3.eth.Contract(abi);
+	// web3.eth.personal.getAccounts().then(console.log);
 
 	console.log("\n\n\n");
   var fileRows = [];
@@ -74,7 +74,7 @@ function deployGameWithFile(req, res) {
       	fileRows.push(data); // push each row
     	})
     	.on("end", function () {
-      	console.log(fileRows)
+      	// console.log(fileRows)
       	fs.unlinkSync(req.file.path);   // remove temp file
      	 //process "fileRows" and respond
     	});
@@ -133,7 +133,7 @@ function deployGameWithFile(req, res) {
 	var data = JSON.stringify(gameInfo);
 	fs.writeFileSync('gameInfo.json', data);
 
-console.log("wait!!");
+// console.log("wait!!");
 
 myContract.deploy({
     data: bytecode,
@@ -142,7 +142,7 @@ myContract.deploy({
 .send({
     from: defaultAccount,
     gas: 20000000,
-}, function(error, transactionHash){})
+}, function(error, transactionHash){console.log(error); console.log(transactionHash);})
 .on('receipt', function(rec){
 	console.log("Contract Address: "+rec.contractAddress);
 	jsonOutput['networks']['5777']['address'] = rec.contractAddress;
@@ -155,8 +155,9 @@ myContract.deploy({
 	web3.eth.personal.lockAccount(factoryAddress);
 
 	console.log("Success");
-	routes.deployed=true;
-	res.status(200).send();
+	var resp = {contractAddress: {}};
+	resp.contractAddress["address"] = rec.contractAddress;
+	res.status(200).send(resp);
 });
 
 
@@ -184,6 +185,7 @@ app.post('/api/ethereum:type', routes.ethereum);
 app.post('/api/startWeb3', routes.startWeb3);
 app.post('/api/checkEthereum', routes.checkEthereum);
 app.post('/api/deleteEverything', routes.deleteEverything);
+app.post('/api/setContractAddress', routes.setContractAddress);
 app.get('/api/checkDAG', routes.checkDAG);
 app.get('/api/check', routes.check);
 app.get('/api/getAddress', routes.getAddress);

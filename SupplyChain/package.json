@@ -17,7 +17,7 @@
     "requirejs": "^2.3.6",
     "truffle-contract": "^4.0.31",
     "truffle-hdwallet-provider": "^1.0.17",
-    "web3": "^2.0.0-alpha",
+    "web3": "^1.2.9",
     "web3-eth-admin": "",
     "web3-eth-txpool": "",
     "xmlhttprequest": "^1.8.0"

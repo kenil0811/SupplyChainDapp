@@ -6,6 +6,7 @@ const Web3 = require('web3');
 var web3, admin, txPool;
 const web3Admin = require('web3-eth-admin');
 const web3txPool = require('web3-eth-txpool');
+const path = require('path');
 var directoryNode1;
 exec('pwd', (err,stdout,stderr) => {
 	var s = stdout.substring(6);
@@ -24,6 +25,11 @@ var ips;
 var addrs;
 var deployed = false;
 var amountSent = false;
+let contract = "SupplyChain";
+let jsonOutputName = path.parse(contract).name + '.json';
+let jsonFile = './build/contracts/' + jsonOutputName;
+let contractJsonContent = fs.readFileSync(jsonFile, 'utf8');
+let jsonOutput = JSON.parse(contractJsonContent);
 
 module.exports = {
 	checkEthereum: function(req, resp){
@@ -155,7 +161,7 @@ module.exports = {
 								resp.json({"status":"error", "errorDetails":"Ethereum has not been configured right now."});
 								return;
 							}
-							exec('geth --datadir '+ directoryNode1 + ' --networkid 5777 --rpc --rpcport 8545 --rpccorsdomain "*" --nat "any" --rpcapi="txpool,db,eth,net,web3,personal,admin,miner"', (err, stdout, stderr) =>{});
+							exec('geth --datadir '+ directoryNode1 + ' --networkid 5777 --rpc --rpcport 8545 --rpccorsdomain "*" --nat "any" --rpcapi="txpool,db,eth,net,web3,personal,admin,miner" --allow-insecure-unlock', (err, stdout, stderr) =>{});
 						});
 					});
 				});
@@ -327,6 +333,17 @@ module.exports = {
 	},
 	getAddresses: function(req, resp){
 		resp.json({"addrs":addrs});
+	},
+	setContractAddress: function(req, resp){
+		jsonOutput['networks']['5777']['address'] = req.body.contractAddress;
+		let formattedJson = JSON.stringify(jsonOutput, null, 4);
+		fs.writeFile(jsonFile, formattedJson, function(err) {
+			if(err)
+				resp.json({"status": "error"});
+			else
+				resp.json({"status": "correct"});
+		});
+
 	}
 
 }

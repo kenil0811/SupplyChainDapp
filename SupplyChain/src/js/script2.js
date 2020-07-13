@@ -30,6 +30,15 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	$("#nextStep").on('click', function(e) {
+		e.preventDefault();
+		var content = $("#content");
+		var qs = window.location.search;
+		var urlparams = new URLSearchParams(qs);
+		var role = urlparams.get('role');
+		window.location.href = './login.html?role=' + role;
+	})
 });
 
 function disableButtons(element, messageElement, message){
@@ -89,12 +98,9 @@ function enableButtons(element){
 		}).done(function(resp){
 			console.log(resp);
 			if(resp.status == "error") {
-				console.log("lol");
 				enableButtons($("#createNewAccount1"));
 			}
 			else if(resp.status == "correct") {
-				console.log("lol2");
-				console.log(resp);
 				$("#accountAddressNode1").val(resp.accountAddress1);
 			}
 		})

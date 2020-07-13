@@ -4,18 +4,52 @@ var url = "http://localhost:3000/deployGame";
 var request = new XMLHttpRequest();
     request.onreadystatechange = function (){
         if (request.status == 200  && request.readyState == 4) {
-        console .log(request.response);
         var data = JSON.parse(request.responseText);
-        var retailer = data.retailer;
-        var wholesaler = data.wholesaler;
-        var distributer = data.distributer;
-        var factory = data.factory;
-        document.getElementById("players").innerHTML = "Contract successfully deployed!!!";
-        document.getElementById("gameID").innerHTML = "Game ID: " + data.GameID;
-        document.getElementById("retailer").innerHTML = "Retailer:<br>&emsp;Address: " + retailer.address + "<br>&emsp;Password: " + retailer.password;
-        document.getElementById("wholesaler").innerHTML =  "Wholesaler:<br>&emsp;Address: " + wholesaler.address + "<br>&emsp;Password: " + wholesaler.password;
-        document.getElementById("distributer").innerHTML =  "Distributer:<br>&emsp;Address: " + distributer.address + "<br>&emsp;Password: " + distributer.password;
-        document.getElementById("factory").innerHTML =  "Factory:<br>&emsp;Address: " + factory.address + "<br>&emsp;Password: " + factory.password;
+        console.log(data);
+        console.log(request.responseText);
+        console.log(data.contractAddress);
+
+        $.ajax({
+            url: '/api/configureEthereum:getIP',
+            type: 'POST',
+            contentType: 'application/json'
+        }).done(function(resp) {
+
+            $.ajax({
+                url: 'http://' + resp.ip1 + ':3000/api/setContractAddress', 
+                type: 'POST', 
+                contentType: 'application/json',
+                data: JSON.stringify({"contractAddress": data.contractAddress.address})
+            }).done(function(resp1){
+            // $.ajax({
+            //     url: 'http://' + resp.ip2 + ':3000/api/setContractAddress', 
+            //     type: 'POST', 
+            //     contentType: 'application/json',
+            //     data: JSON.stringify({"contractAddress": data.contractAddress.address})
+            // }).done(function(resp2){
+            // $.ajax({
+            //     url: 'http://' + resp.ip3 + ':3000/api/setContractAddress', 
+            //     type: 'POST', 
+            //     contentType: 'application/json',
+            //     data: JSON.stringify({"contractAddress": data.contractAddress.address})
+            // }).done(function(resp3){
+            // $.ajax({
+            //     url: 'http://' + resp.ip4 + ':3000/api/setContractAddress', 
+            //     type: 'POST', 
+            //     contentType: 'application/json',
+            //     data: JSON.stringify({"contractAddress": data.contractAddress.address})
+            // }).done(function(resp4){
+                if(resp1.status=="error" /*|| resp2.status=="error" || resp3.status=="error" || resp4.status=="error" */)
+                    document.getElementById("players").innerHTML = "Error in setting contract address on player's systems";
+                else
+                    document.getElementById("players").innerHTML = "Contract successfully deployed!!!";
+            })
+            // })
+            // })
+            // })
+        })
+
+        
     }
     else if(request.status==0) {
         document.getElementById("players").innerHTML = "Please Wait ....";

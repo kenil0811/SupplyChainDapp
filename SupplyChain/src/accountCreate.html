@@ -54,7 +54,7 @@
 									<button type="submit" class="btn btn-primary" id="createNewAccount1">Create Account</button>
 								</div>
 							</div>
-							<label for="accountAddressNode1">Public address of admin</label>
+							<label for="accountAddressNode1">Public address of Player</label>
 							<input autocomplete="off" type="text" class="form-control" id="accountAddressNode1" placeholder="Your Account Addresss for Node_1" readonly>
 						</form>
 					  </div>
@@ -77,20 +77,20 @@
 		// $("#mainContent").fadeOut("fast");
 		// $("#loadedOptions").fadeOut("fast");
 		$(window).on('load', function(){
-		// 	$.ajax({
-		// 		url: '/api/checkEthereum', 
-		// 		type: 'POST', 
-		// 		contentType: 'application/json'}
-		// 	).done(function(resp){
-		// 		if(resp.status == "error"){
-		// 			alert(resp.errorDetails);
-		// 			$("#loadedOptions").fadeIn('fast');
-		// 			$("#loader").fadeOut('slow');
+			// $.ajax({
+			// 	url: '/api/checkEthereum', 
+			// 	type: 'POST', 
+			// 	contentType: 'application/json'}
+			// ).done(function(resp){
+			// 	if(resp.status == "error"){
+			// 		alert(resp.errorDetails);
+			// 		$("#loadedOptions").fadeIn('fast');
+			// 		$("#loader").fadeOut('slow');
 
-		// 		}else if(resp.status == "complete"){
+			// 	}else if(resp.status == "complete"){
 					$("#mainContent").fadeIn("slow");
 					$("#loader").fadeOut();
-		// 		}
+				// }
 			});
 			
 		// });
