@@ -111,7 +111,7 @@ App = {
               var role = player.role.words[0]-1;
               instance.orderState(role).then(function(state) {
                 console.log(state.words[0]);
-                if(weekNo>maxWeeks.words[0]) {
+                if(weekNo.words[0]>maxWeeks.words[0]) {
                  document.getElementById("placeOrder").style.display = "none"; 
                   document.getElementById("gameOver").style.display = "block";
                 }
@@ -161,7 +161,7 @@ App = {
       App.contracts.SupplyChain.deployed().then(function(instance) {
         instance.weekNo().then(function(weekNo) {
           instance.maxWeeks().then(function(maxWeeks) {
-            if(weekNo<=maxWeeks)
+            if(weekNo.words[0]<=maxWeeks.words[0])
               document.getElementById("currentWeek").innerHTML = weekNo;
           
 
@@ -175,7 +175,7 @@ App = {
 
         document.getElementById("totalWeeks").innerHTML = maxWeeks;
 
-        if(weekNo<=maxWeeks) {
+        if(weekNo.words[0]<=maxWeeks.words[0]) {
           instance.inventory(0).then(function(array) {
             $("#ret_inv").html(array.words[0]*(1-array.negative));
           });
@@ -202,7 +202,7 @@ App = {
     App.contracts.SupplyChain.deployed().then(function(instance) {
       instance.weekNo().then(function(weekNo) {
       instance.maxWeeks().then(function(maxWeeks) {
-      if(weekNo <= maxWeeks) {
+      if(weekNo.words[0] <= maxWeeks.words[0]) {
         instance.weekDetails(App.account, weekNo.words[0]-1).then(function(details) {
 
           document.getElementById("demand").innerHTML = details[4].words[0];
