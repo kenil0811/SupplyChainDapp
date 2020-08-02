@@ -32,7 +32,7 @@ let defaultAccount = "0x";
 web3.eth.getAccounts().then(function(accounts) {
 	if(accounts.length > 0)
 		defaultAccount = accounts[0];
-}
+});
 			  
 app.use(express.static('src'));
 app.use(express.static('build/contracts'));
