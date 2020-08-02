@@ -21,32 +21,32 @@ var request = new XMLHttpRequest();
                 contentType: 'application/json',
                 data: JSON.stringify({"contractAddress": data.contractAddress.address})
             }).done(function(resp1){
-            // $.ajax({
-            //     url: 'http://' + resp.ip2 + ':3000/api/setContractAddress', 
-            //     type: 'POST', 
-            //     contentType: 'application/json',
-            //     data: JSON.stringify({"contractAddress": data.contractAddress.address})
-            // }).done(function(resp2){
-            // $.ajax({
-            //     url: 'http://' + resp.ip3 + ':3000/api/setContractAddress', 
-            //     type: 'POST', 
-            //     contentType: 'application/json',
-            //     data: JSON.stringify({"contractAddress": data.contractAddress.address})
-            // }).done(function(resp3){
-            // $.ajax({
-            //     url: 'http://' + resp.ip4 + ':3000/api/setContractAddress', 
-            //     type: 'POST', 
-            //     contentType: 'application/json',
-            //     data: JSON.stringify({"contractAddress": data.contractAddress.address})
-            // }).done(function(resp4){
+            $.ajax({
+                url: 'http://' + resp.ip2 + ':3000/api/setContractAddress', 
+                type: 'POST', 
+                contentType: 'application/json',
+                data: JSON.stringify({"contractAddress": data.contractAddress.address})
+            }).done(function(resp2){
+            $.ajax({
+                url: 'http://' + resp.ip3 + ':3000/api/setContractAddress', 
+                type: 'POST', 
+                contentType: 'application/json',
+                data: JSON.stringify({"contractAddress": data.contractAddress.address})
+            }).done(function(resp3){
+            $.ajax({
+                url: 'http://' + resp.ip4 + ':3000/api/setContractAddress', 
+                type: 'POST', 
+                contentType: 'application/json',
+                data: JSON.stringify({"contractAddress": data.contractAddress.address})
+            }).done(function(resp4){
                 if(resp1.status=="error" /*|| resp2.status=="error" || resp3.status=="error" || resp4.status=="error" */)
                     document.getElementById("players").innerHTML = "Error in setting contract address on player's systems";
                 else
                     document.getElementById("players").innerHTML = "Contract successfully deployed!!!";
             })
-            // })
-            // })
-            // })
+            })
+            })
+            })
         })
 
         
@@ -118,9 +118,9 @@ $("#deployContract").on('click', function(e){
             console.log(resp);
             formData.append("coinbase", resp.addrs.coinbase);
             formData.append("addr1", resp.addrs.addr1);
-            formData.append("addr2", "0xF94DAdBCA5220f889f1CDb7b82285eA992893730");
-            formData.append("addr3", "0xFd38D67c35cb1A662CbA4F718336815067d9A5A1");
-            formData.append("addr4", "0x6D8591C2592b306cf6d792c6CB96CC093ffcF4F6");
+            formData.append("addr2", resp.addrs.addr2);
+            formData.append("addr3", resp.addrs.addr3);
+            formData.append("addr4", resp.addrs.addr4);
 
             request.open("POST","http://localhost:3000/deployGameWithFile", true);
             request.send(formData);
