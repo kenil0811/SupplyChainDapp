@@ -225,9 +225,9 @@ module.exports = {
 			var result;
 			try{
 				result = admin.addPeer(req.body.enode1);
-				// result = admin.addPeer(req.body.enode2);
-				// result = admin.addPeer(req.body.enode3);
-				// result = admin.addPeer(req.body.enode4);
+				 result = admin.addPeer(req.body.enode2);
+				 result = admin.addPeer(req.body.enode3);
+				 result = admin.addPeer(req.body.enode4);
 			}catch(e){
 				var index = e.toString().indexOf("invalid enode");
 				if(index!=1){
@@ -260,17 +260,17 @@ module.exports = {
 				addrs = {"coinbase":coinbase1, "addr1": req.body.addr1 /*, "addr2": req.body.addr2, "addr3": req.body.addr3, "addr4": req.body.addr4 */};
 
 			var transactionObj1 = {from:coinbase1, to:req.body.addr1, value:web3.utils.toWei(amount, "ether")};
-			// var transactionObj2 = {from:coinbase1, to:req.body.addr2, value:web3.utils.toWei(amount, "ether")};
-			// var transactionObj3 = {from:coinbase1, to:req.body.addr3, value:web3.utils.toWei(amount, "ether")};
-			// var transactionObj4 = {from:coinbase1, to:req.body.addr4, value:web3.utils.toWei(amount, "ether")};
+			 var transactionObj2 = {from:coinbase1, to:req.body.addr2, value:web3.utils.toWei(amount, "ether")};
+			 var transactionObj3 = {from:coinbase1, to:req.body.addr3, value:web3.utils.toWei(amount, "ether")};
+			 var transactionObj4 = {from:coinbase1, to:req.body.addr4, value:web3.utils.toWei(amount, "ether")};
 
 			var status;
 			try{
 				var status1 = web3.eth.sendTransaction(transactionObj1);
-				// var status2 = web3.eth.sendTransaction(transactionObj2);
-				// var status3 = web3.eth.sendTransaction(transactionObj3);
-				// var status4 = web3.eth.sendTransaction(transactionObj4);
-				// console.log(status);
+				 var status2 = web3.eth.sendTransaction(transactionObj2);
+				 var status3 = web3.eth.sendTransaction(transactionObj3);
+				 var status4 = web3.eth.sendTransaction(transactionObj4);
+				 console.log(status);
 			}catch(e){
 				var index = e.toString().indexOf("authentication needed");
 				if(index != -1){
