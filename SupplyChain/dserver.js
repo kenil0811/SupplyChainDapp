@@ -27,10 +27,13 @@ let abi = jsonOutput['abi'];
 let bytecode = jsonOutput['bytecode'];
 
 let myContract = new web3.eth.Contract(abi);
+let defaultAccount = "0x";
 
-
-defaultAccount = "0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34";
-
+web3.eth.getAccounts().then(function(accounts) {
+	if(accounts.length > 0)
+		defaultAccount = accounts[0];
+}
+			  
 app.use(express.static('src'));
 app.use(express.static('build/contracts'));
 
@@ -169,7 +172,7 @@ myContract.deploy({
     arguments: [accounts[len-4], accounts[len-3], accounts[len-2], accounts[len-1], totalWeeks, start, end, dLeadTime, oLeadTime, initialInv, hCost, boCost, fileRows]
 })
 .send({
-    from: '0xB92D238ea91Ea398CdC2b885B8F4395Dd5C4Bf34',
+    from: defaultAccount,
     gas: 20000000,
 }, function(error, transactionHash){})
 .on('receipt', function(rec){
