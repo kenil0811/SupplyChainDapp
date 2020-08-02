@@ -257,7 +257,7 @@ module.exports = {
 		}else if(type == ":transaction"){
 			var amount = req.body.amount;
 			if(addrs==null)
-				addrs = {"coinbase":coinbase1, "addr1": req.body.addr1 /*, "addr2": req.body.addr2, "addr3": req.body.addr3, "addr4": req.body.addr4 */};
+				addrs = {"coinbase":coinbase1, "addr1": req.body.addr1 , "addr2": req.body.addr2, "addr3": req.body.addr3, "addr4": req.body.addr4 };
 
 			var transactionObj1 = {from:coinbase1, to:req.body.addr1, value:web3.utils.toWei(amount, "ether")};
 			 var transactionObj2 = {from:coinbase1, to:req.body.addr2, value:web3.utils.toWei(amount, "ether")};
