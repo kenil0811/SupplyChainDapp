@@ -48,7 +48,7 @@ $(document).ready(function(){
 		var ip3 = $("#ip3").val();
 		var ip4 = $("#ip4").val();
 
-		if(!isValidIP(ip1) /* || !isValidIP(ip2) || !isValidIP(ip3) || !isValidIP(ip4) */) {
+		if(!isValidIP(ip1)  || !isValidIP(ip2) || !isValidIP(ip3) || !isValidIP(ip4) ) {
 			alert("Invalid Ip address(es)");
 			enableButtons(page1Buttons);
 			return;
@@ -105,26 +105,26 @@ $(document).ready(function(){
 			}
 		});
 		
-		// $.ajax({
-		//     url: 'http://' + ip2 + ':3000/api/configureEthereum:startPlayer', 
-		//     type: 'POST', 
-		//     contentType: 'application/json', 
-		//     data: JSON.stringify({"genesisData":genesisData})}
-		// ).done(function(resp3){
+		$.ajax({
+		    url: 'http://' + ip2 + ':3000/api/configureEthereum:startPlayer', 
+		    type: 'POST', 
+		    contentType: 'application/json', 
+		    data: JSON.stringify({"genesisData":genesisData})}
+		).done(function(resp3){
 
-		// $.ajax({
-		//     url: 'http://' + ip3 + ':3000/api/configureEthereum:startPlayer', 
-		//     type: 'POST', 
-		//     contentType: 'application/json', 
-		//     data: JSON.stringify({"genesisData":genesisData})}
-		// ).done(function(resp4){
+		$.ajax({
+		    url: 'http://' + ip3 + ':3000/api/configureEthereum:startPlayer', 
+		    type: 'POST', 
+		    contentType: 'application/json', 
+		    data: JSON.stringify({"genesisData":genesisData})}
+		).done(function(resp4){
 
-		// $.ajax({
-		//     url: 'http://' + ip4 + ':3000/api/configureEthereum:startPlayer', 
-		//     type: 'POST', 
-		//     contentType: 'application/json', 
-		//     data: JSON.stringify({"genesisData":genesisData})}
-		// ).done(function(resp5){
+		$.ajax({
+		    url: 'http://' + ip4 + ':3000/api/configureEthereum:startPlayer', 
+		    type: 'POST', 
+		    contentType: 'application/json', 
+		    data: JSON.stringify({"genesisData":genesisData})}
+		).done(function(resp5){
 
 		
 		setTimeout(function(){
@@ -132,9 +132,9 @@ $(document).ready(function(){
 		},1000);
 
 		
-		// });
-		// });
-		// });
+		});
+		});
+		});
 	});
 
 	$("#nextStep").on('click', function(e){
@@ -159,40 +159,40 @@ $(document).ready(function(){
 				contentType: 'application/json'
 			}).done(function(resp1) {
 				console.log(resp1);
-			// $.ajax({
-			// 	url: 'http://' + resp.ip2 + ':3000/api/ethereum:getEnode',
-			// 	type: 'POST',
-			// 	contentType: 'application/json'
-			// }).done(function(resp2) {
-			// $.ajax({
-			// 	url: 'http://' + resp.ip3 + ':3000/api/ethereum:getEnode',
-			// 	type: 'POST',
-			// 	contentType: 'application/json'
-			// }).done(function(resp3) {
-			// $.ajax({
-			// 	url: 'http://' + resp.ip4 + ':3000/api/ethereum:getEnode',
-			// 	type: 'POST',
-			// 	contentType: 'application/json'
-			// }).done(function(resp4) {
+			$.ajax({
+				url: 'http://' + resp.ip2 + ':3000/api/ethereum:getEnode',
+				type: 'POST',
+				contentType: 'application/json'
+			}).done(function(resp2) {
+			$.ajax({
+				url: 'http://' + resp.ip3 + ':3000/api/ethereum:getEnode',
+				type: 'POST',
+				contentType: 'application/json'
+			}).done(function(resp3) {
+			$.ajax({
+				url: 'http://' + resp.ip4 + ':3000/api/ethereum:getEnode',
+				type: 'POST',
+				contentType: 'application/json'
+			}).done(function(resp4) {
 
 				var index1 = resp1.enode.indexOf("@");
 				var s1 = resp1.enode.substring(0, index1+1);
 				s1 = s1.concat(resp.ip1 + ":30303");
 
-				// var index2 = resp2.enode.indexOf("127");
-				// var s2 = resp2.enode.substring(0, index2);
-				// s2 = s2.concat(resp.ip2 + ":30303");
+				var index2 = resp2.enode.indexOf("127");
+				var s2 = resp2.enode.substring(0, index2);
+				s2 = s2.concat(resp.ip2 + ":30303");
 
-				// var index3 = resp3.enode.indexOf("127");
-				// var s3 = resp3.enode.substring(0, index3);
-				// s3 = s3.concat(resp.ip3 + ":30303");
+				var index3 = resp3.enode.indexOf("127");
+				var s3 = resp3.enode.substring(0, index3);
+				s3 = s3.concat(resp.ip3 + ":30303");
 
-				// var index4 = resp4.enode.indexOf("127");
-				// var s4 = resp4.enode.substring(0, index4);
-				// s4 = s4.concat(resp.ip4 + ":30303");
+				var index4 = resp4.enode.indexOf("127");
+				var s4 = resp4.enode.substring(0, index4);
+				s4 = s4.concat(resp.ip4 + ":30303");
 
 
-				var s = {"enode1": s1 /*, "enode2": s2, "enode3": s3, "enode4": s4 */}
+				var s = {"enode1": s1 , "enode2": s2, "enode3": s3, "enode4": s4 }
 
 
 				$.ajax({
@@ -214,9 +214,9 @@ $(document).ready(function(){
 				});
 				// body...
 			})
-			// })
-			// })
-			// })
+			})
+			})
+			})
 		})
 	})
 		
@@ -281,38 +281,38 @@ $(document).ready(function(){
 				type: 'GET',
 				contentType: 'application/json'
 			}).done(function(resp1) {
-			// $.ajax({
-			// 	url: 'http://' + resp.ip2 + ':3000/api/checkAccountPresent',
-			// 	type: 'GET',
-			// 	contentType: 'application/json'
-			// }).done(function(resp2) {
-			// $.ajax({
-			// 	url: 'http://' + resp.ip3 + ':3000/api/checkAccountPresent',
-			// 	type: 'GET',
-			// 	contentType: 'application/json'
-			// }).done(function(resp3) {
-			// $.ajax({
-			// 	url: 'http://' + resp.ip4 + ':3000/api/checkAccountPresent',
-			// 	type: 'GET',
-			// 	contentType: 'application/json'
-			// }).done(function(resp4) {
+			$.ajax({
+				url: 'http://' + resp.ip2 + ':3000/api/checkAccountPresent',
+				type: 'GET',
+				contentType: 'application/json'
+			}).done(function(resp2) {
+			$.ajax({
+				url: 'http://' + resp.ip3 + ':3000/api/checkAccountPresent',
+				type: 'GET',
+				contentType: 'application/json'
+			}).done(function(resp3) {
+			$.ajax({
+				url: 'http://' + resp.ip4 + ':3000/api/checkAccountPresent',
+				type: 'GET',
+				contentType: 'application/json'
+			}).done(function(resp4) {
 				var s="", c=0;
 				if(resp1.status == "error") {
 					s += "Retailer  ";
 					c++;
 				}
-				// if(resp2.status == "error") {
-				// 	s += "Wholesaler  ";
-				// 	c++;
-				// }
-				// if(resp3.status == "error") {
-				// 	s += "Distributer  ";
-				// 	c++;
-				// }
-				// if(resp4.status == "error") {
-				// 	s += "Factory  ";
-				// 	c++;
-				// }
+				if(resp2.status == "error") {
+					s += "Wholesaler  ";
+					c++;
+				}
+				if(resp3.status == "error") {
+					s += "Distributer  ";
+					c++;
+				}
+				if(resp4.status == "error") {
+					s += "Factory  ";
+					c++;
+				}
 				if(c==0) {
 					s="All The players have generated their accounts. You can send ether now";
 					enableButtons(page2Buttons);
@@ -326,9 +326,9 @@ $(document).ready(function(){
 				}
 				$("#checkAddressesStatus").val(s);
 
-			// })
-			// })
-			// })	
+			})
+			})
+			})	
 			})
 		})
 	})
@@ -354,27 +354,27 @@ $(document).ready(function(){
 				type: 'GET',
 				contentType: 'application/json'
 			}).done(function(resp1) {
-			// $.ajax({
-			// 	url: 'http://' + resp.ip2 + ":3000/api/getAddress",
-			// 	type: 'GET',
-			// 	contentType: 'application/json'
-			// }).done(function(resp2) {			
-			// $.ajax({
-			// 	url: 'http://' + resp.ip3 + ":3000/api/getAddress",
-			// 	type: 'GET',
-			// 	contentType: 'application/json'
-			// }).done(function(resp3) {	
-			// $.ajax({
-			// 	url: 'http://' + resp.ip4 + ":3000/api/getAddress",
-			// 	type: 'GET',
-			// 	contentType: 'application/json'
-			// }).done(function(resp4) {
+			$.ajax({
+				url: 'http://' + resp.ip2 + ":3000/api/getAddress",
+				type: 'GET',
+				contentType: 'application/json'
+			}).done(function(resp2) {			
+			$.ajax({
+				url: 'http://' + resp.ip3 + ":3000/api/getAddress",
+				type: 'GET',
+				contentType: 'application/json'
+			}).done(function(resp3) {	
+			$.ajax({
+				url: 'http://' + resp.ip4 + ":3000/api/getAddress",
+				type: 'GET',
+				contentType: 'application/json'
+			}).done(function(resp4) {
 		
 				$.ajax({
 				    url: '/api/ethereum:transaction', 
 				    type: 'POST', 
 				    contentType: 'application/json',
-				    data: JSON.stringify({"addr1":resp1.addr, /* "addr2":resp2.addr, "addr3":resp3.addr, "addr4":resp4.addr, */ "amount":amount})
+				    data: JSON.stringify({"addr1":resp1.addr,  "addr2":resp2.addr, "addr3":resp3.addr, "addr4":resp4.addr,  "amount":amount})
 				}).done(function(resp){
 					if(resp.status == "error"){
 						alert(resp.errorDetails);
@@ -390,9 +390,9 @@ $(document).ready(function(){
 				});
 			});
 			});
-			// });
-			// });
-			// });
+			});
+			});
+			});
 	});
 	
 	$("#checkTransactionForm").on('submit', function(e){
